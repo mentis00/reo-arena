@@ -11,7 +11,7 @@
     background: #0f0c1a;
     font-family: 'Noto Sans KR', sans-serif;
     padding: 40px;
-    width: 1000px;
+    width: 1100px;
   }
 
   .container {
@@ -51,9 +51,9 @@
 
   .guild-name {
     font-family: 'Rajdhani', sans-serif;
-    font-size: 42px;
+    font-size: 52px;
     font-weight: 700;
-    letter-spacing: 6px;
+    letter-spacing: 8px;
     background: linear-gradient(135deg, #c084fc, #818cf8, #38bdf8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -62,30 +62,31 @@
   .header-right { text-align: right; }
 
   .event-label {
-    font-size: 13px;
+    font-size: 14px;
     color: rgba(200,180,255,0.6);
     letter-spacing: 2px;
     text-transform: uppercase;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 
   .update-time {
-    font-size: 12px;
-    color: rgba(200,180,255,0.5);
+    font-size: 14px;
+    color: rgba(200,180,255,0.7);
   }
 
   .update-time span {
-    color: #a78bfa;
+    color: #c4b5fd;
     font-weight: 700;
+    font-size: 15px;
   }
 
   .rule-box {
     background: rgba(255,200,80,0.07);
     border: 1px solid rgba(255,200,80,0.25);
     border-radius: 10px;
-    padding: 10px 18px;
+    padding: 13px 20px;
     margin-bottom: 26px;
-    font-size: 13px;
+    font-size: 15px;
     color: #fcd34d;
     display: flex;
     align-items: center;
@@ -94,8 +95,8 @@
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px;
   }
 
   .row {
@@ -104,8 +105,8 @@
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 10px;
-    padding: 8px 10px;
-    gap: 6px;
+    padding: 11px 14px;
+    gap: 10px;
     min-width: 0;
   }
 
@@ -121,20 +122,20 @@
 
   .no {
     font-family: 'Rajdhani', sans-serif;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
     color: rgba(200,180,255,0.35);
-    width: 16px;
+    width: 22px;
     text-align: right;
     flex-shrink: 0;
   }
 
   .rank {
     font-family: 'Rajdhani', sans-serif;
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 700;
     color: rgba(200,180,255,0.5);
-    width: 26px;
+    width: 38px;
     text-align: center;
     flex-shrink: 0;
   }
@@ -144,7 +145,7 @@
 
   .name {
     flex: 1;
-    font-size: 11px;
+    font-size: 16px;
     font-weight: 700;
     color: #e2d9f3;
     white-space: nowrap;
@@ -155,23 +156,23 @@
 
   .score {
     font-family: 'Rajdhani', sans-serif;
-    font-size: 13px;
+    font-size: 18px;
     font-weight: 700;
     color: #a78bfa;
     text-align: right;
     flex-shrink: 0;
-    min-width: 44px;
+    min-width: 58px;
   }
 
   .score.high { color: #34d399; }
   .score.zero-score { color: rgba(255,100,100,0.6); }
 
   .updated {
-    font-size: 8.5px;
-    color: rgba(200,180,255,0.28);
+    font-size: 11px;
+    color: rgba(180,160,255,0.5);
     flex-shrink: 0;
     white-space: nowrap;
-    width: 58px;
+    width: 62px;
     text-align: right;
   }
 
@@ -185,18 +186,18 @@
   }
 
   .total {
-    font-size: 12px;
+    font-size: 14px;
     color: rgba(200,180,255,0.45);
   }
 
   .total strong {
     color: rgba(200,180,255,0.8);
     font-family: 'Rajdhani', sans-serif;
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .goal-note {
-    font-size: 12px;
+    font-size: 14px;
     color: rgba(252,211,77,0.6);
   }
 </style>
@@ -225,7 +226,6 @@
 </div>
 
 <script>
-// 업데이트 시간 (MM-DD HH:MM 형식)
 const UPDATE_TIME = "04-07 14:00";
 document.getElementById('lastUpdate').textContent = UPDATE_TIME;
 
