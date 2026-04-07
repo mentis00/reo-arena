@@ -2,19 +2,20 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REO Guild Arena</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     background: #0f0c1a;
     font-family: 'Noto Sans KR', sans-serif;
-    padding: 40px;
-    width: 1100px;
+    padding: 20px;
+    color: #fff;
   }
-
   .container {
+    max-width: 1100px;
+    margin: 0 auto;
     background: linear-gradient(160deg, #1a1030 0%, #0f0c1a 50%, #0c1525 100%);
     border: 1px solid rgba(180,130,255,0.2);
     border-radius: 20px;
@@ -22,7 +23,6 @@
     position: relative;
     overflow: hidden;
   }
-
   .container::before {
     content: '';
     position: absolute;
@@ -39,16 +39,15 @@
     background: radial-gradient(circle, rgba(60,160,255,0.1) 0%, transparent 70%);
     pointer-events: none;
   }
-
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 16px;
     margin-bottom: 28px;
     padding-bottom: 20px;
     border-bottom: 1px solid rgba(180,130,255,0.2);
   }
-
   .guild-name {
     font-family: 'Rajdhani', sans-serif;
     font-size: 52px;
@@ -58,9 +57,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-
   .header-right { text-align: right; }
-
   .event-label {
     font-size: 14px;
     color: rgba(200,180,255,0.6);
@@ -68,18 +65,15 @@
     text-transform: uppercase;
     margin-bottom: 8px;
   }
-
   .update-time {
     font-size: 14px;
     color: rgba(200,180,255,0.7);
   }
-
   .update-time span {
     color: #c4b5fd;
     font-weight: 700;
     font-size: 15px;
   }
-
   .rule-box {
     background: rgba(255,200,80,0.07);
     border: 1px solid rgba(255,200,80,0.25);
@@ -92,13 +86,11 @@
     align-items: center;
     gap: 8px;
   }
-
   .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 9px;
   }
-
   .row {
     display: flex;
     align-items: center;
@@ -109,17 +101,14 @@
     gap: 10px;
     min-width: 0;
   }
-
   .row.top3 {
     background: rgba(180,130,255,0.1);
     border-color: rgba(180,130,255,0.25);
   }
-
   .row.zero {
     background: rgba(255,80,80,0.05);
     border-color: rgba(255,80,80,0.15);
   }
-
   .no {
     font-family: 'Rajdhani', sans-serif;
     font-size: 13px;
@@ -129,20 +118,18 @@
     text-align: right;
     flex-shrink: 0;
   }
-
   .rank {
     font-family: 'Rajdhani', sans-serif;
     font-size: 14px;
     font-weight: 700;
     color: rgba(200,180,255,0.5);
-    width: 38px;
+    width: 46px;
     text-align: center;
     flex-shrink: 0;
   }
-
+  .rank.r1 { color: #fbbf24; }
   .rank.r2 { color: #94a3b8; }
   .rank.r3 { color: #cd7c3a; }
-
   .name {
     flex: 1;
     font-size: 16px;
@@ -153,7 +140,6 @@
     text-overflow: ellipsis;
     min-width: 0;
   }
-
   .score {
     font-family: 'Rajdhani', sans-serif;
     font-size: 18px;
@@ -163,19 +149,16 @@
     flex-shrink: 0;
     min-width: 58px;
   }
-
   .score.high { color: #34d399; }
   .score.zero-score { color: rgba(255,100,100,0.6); }
-
   .updated {
     font-size: 11px;
     color: rgba(180,160,255,0.5);
     flex-shrink: 0;
     white-space: nowrap;
-    width: 62px;
+    width: 84px;
     text-align: right;
   }
-
   .footer {
     margin-top: 24px;
     padding-top: 16px;
@@ -183,167 +166,705 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
   }
-
   .total {
     font-size: 14px;
     color: rgba(200,180,255,0.45);
   }
-
   .total strong {
     color: rgba(200,180,255,0.8);
     font-family: 'Rajdhani', sans-serif;
     font-size: 17px;
   }
-
   .goal-note {
     font-size: 14px;
     color: rgba(252,211,77,0.6);
+  }
+  @media (max-width: 860px) {
+    body { padding: 12px; }
+    .container { padding: 22px 18px 28px; }
+    .grid { grid-template-columns: 1fr; }
+    .header { flex-direction: column; align-items: flex-start; }
+    .header-right { text-align: left; }
+    .guild-name { font-size: 36px; letter-spacing: 4px; }
   }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">
-    <div class="guild-name">REO</div>
+    <div class="guild-name" id="guildName">REO</div>
     <div class="header-right">
-      <div class="event-label">Guild Arena</div>
+      <div class="event-label" id="eventLabel">Guild Arena</div>
       <div class="update-time">최종 업데이트: <span id="lastUpdate"></span></div>
     </div>
   </div>
 
   <div class="rule-box">
     <span>📌</span>
-    <span>길드 규칙: 길드 아레나(Guild Arena) 이벤트 진행 시 최소 개인점수 <strong>7,000점</strong> 달성 바랍니다.</span>
+    <span id="ruleText"></span>
   </div>
 
   <div class="grid" id="grid"></div>
 
   <div class="footer">
-    <div class="total">총 멤버 <strong>94명</strong> &nbsp;|&nbsp; Day 2 / 7</div>
-    <div class="goal-note">⚠️ 7,000점 미달성 시 주의</div>
+    <div class="total" id="footerLeft"></div>
+    <div class="goal-note" id="footerRight"></div>
   </div>
 </div>
 
+<script id="arenaData" type="application/json">{
+  "guildName": "REO",
+  "eventLabel": "Guild Arena",
+  "goalScore": 7000,
+  "totalMembers": 94,
+  "updateInput": "2026-04-07T14:00",
+  "members": [
+    {
+      "no": 1,
+      "rank": 2,
+      "name": "zzĐÚcdzz",
+      "score": 11730
+    },
+    {
+      "no": 2,
+      "rank": 3,
+      "name": "신타로",
+      "score": 11671
+    },
+    {
+      "no": 3,
+      "rank": 6,
+      "name": "HJjjjjjJH",
+      "score": 10107
+    },
+    {
+      "no": 4,
+      "rank": 7,
+      "name": "FM SONG🌹🌷",
+      "score": 9752
+    },
+    {
+      "no": 5,
+      "rank": 8,
+      "name": "WhiteCat",
+      "score": 9649
+    },
+    {
+      "no": 6,
+      "rank": 10,
+      "name": "Mạnh🙂",
+      "score": 9177
+    },
+    {
+      "no": 7,
+      "rank": 12,
+      "name": "red",
+      "score": 8648
+    },
+    {
+      "no": 8,
+      "rank": 18,
+      "name": "Haarhus",
+      "score": 7314
+    },
+    {
+      "no": 9,
+      "rank": 19,
+      "name": "Meeshka",
+      "score": 7310
+    },
+    {
+      "no": 10,
+      "rank": 20,
+      "name": "HoHo_LiM",
+      "score": 7035
+    },
+    {
+      "no": 11,
+      "rank": 21,
+      "name": "엘렌_Ellen🐒",
+      "score": 6900
+    },
+    {
+      "no": 12,
+      "rank": 22,
+      "name": "FARMER",
+      "score": 6716
+    },
+    {
+      "no": 13,
+      "rank": 23,
+      "name": "xxx",
+      "score": 6690
+    },
+    {
+      "no": 14,
+      "rank": 27,
+      "name": "페라리탄토끼🐱",
+      "score": 6377
+    },
+    {
+      "no": 15,
+      "rank": 31,
+      "name": "Lucas",
+      "score": 6069
+    },
+    {
+      "no": 16,
+      "rank": 34,
+      "name": "YOU_ゆう",
+      "score": 5956
+    },
+    {
+      "no": 17,
+      "rank": 37,
+      "name": "神崎澄",
+      "score": 5865
+    },
+    {
+      "no": 18,
+      "rank": 39,
+      "name": "GUN🍞",
+      "score": 5829
+    },
+    {
+      "no": 19,
+      "rank": 40,
+      "name": "HelpMe잔스노우",
+      "score": 5828
+    },
+    {
+      "no": 20,
+      "rank": 41,
+      "name": "FBPFK♡_소🐮",
+      "score": 5823
+    },
+    {
+      "no": 21,
+      "rank": 42,
+      "name": "Teresa🙂테라",
+      "score": 5769
+    },
+    {
+      "no": 22,
+      "rank": 44,
+      "name": "PRINCESS김깽",
+      "score": 5658
+    },
+    {
+      "no": 23,
+      "rank": 52,
+      "name": "燒漢堡",
+      "score": 5106
+    },
+    {
+      "no": 24,
+      "rank": 53,
+      "name": "夢小喵Mew",
+      "score": 5037
+    },
+    {
+      "no": 25,
+      "rank": 58,
+      "name": "장첸 zzang",
+      "score": 4761
+    },
+    {
+      "no": 26,
+      "rank": 59,
+      "name": "jason치로",
+      "score": 4746
+    },
+    {
+      "no": 27,
+      "rank": 61,
+      "name": "cho 초초",
+      "score": 4645
+    },
+    {
+      "no": 28,
+      "rank": 62,
+      "name": "ʚïɞMadameY",
+      "score": 4636
+    },
+    {
+      "no": 29,
+      "rank": 63,
+      "name": "yoon",
+      "score": 4577
+    },
+    {
+      "no": 30,
+      "rank": 64,
+      "name": "Satori",
+      "score": 4518
+    },
+    {
+      "no": 31,
+      "rank": 71,
+      "name": "Agnes",
+      "score": 4278
+    },
+    {
+      "no": 32,
+      "rank": 74,
+      "name": "Mỹ Miều",
+      "score": 4243
+    },
+    {
+      "no": 33,
+      "rank": 76,
+      "name": "Ven 벤데타",
+      "score": 4127
+    },
+    {
+      "no": 34,
+      "rank": 77,
+      "name": "Celli",
+      "score": 4104
+    },
+    {
+      "no": 35,
+      "rank": 78,
+      "name": "영블리_YoYo",
+      "score": 4081
+    },
+    {
+      "no": 36,
+      "rank": 81,
+      "name": "Teto디노니논",
+      "score": 3967
+    },
+    {
+      "no": 37,
+      "rank": 88,
+      "name": "HAYATO79",
+      "score": 3795
+    },
+    {
+      "no": 38,
+      "rank": 90,
+      "name": "NaNashi名無し",
+      "score": 3722
+    },
+    {
+      "no": 39,
+      "rank": 91,
+      "name": "aki_あき",
+      "score": 3706
+    },
+    {
+      "no": 40,
+      "rank": 92,
+      "name": "Ice Tea🍋",
+      "score": 3660
+    },
+    {
+      "no": 41,
+      "rank": 98,
+      "name": "ChouChou🐱",
+      "score": 3586
+    },
+    {
+      "no": 42,
+      "rank": 100,
+      "name": "키라리♡kirari",
+      "score": 3479
+    },
+    {
+      "no": 43,
+      "rank": 101,
+      "name": "Ramen",
+      "score": 3461
+    },
+    {
+      "no": 44,
+      "rank": 102,
+      "name": "Luffy",
+      "score": 3415
+    },
+    {
+      "no": 45,
+      "rank": 104,
+      "name": "CHICKEN",
+      "score": 3400
+    },
+    {
+      "no": 46,
+      "rank": 108,
+      "name": "YaY 압",
+      "score": 3312
+    },
+    {
+      "no": 47,
+      "rank": 113,
+      "name": "체리cherry🍒",
+      "score": 3174
+    },
+    {
+      "no": 48,
+      "rank": 114,
+      "name": "Dong_동삼집",
+      "score": 3174
+    },
+    {
+      "no": 49,
+      "rank": 119,
+      "name": "두부_Dubu",
+      "score": 3100
+    },
+    {
+      "no": 50,
+      "rank": 121,
+      "name": "yon_욘욘",
+      "score": 3038
+    },
+    {
+      "no": 51,
+      "rank": 123,
+      "name": "PoP Heroes",
+      "score": 3024
+    },
+    {
+      "no": 52,
+      "rank": 125,
+      "name": "Maese",
+      "score": 3000
+    },
+    {
+      "no": 53,
+      "rank": 128,
+      "name": "Uhhhokay",
+      "score": 2997
+    },
+    {
+      "no": 54,
+      "rank": 131,
+      "name": "새우🦐Shrimp",
+      "score": 2964
+    },
+    {
+      "no": 55,
+      "rank": 135,
+      "name": "Jmong_제이몽",
+      "score": 2930
+    },
+    {
+      "no": 56,
+      "rank": 139,
+      "name": "leez_이자하",
+      "score": 2894
+    },
+    {
+      "no": 57,
+      "rank": 149,
+      "name": "Yota Mafia",
+      "score": 2621
+    },
+    {
+      "no": 58,
+      "rank": 151,
+      "name": "Nbybi",
+      "score": 2587
+    },
+    {
+      "no": 59,
+      "rank": 153,
+      "name": "Warr_와르르",
+      "score": 2584
+    },
+    {
+      "no": 60,
+      "rank": 154,
+      "name": "Tarik",
+      "score": 2553
+    },
+    {
+      "no": 61,
+      "rank": 159,
+      "name": "ulssy_얼씨군요",
+      "score": 2448
+    },
+    {
+      "no": 62,
+      "rank": 166,
+      "name": "Mama Raz",
+      "score": 2413
+    },
+    {
+      "no": 63,
+      "rank": 170,
+      "name": "선배_sunbae",
+      "score": 2378
+    },
+    {
+      "no": 64,
+      "rank": 171,
+      "name": "Aphrodite",
+      "score": 2377
+    },
+    {
+      "no": 65,
+      "rank": 173,
+      "name": "Sekiden",
+      "score": 2351
+    },
+    {
+      "no": 66,
+      "rank": 178,
+      "name": "Apii😇",
+      "score": 2307
+    },
+    {
+      "no": 67,
+      "rank": 179,
+      "name": "sang 상한가",
+      "score": 2275
+    },
+    {
+      "no": 68,
+      "rank": 184,
+      "name": "⚡THOR⚡",
+      "score": 2221
+    },
+    {
+      "no": 69,
+      "rank": 186,
+      "name": "miyabi_みやび",
+      "score": 2185
+    },
+    {
+      "no": 70,
+      "rank": 194,
+      "name": "GodSpeed",
+      "score": 2120
+    },
+    {
+      "no": 71,
+      "rank": 195,
+      "name": "sweetNlow",
+      "score": 2104
+    },
+    {
+      "no": 72,
+      "rank": 201,
+      "name": "럭키Ducky",
+      "score": 2065
+    },
+    {
+      "no": 73,
+      "rank": 206,
+      "name": "Bell",
+      "score": 1964
+    },
+    {
+      "no": 74,
+      "rank": 211,
+      "name": "Shooshi",
+      "score": 1896
+    },
+    {
+      "no": 75,
+      "rank": 215,
+      "name": "Nichoo니콜🎮",
+      "score": 1863
+    },
+    {
+      "no": 76,
+      "rank": 220,
+      "name": "Fisher",
+      "score": 1794
+    },
+    {
+      "no": 77,
+      "rank": 223,
+      "name": "мιηgkα",
+      "score": 1725
+    },
+    {
+      "no": 78,
+      "rank": 225,
+      "name": "NSAIDs미노브이",
+      "score": 1724
+    },
+    {
+      "no": 79,
+      "rank": 227,
+      "name": "apple_공주",
+      "score": 1723
+    },
+    {
+      "no": 80,
+      "rank": 231,
+      "name": "페페",
+      "score": 1667
+    },
+    {
+      "no": 81,
+      "rank": 237,
+      "name": "Soda 솜사탕",
+      "score": 1619
+    },
+    {
+      "no": 82,
+      "rank": 261,
+      "name": "YT",
+      "score": 1209
+    },
+    {
+      "no": 83,
+      "rank": 270,
+      "name": "ゆき💗Yuki💗",
+      "score": 1102
+    },
+    {
+      "no": 84,
+      "rank": 278,
+      "name": "ⒷⒺⓁⓁⒾⓄⓃ",
+      "score": 1034
+    },
+    {
+      "no": 85,
+      "rank": 281,
+      "name": "LJ",
+      "score": 1008
+    },
+    {
+      "no": 86,
+      "rank": 287,
+      "name": "Miffy",
+      "score": 862
+    },
+    {
+      "no": 87,
+      "rank": 289,
+      "name": "Black_리무바이",
+      "score": 862
+    },
+    {
+      "no": 88,
+      "rank": 312,
+      "name": "Manjo_O",
+      "score": 517
+    },
+    {
+      "no": 89,
+      "rank": 313,
+      "name": "ASEDO 아세도",
+      "score": 517
+    },
+    {
+      "no": 90,
+      "rank": 323,
+      "name": "san、オーク",
+      "score": 401
+    },
+    {
+      "no": 91,
+      "rank": "-",
+      "name": "린_RIN",
+      "score": 0
+    },
+    {
+      "no": 92,
+      "rank": "-",
+      "name": "GOLD D SON",
+      "score": 0
+    },
+    {
+      "no": 93,
+      "rank": "-",
+      "name": "Andy5909",
+      "score": 0
+    },
+    {
+      "no": 94,
+      "rank": "-",
+      "name": "Lilith",
+      "score": 0
+    }
+  ]
+}</script>
 <script>
-const UPDATE_TIME = "04-07 14:00";
-document.getElementById('lastUpdate').textContent = UPDATE_TIME;
+const data = JSON.parse(document.getElementById('arenaData').textContent);
 
-const members = [
-  {no:1,  rank:2,   name:"zzĐÚcdzz",       score:11730, updated:"04-07 14:00"},
-  {no:2,  rank:3,   name:"신타로",           score:11671, updated:"04-07 14:00"},
-  {no:3,  rank:6,   name:"HJjjjjjJH",       score:10107, updated:"04-07 14:00"},
-  {no:4,  rank:7,   name:"FM SONG🌹🌷",     score:9752,  updated:"04-07 14:00"},
-  {no:5,  rank:8,   name:"WhiteCat",         score:9649,  updated:"04-07 14:00"},
-  {no:6,  rank:10,  name:"Mạnh🙂",          score:9177,  updated:"04-07 14:00"},
-  {no:7,  rank:12,  name:"red",              score:8648,  updated:"04-07 14:00"},
-  {no:8,  rank:18,  name:"Haarhus",          score:7314,  updated:"04-07 14:00"},
-  {no:9,  rank:19,  name:"Meeshka",          score:7310,  updated:"04-07 14:00"},
-  {no:10, rank:20,  name:"HoHo_LiM",         score:7035,  updated:"04-07 14:00"},
-  {no:11, rank:21,  name:"엘렌_Ellen🐒",     score:6900,  updated:"04-07 14:00"},
-  {no:12, rank:22,  name:"FARMER",           score:6716,  updated:"04-07 14:00"},
-  {no:13, rank:23,  name:"xxx",              score:6690,  updated:"04-07 14:00"},
-  {no:14, rank:27,  name:"페라리탄토끼🐱",  score:6377,  updated:"04-07 14:00"},
-  {no:15, rank:31,  name:"Lucas",            score:6069,  updated:"04-07 14:00"},
-  {no:16, rank:34,  name:"YOU_ゆう",         score:5956,  updated:"04-07 14:00"},
-  {no:17, rank:37,  name:"神崎澄",           score:5865,  updated:"04-07 14:00"},
-  {no:18, rank:39,  name:"GUN🍞",           score:5829,  updated:"04-07 14:00"},
-  {no:19, rank:40,  name:"HelpMe잔스노우",   score:5828,  updated:"04-07 14:00"},
-  {no:20, rank:41,  name:"FBPFK♡_소🐮",    score:5823,  updated:"04-07 14:00"},
-  {no:21, rank:42,  name:"Teresa🙂테라",    score:5769,  updated:"04-07 14:00"},
-  {no:22, rank:44,  name:"PRINCESS김깽",    score:5658,  updated:"04-07 14:00"},
-  {no:23, rank:52,  name:"燒漢堡",          score:5106,  updated:"04-07 14:00"},
-  {no:24, rank:53,  name:"夢小喵Mew",       score:5037,  updated:"04-07 14:00"},
-  {no:25, rank:58,  name:"장첸 zzang",      score:4761,  updated:"04-07 14:00"},
-  {no:26, rank:59,  name:"jason치로",       score:4746,  updated:"04-07 14:00"},
-  {no:27, rank:61,  name:"cho 초초",        score:4645,  updated:"04-07 14:00"},
-  {no:28, rank:62,  name:"ʚïɞMadameY",     score:4636,  updated:"04-07 14:00"},
-  {no:29, rank:63,  name:"yoon",            score:4577,  updated:"04-07 14:00"},
-  {no:30, rank:64,  name:"Satori",          score:4518,  updated:"04-07 14:00"},
-  {no:31, rank:71,  name:"Agnes",           score:4278,  updated:"04-07 14:00"},
-  {no:32, rank:74,  name:"Mỹ Miều",        score:4243,  updated:"04-07 14:00"},
-  {no:33, rank:76,  name:"Ven 벤데타",      score:4127,  updated:"04-07 14:00"},
-  {no:34, rank:77,  name:"Celli",           score:4104,  updated:"04-07 14:00"},
-  {no:35, rank:78,  name:"영블리_YoYo",     score:4081,  updated:"04-07 14:00"},
-  {no:36, rank:81,  name:"Teto디노니논",    score:3967,  updated:"04-07 14:00"},
-  {no:37, rank:88,  name:"HAYATO79",        score:3795,  updated:"04-07 14:00"},
-  {no:38, rank:90,  name:"NaNashi名無し",   score:3722,  updated:"04-07 14:00"},
-  {no:39, rank:91,  name:"aki_あき",        score:3706,  updated:"04-07 14:00"},
-  {no:40, rank:92,  name:"Ice Tea🍋",       score:3660,  updated:"04-07 14:00"},
-  {no:41, rank:98,  name:"ChouChou🐱",      score:3586,  updated:"04-07 14:00"},
-  {no:42, rank:100, name:"키라리♡kirari",   score:3479,  updated:"04-07 14:00"},
-  {no:43, rank:101, name:"Ramen",           score:3461,  updated:"04-07 14:00"},
-  {no:44, rank:102, name:"Luffy",           score:3415,  updated:"04-07 14:00"},
-  {no:45, rank:104, name:"CHICKEN",         score:3400,  updated:"04-07 14:00"},
-  {no:46, rank:108, name:"YaY 압",          score:3312,  updated:"04-07 14:00"},
-  {no:47, rank:113, name:"체리cherry🍒",    score:3174,  updated:"04-07 14:00"},
-  {no:48, rank:114, name:"Dong_동삼집",     score:3174,  updated:"04-07 14:00"},
-  {no:49, rank:119, name:"두부_Dubu",       score:3100,  updated:"04-07 14:00"},
-  {no:50, rank:121, name:"yon_욘욘",        score:3038,  updated:"04-07 14:00"},
-  {no:51, rank:123, name:"PoP Heroes",      score:3024,  updated:"04-07 14:00"},
-  {no:52, rank:125, name:"Maese",           score:3000,  updated:"04-07 14:00"},
-  {no:53, rank:128, name:"Uhhhokay",        score:2997,  updated:"04-07 14:00"},
-  {no:54, rank:131, name:"새우🦐Shrimp",    score:2964,  updated:"04-07 14:00"},
-  {no:55, rank:135, name:"Jmong_제이몽",    score:2930,  updated:"04-07 14:00"},
-  {no:56, rank:139, name:"leez_이자하",     score:2894,  updated:"04-07 14:00"},
-  {no:57, rank:149, name:"Yota Mafia",      score:2621,  updated:"04-07 14:00"},
-  {no:58, rank:151, name:"Nbybi",           score:2587,  updated:"04-07 14:00"},
-  {no:59, rank:153, name:"Warr_와르르",     score:2584,  updated:"04-07 14:00"},
-  {no:60, rank:154, name:"Tarik",           score:2553,  updated:"04-07 14:00"},
-  {no:61, rank:159, name:"ulssy_얼씨군요",  score:2448,  updated:"04-07 14:00"},
-  {no:62, rank:166, name:"Mama Raz",        score:2413,  updated:"04-07 14:00"},
-  {no:63, rank:170, name:"선배_sunbae",     score:2378,  updated:"04-07 14:00"},
-  {no:64, rank:171, name:"Aphrodite",       score:2377,  updated:"04-07 14:00"},
-  {no:65, rank:173, name:"Sekiden",         score:2351,  updated:"04-07 14:00"},
-  {no:66, rank:178, name:"Apii😇",          score:2307,  updated:"04-07 14:00"},
-  {no:67, rank:179, name:"sang 상한가",     score:2275,  updated:"04-07 14:00"},
-  {no:68, rank:184, name:"⚡THOR⚡",        score:2221,  updated:"04-07 14:00"},
-  {no:69, rank:186, name:"miyabi_みやび",   score:2185,  updated:"04-07 14:00"},
-  {no:70, rank:194, name:"GodSpeed",        score:2120,  updated:"04-07 14:00"},
-  {no:71, rank:195, name:"sweetNlow",       score:2104,  updated:"04-07 14:00"},
-  {no:72, rank:201, name:"럭키Ducky",       score:2065,  updated:"04-07 14:00"},
-  {no:73, rank:206, name:"Bell",            score:1964,  updated:"04-07 14:00"},
-  {no:74, rank:211, name:"Shooshi",         score:1896,  updated:"04-07 14:00"},
-  {no:75, rank:215, name:"Nichoo니콜🎮",    score:1863,  updated:"04-07 14:00"},
-  {no:76, rank:220, name:"Fisher",          score:1794,  updated:"04-07 14:00"},
-  {no:77, rank:223, name:"мιηgkα",         score:1725,  updated:"04-07 14:00"},
-  {no:78, rank:225, name:"NSAIDs미노브이",  score:1724,  updated:"04-07 14:00"},
-  {no:79, rank:227, name:"apple_공주",      score:1723,  updated:"04-07 14:00"},
-  {no:80, rank:231, name:"페페",            score:1667,  updated:"04-07 14:00"},
-  {no:81, rank:237, name:"Soda 솜사탕",     score:1619,  updated:"04-07 14:00"},
-  {no:82, rank:261, name:"YT",             score:1209,  updated:"04-07 14:00"},
-  {no:83, rank:270, name:"ゆき💗Yuki💗",   score:1102,  updated:"04-07 14:00"},
-  {no:84, rank:278, name:"ⒷⒺⓁⓁⒾⓄⓃ",   score:1034,  updated:"04-07 14:00"},
-  {no:85, rank:281, name:"LJ",             score:1008,  updated:"04-07 14:00"},
-  {no:86, rank:287, name:"Miffy",          score:862,   updated:"04-07 14:00"},
-  {no:87, rank:289, name:"Black_리무바이", score:862,   updated:"04-07 14:00"},
-  {no:88, rank:312, name:"Manjo_O",        score:517,   updated:"04-07 14:00"},
-  {no:89, rank:313, name:"ASEDO 아세도",   score:517,   updated:"04-07 14:00"},
-  {no:90, rank:323, name:"san、オーク",    score:401,   updated:"04-07 14:00"},
-  {no:91, rank:"-", name:"린_RIN",         score:0,     updated:"04-07 14:00"},
-  {no:92, rank:"-", name:"GOLD D SON",     score:0,     updated:"04-07 14:00"},
-  {no:93, rank:"-", name:"Andy5909",       score:0,     updated:"04-07 14:00"},
-  {no:94, rank:"-", name:"Lilith",         score:0,     updated:"04-07 14:00"},
-];
+function formatUpdate(input){
+  if(!input) return '';
+  const d = new Date(input);
+  if (isNaN(d.getTime())) return input;
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  return `${m}-${day} ${hh}:${mm}`;
+}
+function getDayText(input){
+  const d = new Date(input);
+  if (isNaN(d.getTime())) return 'Day ? / 7';
+  const day = d.getDay(); // Sun0 Mon1 Tue2
+  const map = {1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 0:7};
+  return `Day ${map[day] ?? '?'} / 7`;
+}
+function rankNumber(v){
+  if (v === '-' || v === '' || v == null) return Infinity;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : Infinity;
+}
+function escapeHtml(value){
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'","&#39;");
+}
+const displayUpdate = formatUpdate(data.updateInput);
+const goalScore = Number(data.goalScore || 7000);
+
+document.getElementById('guildName').textContent = data.guildName || 'REO';
+document.getElementById('eventLabel').textContent = data.eventLabel || 'Guild Arena';
+document.getElementById('lastUpdate').textContent = displayUpdate;
+document.getElementById('ruleText').innerHTML = `길드 규칙: 길드 아레나(Guild Arena) 이벤트 진행 시 최소 개인점수 <strong>${goalScore.toLocaleString()}점</strong> 달성 바랍니다.`;
+
+const sortedMembers = [...(data.members || [])].sort((a, b) => {
+  const scoreDiff = (Number(b.score)||0) - (Number(a.score)||0);
+  if (scoreDiff !== 0) return scoreDiff;
+  const rankDiff = rankNumber(a.rank) - rankNumber(b.rank);
+  if (rankDiff !== 0) return rankDiff;
+  return String(a.name || '').localeCompare(String(b.name || ''), 'ko');
+}).map((m, i) => ({
+  ...m,
+  no: i + 1,
+  updated: displayUpdate
+}));
 
 const grid = document.getElementById('grid');
-members.forEach(m => {
-  const isTop3 = m.rank <= 3;
-  const isZero = m.score === 0;
-  const scoreClass = m.score >= 7000 ? 'high' : isZero ? 'zero-score' : '';
-  const rankClass = m.rank === 2 ? 'r2' : m.rank === 3 ? 'r3' : '';
+grid.innerHTML = sortedMembers.map(m => {
+  const numericRank = rankNumber(m.rank);
+  const isTop3 = Number.isFinite(numericRank) && numericRank <= 3;
+  const isZero = Number(m.score) === 0;
+  const scoreClass = Number(m.score) >= goalScore ? 'high' : isZero ? 'zero-score' : '';
+  const rankClass = numericRank === 1 ? 'r1' : numericRank === 2 ? 'r2' : numericRank === 3 ? 'r3' : '';
   const rowClass = isTop3 ? 'row top3' : isZero ? 'row zero' : 'row';
-  const scoreStr = m.score === 0 ? '0' : m.score.toLocaleString();
-  grid.innerHTML += `
+  const scoreStr = Number(m.score || 0).toLocaleString();
+  return `
     <div class="${rowClass}">
       <span class="no">${m.no}</span>
       <span class="rank ${rankClass}">${m.rank === '-' ? '—' : '#'+m.rank}</span>
-      <span class="name">${m.name}</span>
+      <span class="name">${escapeHtml(m.name)}</span>
       <span class="score ${scoreClass}">${scoreStr}</span>
-      <span class="updated">${m.updated}</span>
+      <span class="updated">${escapeHtml(m.updated)}</span>
     </div>
   `;
-});
+}).join('');
+
+const totalMembers = Number(data.totalMembers || sortedMembers.length);
+const lowCount = sortedMembers.filter(m => Number(m.score || 0) < goalScore).length;
+document.getElementById('footerLeft').innerHTML = `총 멤버 <strong>${totalMembers}명</strong> &nbsp;|&nbsp; ${getDayText(data.updateInput)}`;
+document.getElementById('footerRight').textContent = `⚠️ ${goalScore.toLocaleString()}점 미달성 시 주의`;
 </script>
 </body>
 </html>
