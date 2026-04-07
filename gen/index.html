@@ -311,7 +311,7 @@ function renderPreview() {
           const rankClass = numericRank === 1 ? 'r1' : numericRank === 2 ? 'r2' : numericRank === 3 ? 'r3' : '';
           const rowClass = isTop3 ? 'arena-row top3' : isZero ? 'arena-row zero' : 'arena-row';
           return `
-            <div class="${rowClass}">
+            <div class="${rowClass}" data-score="${Number(m.score||0)}">
               <span class="arena-no">${m.no}</span>
               <span class="arena-rank ${rankClass}">${m.rank === '-' ? '—' : '#'+m.rank}</span>
               <span class="arena-name">${escapeHtml(m.name)}</span>
@@ -342,7 +342,7 @@ function buildStaticIndexHtml() {
     const rankClass = numericRank === 1 ? 'r1' : numericRank === 2 ? 'r2' : numericRank === 3 ? 'r3' : '';
     const rowClass = isTop3 ? 'row top3' : isZero ? 'row zero' : 'row';
     return `
-    <div class="${rowClass}">
+    <div class="${rowClass}" data-score="${Number(m.score||0)}">
       <span class="no">${m.no}</span>
       <span class="rank ${rankClass}">${m.rank === '-' ? '—' : '#'+m.rank}</span>
       <span class="name">${escapeHtml(m.name)}</span>
@@ -410,12 +410,28 @@ function buildStaticIndexHtml() {
     <span>📌</span>
     <span>길드 규칙: 길드 아레나(Guild Arena) 이벤트 진행 시 최소 개인점수 <strong>${goalScore.toLocaleString()}점</strong> 달성 바랍니다.</span>
   </div>
-  <div class="grid">${rows}</div>
+  <div class="filter-bar">
+<button onclick="filterRows('all')">전체</button>
+<button onclick="filterRows('above')">이상</button>
+<button onclick="filterRows('below')">미만</button>
+</div>
+<div class="grid">${rows}</div>
   <div class="footer">
     <div class="total">총 멤버 <strong>${sorted.length}명</strong> &nbsp;|&nbsp; ${getDayText(state.updateInput)}</div>
     <div class="goal-note">⚠️ ${goalScore.toLocaleString()}점 미달성 시 주의</div>
   </div>
 </div>
+<script>
+function filterRows(type){
+  const goal =  + goalScore + ;
+  document.querySelectorAll('.row').forEach(r=>{
+    const s = Number(r.getAttribute('data-score')||0);
+    if(type==='all') r.style.display='';
+    else if(type==='above') r.style.display = s>=goal?'':'none';
+    else if(type==='below') r.style.display = s<goal?'':'none';
+  });
+}
+</script>
 </body>
 </html>`;
 }
