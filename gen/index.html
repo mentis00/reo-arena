@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>REO Arena Generator Local</title>
+<title>REO Arena Generator</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');
   *{box-sizing:border-box}
@@ -14,9 +14,10 @@
   .body{padding:18px;}
   .stack{display:flex;flex-direction:column;gap:14px;}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
   label{display:block;font-size:13px;color:#b7c2e6;margin-bottom:6px;}
-  input, textarea{width:100%;border:1px solid rgba(255,255,255,.09);background:#0c1428;color:#eef2ff;border-radius:12px;padding:10px 12px;font-size:14px;outline:none;}
+  input, textarea{
+    width:100%;border:1px solid rgba(255,255,255,.09);background:#0c1428;color:#eef2ff;border-radius:12px;padding:10px 12px;font-size:14px;outline:none;
+  }
   textarea{min-height:130px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
   button{border:0;border-radius:12px;padding:11px 14px;font-size:14px;font-weight:800;cursor:pointer;}
   .btn-primary{background:linear-gradient(135deg,#8b5cf6,#38bdf8);color:#fff;}
@@ -34,14 +35,12 @@
   .small{font-size:11px;color:#9fb0df}
   .mini-btn{padding:7px 10px;font-size:12px;border-radius:8px}
   .file-input{display:none}
-
   .table-wrap input{min-width:0}
   .name-input{min-width:160px}
   .rank-input{width:74px}
   .score-input{width:92px}
-
   @media (max-width:1250px){ .wrap{grid-template-columns:1fr;} .preview-scroll{max-height:none;} }
-  @media (max-width:860px){ .grid2,.grid3{grid-template-columns:1fr;} }
+  @media (max-width:860px){ .grid2{grid-template-columns:1fr;} }
 
   .arena-container {
     max-width: 1100px; margin: 0 auto; background: linear-gradient(160deg, #1a1030 0%, #0f0c1a 50%, #0c1525 100%);
@@ -95,18 +94,18 @@
   <section class="panel">
     <div class="head">
       <div class="topline">
-        <span>로컬용 생성기</span>
-        <span class="badge">암호 없음 / JSON 저장 가능</span>
+        <span>아레나 점수 입력기</span>
+        <span class="badge">GitHub: 같은 폴더 arena-data.json 자동 로드</span>
       </div>
     </div>
     <div class="body stack">
       <div class="grid2">
         <div><label>길드명</label><input id="guildName"></div>
-        <div><label>이벤트명</label><input id="eventLabel"></div>
+        <div><label>이벤트명</label><input value="Guild Arena" readonly style="opacity:0.7"></div>
       </div>
-      <div class="grid3">
+
+      <div class="grid2">
         <div><label>목표 점수</label><input id="goalScore" type="number"></div>
-        <div><label>총 길드원 수</label><input id="totalMembers" type="number"></div>
         <div><label>최종 업데이트</label><input id="lastUpdateText" readonly></div>
       </div>
 
@@ -123,8 +122,8 @@
       <textarea id="jsonBox" placeholder="JSON 붙여넣기 / 백업용"></textarea>
 
       <div class="hint">
-        점수와 <strong>#등수</strong>를 바꾸면 해당 길드원의 업데이트 시간이 현재 PC 시간으로 바뀝니다.<br>
-        길드원 추가/삭제 가능, JSON 저장/불러오기 가능.
+        GitHub에서는 시작 시 같은 폴더의 <strong>arena-data.json</strong>을 자동으로 읽습니다.<br>
+        로컬에서는 자동 로드가 안 될 수 있으니 <strong>JSON 파일 불러오기</strong>를 사용하세요.
       </div>
 
       <div class="table-wrap">
@@ -155,578 +154,14 @@
 
 <script>
 let state = {
-  "guildName": "REO",
-  "eventLabel": "Guild Arena",
-  "goalScore": 7000,
-  "totalMembers": 94,
-  "updateInput": "2026-04-07T14:00",
-  "members": [
-    {
-      "rank": 2,
-      "name": "zzĐÚcdzz",
-      "score": 11730,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 3,
-      "name": "신타로",
-      "score": 11671,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 6,
-      "name": "HJjjjjjJH",
-      "score": 10107,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 7,
-      "name": "FM SONG🌹🌷",
-      "score": 9752,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 8,
-      "name": "WhiteCat",
-      "score": 9649,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 10,
-      "name": "Mạnh🙂",
-      "score": 9177,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 12,
-      "name": "red",
-      "score": 8648,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 18,
-      "name": "Haarhus",
-      "score": 7314,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 19,
-      "name": "Meeshka",
-      "score": 7310,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 20,
-      "name": "HoHo_LiM",
-      "score": 7035,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 21,
-      "name": "엘렌_Ellen🐒",
-      "score": 6900,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 22,
-      "name": "FARMER",
-      "score": 6716,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 23,
-      "name": "xxx",
-      "score": 6690,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 27,
-      "name": "페라리탄토끼🐱",
-      "score": 6377,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 31,
-      "name": "Lucas",
-      "score": 6069,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 34,
-      "name": "YOU_ゆう",
-      "score": 5956,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 37,
-      "name": "神崎澄",
-      "score": 5865,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 39,
-      "name": "GUN🍞",
-      "score": 5829,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 40,
-      "name": "HelpMe잔스노우",
-      "score": 5828,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 41,
-      "name": "FBPFK♡_소🐮",
-      "score": 5823,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 42,
-      "name": "Teresa🙂테라",
-      "score": 5769,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 44,
-      "name": "PRINCESS김깽",
-      "score": 5658,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 52,
-      "name": "燒漢堡",
-      "score": 5106,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 53,
-      "name": "夢小喵Mew",
-      "score": 5037,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 58,
-      "name": "장첸 zzang",
-      "score": 4761,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 59,
-      "name": "jason치로",
-      "score": 4746,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 61,
-      "name": "cho 초초",
-      "score": 4645,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 62,
-      "name": "ʚïɞMadameY",
-      "score": 4636,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 63,
-      "name": "yoon",
-      "score": 4577,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 64,
-      "name": "Satori",
-      "score": 4518,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 71,
-      "name": "Agnes",
-      "score": 4278,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 74,
-      "name": "Mỹ Miều",
-      "score": 4243,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 76,
-      "name": "Ven 벤데타",
-      "score": 4127,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 77,
-      "name": "Celli",
-      "score": 4104,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 78,
-      "name": "영블리_YoYo",
-      "score": 4081,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 81,
-      "name": "Teto디노니논",
-      "score": 3967,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 88,
-      "name": "HAYATO79",
-      "score": 3795,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 90,
-      "name": "NaNashi名無し",
-      "score": 3722,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 91,
-      "name": "aki_あき",
-      "score": 3706,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 92,
-      "name": "Ice Tea🍋",
-      "score": 3660,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 98,
-      "name": "ChouChou🐱",
-      "score": 3586,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 100,
-      "name": "키라리♡kirari",
-      "score": 3479,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 101,
-      "name": "Ramen",
-      "score": 3461,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 102,
-      "name": "Luffy",
-      "score": 3415,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 104,
-      "name": "CHICKEN",
-      "score": 3400,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 108,
-      "name": "YaY 압",
-      "score": 3312,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 113,
-      "name": "체리cherry🍒",
-      "score": 3174,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 114,
-      "name": "Dong_동삼집",
-      "score": 3174,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 119,
-      "name": "두부_Dubu",
-      "score": 3100,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 121,
-      "name": "yon_욘욘",
-      "score": 3038,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 123,
-      "name": "PoP Heroes",
-      "score": 3024,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 125,
-      "name": "Maese",
-      "score": 3000,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 128,
-      "name": "Uhhhokay",
-      "score": 2997,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 131,
-      "name": "새우🦐Shrimp",
-      "score": 2964,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 135,
-      "name": "Jmong_제이몽",
-      "score": 2930,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 139,
-      "name": "leez_이자하",
-      "score": 2894,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 149,
-      "name": "Yota Mafia",
-      "score": 2621,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 151,
-      "name": "Nbybi",
-      "score": 2587,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 153,
-      "name": "Warr_와르르",
-      "score": 2584,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 154,
-      "name": "Tarik",
-      "score": 2553,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 159,
-      "name": "ulssy_얼씨군요",
-      "score": 2448,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 166,
-      "name": "Mama Raz",
-      "score": 2413,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 170,
-      "name": "선배_sunbae",
-      "score": 2378,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 171,
-      "name": "Aphrodite",
-      "score": 2377,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 173,
-      "name": "Sekiden",
-      "score": 2351,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 178,
-      "name": "Apii😇",
-      "score": 2307,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 179,
-      "name": "sang 상한가",
-      "score": 2275,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 184,
-      "name": "⚡THOR⚡",
-      "score": 2221,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 186,
-      "name": "miyabi_みやび",
-      "score": 2185,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 194,
-      "name": "GodSpeed",
-      "score": 2120,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 195,
-      "name": "sweetNlow",
-      "score": 2104,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 201,
-      "name": "럭키Ducky",
-      "score": 2065,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 206,
-      "name": "Bell",
-      "score": 1964,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 211,
-      "name": "Shooshi",
-      "score": 1896,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 215,
-      "name": "Nichoo니콜🎮",
-      "score": 1863,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 220,
-      "name": "Fisher",
-      "score": 1794,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 223,
-      "name": "мιηgkα",
-      "score": 1725,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 225,
-      "name": "NSAIDs미노브이",
-      "score": 1724,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 227,
-      "name": "apple_공주",
-      "score": 1723,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 231,
-      "name": "페페",
-      "score": 1667,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 237,
-      "name": "Soda 솜사탕",
-      "score": 1619,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 261,
-      "name": "YT",
-      "score": 1209,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 270,
-      "name": "ゆき💗Yuki💗",
-      "score": 1102,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 278,
-      "name": "ⒷⒺⓁⓁⒾⓄⓃ",
-      "score": 1034,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 281,
-      "name": "LJ",
-      "score": 1008,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 287,
-      "name": "Miffy",
-      "score": 862,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 289,
-      "name": "Black_리무바이",
-      "score": 862,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 312,
-      "name": "Manjo_O",
-      "score": 517,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 313,
-      "name": "ASEDO 아세도",
-      "score": 517,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": 323,
-      "name": "san、オーク",
-      "score": 401,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": "-",
-      "name": "린_RIN",
-      "score": 0,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": "-",
-      "name": "GOLD D SON",
-      "score": 0,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": "-",
-      "name": "Andy5909",
-      "score": 0,
-      "updated": "2026-04-07T14:00"
-    },
-    {
-      "rank": "-",
-      "name": "Lilith",
-      "score": 0,
-      "updated": "2026-04-07T14:00"
-    }
-  ]
+  guildName: '',
+  eventLabel: 'Guild Arena',
+  goalScore: '',
+  totalMembers: '',
+  updateInput: '',
+  members: []
 };
+
 const $ = id => document.getElementById(id);
 
 function nowLocalIso() {
@@ -769,11 +204,19 @@ function escapeHtml(value) {
 }
 function latestUpdateIso() {
   const list = (state.members || []).map(m => m.updated).filter(Boolean);
-  if (!list.length) return nowLocalIso();
+  if (!list.length) return '';
   return list.sort().slice(-1)[0];
 }
+function ensureMemberDefaults() {
+  (state.members || []).forEach(m => {
+    if (m.updated == null || m.updated === '') m.updated = state.updateInput || nowLocalIso();
+    if (m.rank == null || m.rank === '') m.rank = '-';
+    if (m.score == null || Number.isNaN(Number(m.score))) m.score = 0;
+  });
+}
 function syncMeta() {
-  state.updateInput = latestUpdateIso();
+  state.totalMembers = (state.members || []).length;
+  state.updateInput = latestUpdateIso() || state.updateInput || '';
   $('lastUpdateText').value = formatUpdate(state.updateInput);
 }
 function sortMembers() {
@@ -785,27 +228,17 @@ function sortMembers() {
     return String(a.name || '').localeCompare(String(b.name || ''), 'ko');
   });
 }
-function ensureMemberDefaults() {
-  (state.members || []).forEach(m => {
-    if (m.updated == null || m.updated === '') m.updated = state.updateInput || nowLocalIso();
-    if (m.rank == null || m.rank === '') m.rank = '-';
-    if (m.score == null || Number.isNaN(Number(m.score))) m.score = 0;
-  });
-}
 function syncForm() {
   ensureMemberDefaults();
   $('guildName').value = state.guildName || '';
-  $('eventLabel').value = state.eventLabel || '';
-  $('goalScore').value = state.goalScore || 7000;
-  $('totalMembers').value = state.totalMembers || 94;
+  $('goalScore').value = state.goalScore || '';
   syncMeta();
   $('jsonBox').value = JSON.stringify(state, null, 2);
 }
 function syncState() {
-  state.guildName = $('guildName').value.trim() || 'REO';
-  state.eventLabel = $('eventLabel').value.trim() || 'Guild Arena';
-  state.goalScore = Number($('goalScore').value) || 7000;
-  state.totalMembers = Number($('totalMembers').value) || 94;
+  state.guildName = $('guildName').value.trim();
+  state.eventLabel = 'Guild Arena';
+  state.goalScore = Number($('goalScore').value) || 0;
   syncMeta();
   $('jsonBox').value = JSON.stringify(state, null, 2);
   renderTable();
@@ -853,15 +286,15 @@ function renderTable() {
 }
 function renderPreview() {
   sortMembers();
-  const goalScore = Number(state.goalScore || 7000);
+  const goalScore = Number(state.goalScore || 0);
   const displayUpdate = formatUpdate(state.updateInput);
   const sorted = state.members.map((m, i) => ({ ...m, no:i+1 }));
   $('previewRoot').innerHTML = `
     <div class="arena-container">
       <div class="arena-header">
-        <div class="arena-guild-name">${escapeHtml(state.guildName || 'REO')}</div>
+        <div class="arena-guild-name">${escapeHtml(state.guildName || '')}</div>
         <div class="arena-header-right">
-          <div class="arena-event-label">${escapeHtml(state.eventLabel || 'Guild Arena')}</div>
+          <div class="arena-event-label">Guild Arena</div>
           <div class="arena-update-time">최종 업데이트: <span>${escapeHtml(displayUpdate)}</span></div>
         </div>
       </div>
@@ -889,7 +322,7 @@ function renderPreview() {
         }).join('')}
       </div>
       <div class="arena-footer">
-        <div class="arena-total">총 멤버 <strong>${Number(state.totalMembers||94)}명</strong> &nbsp;|&nbsp; ${getDayText(state.updateInput)}</div>
+        <div class="arena-total">총 멤버 <strong>${sorted.length}명</strong> &nbsp;|&nbsp; ${getDayText(state.updateInput)}</div>
         <div class="arena-goal-note">⚠️ ${goalScore.toLocaleString()}점 미달성 시 주의</div>
       </div>
     </div>
@@ -897,7 +330,7 @@ function renderPreview() {
 }
 function buildStaticIndexHtml() {
   sortMembers();
-  const goalScore = Number(state.goalScore || 7000);
+  const goalScore = Number(state.goalScore || 0);
   const displayUpdate = formatUpdate(state.updateInput);
   const sorted = state.members.map((m, i) => ({ ...m, no:i+1 }));
 
@@ -923,7 +356,7 @@ function buildStaticIndexHtml() {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${escapeHtml(state.guildName || 'REO')} Guild Arena</title>
+<title>${escapeHtml(state.guildName || '')} Guild Arena</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -967,9 +400,9 @@ function buildStaticIndexHtml() {
 <body>
 <div class="container">
   <div class="header">
-    <div class="guild-name">${escapeHtml(state.guildName || 'REO')}</div>
+    <div class="guild-name">${escapeHtml(state.guildName || '')}</div>
     <div class="header-right">
-      <div class="event-label">${escapeHtml(state.eventLabel || 'Guild Arena')}</div>
+      <div class="event-label">Guild Arena</div>
       <div class="update-time">최종 업데이트: <span>${escapeHtml(displayUpdate)}</span></div>
     </div>
   </div>
@@ -979,7 +412,7 @@ function buildStaticIndexHtml() {
   </div>
   <div class="grid">${rows}</div>
   <div class="footer">
-    <div class="total">총 멤버 <strong>${Number(state.totalMembers||94)}명</strong> &nbsp;|&nbsp; ${getDayText(state.updateInput)}</div>
+    <div class="total">총 멤버 <strong>${sorted.length}명</strong> &nbsp;|&nbsp; ${getDayText(state.updateInput)}</div>
     <div class="goal-note">⚠️ ${goalScore.toLocaleString()}점 미달성 시 주의</div>
   </div>
 </div>
@@ -995,12 +428,32 @@ function downloadFile(name, content, type) {
   a.click();
   URL.revokeObjectURL(url);
 }
+async function tryLoadArenaJsonFromSameFolder() {
+  try {
+    const res = await fetch('./arena-data.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error();
+    const parsed = await res.json();
+    if (!parsed || !Array.isArray(parsed.members)) throw new Error();
+    state = parsed;
+    state.eventLabel = 'Guild Arena';
+    ensureMemberDefaults();
+  } catch (e) {
+    // GitHub가 아닌 로컬 file:// 에서는 자동 로드 실패 가능
+  }
+}
+
 $('downloadIndexBtn').addEventListener('click', () => {
   syncMeta();
+  $('jsonBox').value = JSON.stringify(state, null, 2);
+  renderTable();
+  renderPreview();
   downloadFile('index.html', buildStaticIndexHtml(), 'text/html;charset=utf-8');
 });
 $('downloadJsonBtn').addEventListener('click', () => {
   syncMeta();
+  $('jsonBox').value = JSON.stringify(state, null, 2);
+  renderTable();
+  renderPreview();
   downloadFile('arena-data.json', JSON.stringify(state, null, 2), 'application/json;charset=utf-8');
 });
 $('loadJsonBtn').addEventListener('click', () => $('jsonFileInput').click());
@@ -1012,6 +465,7 @@ $('jsonFileInput').addEventListener('change', async (e) => {
     const parsed = JSON.parse(text);
     if (!parsed || !Array.isArray(parsed.members)) throw new Error();
     state = parsed;
+    state.eventLabel = 'Guild Arena';
     ensureMemberDefaults();
     syncForm();
     renderTable();
@@ -1021,18 +475,12 @@ $('jsonFileInput').addEventListener('change', async (e) => {
   }
   e.target.value = '';
 });
-$('sortBtn').addEventListener('click', ()=> {
-  sortMembers();
-  syncForm();
-  renderTable();
-  renderPreview();
-});
-$('addMemberBtn').addEventListener('click', addMember);
 $('importJsonBtn').addEventListener('click', ()=> {
   try {
     const parsed = JSON.parse($('jsonBox').value);
     if (!parsed || !Array.isArray(parsed.members)) throw new Error();
     state = parsed;
+    state.eventLabel = 'Guild Arena';
     ensureMemberDefaults();
     syncForm();
     renderTable();
@@ -1041,14 +489,24 @@ $('importJsonBtn').addEventListener('click', ()=> {
     alert('JSON 형식이 올바르지 않습니다.');
   }
 });
-['guildName','eventLabel','goalScore','totalMembers'].forEach(id => $(id).addEventListener('input', syncState));
+$('sortBtn').addEventListener('click', ()=> {
+  sortMembers();
+  syncForm();
+  renderTable();
+  renderPreview();
+});
+$('addMemberBtn').addEventListener('click', addMember);
+['guildName','goalScore'].forEach(id => $(id).addEventListener('input', syncState));
 
 window.updateMember = updateMember;
 window.deleteMember = deleteMember;
 
-syncForm();
-renderTable();
-renderPreview();
+(async () => {
+  await tryLoadArenaJsonFromSameFolder();
+  syncForm();
+  renderTable();
+  renderPreview();
+})();
 </script>
 </body>
 </html>
