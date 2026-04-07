@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>REO Arena Generator</title>
+<title>REO Arena Generator Local</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');
   *{box-sizing:border-box}
   body{margin:0;font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#09111f,#0d1326);color:#eef2ff;}
-  .wrap{max-width:1520px;margin:0 auto;padding:20px;display:grid;grid-template-columns:500px minmax(0,1fr);gap:20px;}
+  .wrap{max-width:1560px;margin:0 auto;padding:20px;display:grid;grid-template-columns:560px minmax(0,1fr);gap:20px;}
   .panel,.preview{background:rgba(16,24,48,.96);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;}
   .head{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08);font-weight:800;font-size:18px;}
   .body{padding:18px;}
   .stack{display:flex;flex-direction:column;gap:14px;}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
   label{display:block;font-size:13px;color:#b7c2e6;margin-bottom:6px;}
   input, textarea{width:100%;border:1px solid rgba(255,255,255,.09);background:#0c1428;color:#eef2ff;border-radius:12px;padding:10px 12px;font-size:14px;outline:none;}
-  textarea{min-height:120px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  textarea{min-height:130px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
   button{border:0;border-radius:12px;padding:11px 14px;font-size:14px;font-weight:800;cursor:pointer;}
   .btn-primary{background:linear-gradient(135deg,#8b5cf6,#38bdf8);color:#fff;}
   .btn-secondary{background:#172343;color:#fff;border:1px solid rgba(255,255,255,.08);}
@@ -24,20 +25,23 @@
   .btn-row{display:flex;flex-wrap:wrap;gap:10px;}
   .hint{font-size:12px;color:#a9b5d8;line-height:1.5;}
   table{width:100%;border-collapse:collapse;font-size:13px;}
-  th,td{padding:9px 8px;border-bottom:1px solid rgba(255,255,255,.06);text-align:left;}
+  th,td{padding:9px 8px;border-bottom:1px solid rgba(255,255,255,.06);text-align:left;vertical-align:middle;}
   th{position:sticky;top:0;background:#14203d;}
-  .table-wrap{max-height:640px;overflow:auto;border:1px solid rgba(255,255,255,.08);border-radius:14px;}
+  .table-wrap{max-height:680px;overflow:auto;border:1px solid rgba(255,255,255,.08);border-radius:14px;}
   .badge{display:inline-block;font-size:12px;padding:6px 10px;border-radius:999px;background:#1a274b;color:#d8e3ff;}
   .topline{display:flex;justify-content:space-between;gap:10px;align-items:center;}
-  .modal-bg{position:fixed;inset:0;background:rgba(3,6,14,.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:9999;}
-  .modal{width:min(92vw,460px);background:#10172d;border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.45);}
-  .title{font-size:22px;font-weight:900;margin-bottom:8px;}
-  .desc{font-size:13px;color:#b8c3e5;line-height:1.6;margin-bottom:14px;}
-  .muted{color:#98a8d6;font-size:12px;}
   .preview-scroll{max-height: calc(100vh - 110px); overflow:auto; padding:18px; background:#0f0c1a;}
   .small{font-size:11px;color:#9fb0df}
-  @media (max-width:1200px){ .wrap{grid-template-columns:1fr;} .preview-scroll{max-height:none;} }
-  @media (max-width:860px){ .grid2{grid-template-columns:1fr;} }
+  .mini-btn{padding:7px 10px;font-size:12px;border-radius:8px}
+  .file-input{display:none}
+
+  .table-wrap input{min-width:0}
+  .name-input{min-width:160px}
+  .rank-input{width:74px}
+  .score-input{width:92px}
+
+  @media (max-width:1250px){ .wrap{grid-template-columns:1fr;} .preview-scroll{max-height:none;} }
+  @media (max-width:860px){ .grid2,.grid3{grid-template-columns:1fr;} }
 
   .arena-container {
     max-width: 1100px; margin: 0 auto; background: linear-gradient(160deg, #1a1030 0%, #0f0c1a 50%, #0c1525 100%);
@@ -87,35 +91,12 @@
 </style>
 </head>
 <body>
-<div class="modal-bg" id="pwModalBg">
-  <div class="modal">
-    <div class="title" id="pwTitle">관리자 확인</div>
-    <div class="desc" id="pwDesc">index.html을 만들려면 관리자 암호를 입력하세요.</div>
-    <div id="pwRegisterBox" style="display:none;">
-      <label>새 암호</label>
-      <input id="newPassword" type="password" placeholder="새 암호 입력">
-      <label style="margin-top:10px;">새 암호 확인</label>
-      <input id="confirmPassword" type="password" placeholder="한 번 더 입력">
-    </div>
-    <div id="pwUnlockBox" style="display:none;">
-      <label>관리자 암호</label>
-      <input id="passwordInput" type="password" placeholder="암호 입력">
-    </div>
-    <div class="btn-row" style="margin-top:14px;">
-      <button class="btn-primary" id="pwSubmitBtn">확인</button>
-      <button class="btn-secondary" id="pwCancelBtn">취소</button>
-      <button class="btn-danger" id="pwResetBtn" style="display:none;">암호 초기화</button>
-    </div>
-    <div class="muted" id="pwMsg" style="margin-top:12px;"></div>
-  </div>
-</div>
-
 <div class="wrap">
   <section class="panel">
     <div class="head">
       <div class="topline">
-        <span>관리자용 생성기</span>
-        <span class="badge">점수 수정 시 해당 행 시간 갱신</span>
+        <span>로컬용 생성기</span>
+        <span class="badge">암호 없음 / JSON 저장 가능</span>
       </div>
     </div>
     <div class="body stack">
@@ -123,26 +104,27 @@
         <div><label>길드명</label><input id="guildName"></div>
         <div><label>이벤트명</label><input id="eventLabel"></div>
       </div>
-      <div class="grid2">
+      <div class="grid3">
         <div><label>목표 점수</label><input id="goalScore" type="number"></div>
         <div><label>총 길드원 수</label><input id="totalMembers" type="number"></div>
-      </div>
-      <div>
-        <label>최종 업데이트</label>
-        <input id="lastUpdateText" readonly>
+        <div><label>최종 업데이트</label><input id="lastUpdateText" readonly></div>
       </div>
 
       <div class="btn-row">
-        <button class="btn-primary" id="downloadIndexBtn">index.html 생성/다운로드</button>
+        <button class="btn-primary" id="downloadIndexBtn">index.html 다운로드</button>
+        <button class="btn-secondary" id="downloadJsonBtn">JSON 저장</button>
+        <button class="btn-secondary" id="loadJsonBtn">JSON 파일 불러오기</button>
+        <button class="btn-secondary" id="importJsonBtn">JSON 붙여넣기 적용</button>
         <button class="btn-secondary" id="sortBtn">점수순 재정렬</button>
-        <button class="btn-secondary" id="importJsonBtn">JSON 불러오기</button>
+        <button class="btn-secondary" id="addMemberBtn">길드원 추가</button>
       </div>
+      <input class="file-input" id="jsonFileInput" type="file" accept=".json,application/json">
 
       <textarea id="jsonBox" placeholder="JSON 붙여넣기 / 백업용"></textarea>
 
       <div class="hint">
-        이제 <strong>점수를 수정한 길드원만</strong> 업데이트 시간이 바뀌고,<br>
-        상단 <strong>최종 업데이트</strong>도 가장 최근 수정 시간으로 자동 갱신됩니다.
+        점수와 <strong>#등수</strong>를 바꾸면 해당 길드원의 업데이트 시간이 현재 PC 시간으로 바뀝니다.<br>
+        길드원 추가/삭제 가능, JSON 저장/불러오기 가능.
       </div>
 
       <div class="table-wrap">
@@ -151,9 +133,10 @@
             <tr>
               <th style="width:60px;">순번</th>
               <th style="width:90px;">#등수</th>
-              <th>이름</th>
+              <th style="min-width:160px;">이름</th>
               <th style="width:110px;">점수</th>
               <th style="width:120px;">업데이트</th>
+              <th style="width:80px;">삭제</th>
             </tr>
           </thead>
           <tbody id="memberTable"></tbody>
@@ -171,7 +154,6 @@
 </div>
 
 <script>
-const STORAGE_KEY = 'reo_arena_index_password_v2';
 let state = {
   "guildName": "REO",
   "eventLabel": "Guild Arena",
@@ -745,7 +727,6 @@ let state = {
     }
   ]
 };
-let pendingAction = null;
 const $ = id => document.getElementById(id);
 
 function nowLocalIso() {
@@ -804,7 +785,15 @@ function sortMembers() {
     return String(a.name || '').localeCompare(String(b.name || ''), 'ko');
   });
 }
+function ensureMemberDefaults() {
+  (state.members || []).forEach(m => {
+    if (m.updated == null || m.updated === '') m.updated = state.updateInput || nowLocalIso();
+    if (m.rank == null || m.rank === '') m.rank = '-';
+    if (m.score == null || Number.isNaN(Number(m.score))) m.score = 0;
+  });
+}
 function syncForm() {
+  ensureMemberDefaults();
   $('guildName').value = state.guildName || '';
   $('eventLabel').value = state.eventLabel || '';
   $('goalScore').value = state.goalScore || 7000;
@@ -829,9 +818,24 @@ function updateMember(index, field, value) {
   } else if (field === 'rank') {
     const v = String(value).trim();
     state.members[index][field] = v === '' ? '-' : (isFinite(Number(v)) ? Number(v) : '-');
+    state.members[index].updated = nowLocalIso();
   } else {
     state.members[index][field] = value;
   }
+  syncState();
+}
+function addMember() {
+  state.members.push({
+    rank: '-',
+    name: 'New Member',
+    score: 0,
+    updated: nowLocalIso()
+  });
+  syncState();
+}
+function deleteMember(index) {
+  if (!confirm('이 길드원을 삭제할까요?')) return;
+  state.members.splice(index, 1);
   syncState();
 }
 function renderTable() {
@@ -839,10 +843,11 @@ function renderTable() {
   $('memberTable').innerHTML = state.members.map((m, idx)=>`
     <tr>
       <td>${idx+1}</td>
-      <td><input value="${escapeHtml(m.rank ?? '')}" onchange="updateMember(${idx}, 'rank', this.value)"></td>
-      <td><input value="${escapeHtml(m.name ?? '')}" onchange="updateMember(${idx}, 'name', this.value)"></td>
-      <td><input type="number" value="${Number(m.score||0)}" onchange="updateMember(${idx}, 'score', this.value)"></td>
+      <td><input class="rank-input" value="${escapeHtml(m.rank ?? '')}" onchange="updateMember(${idx}, 'rank', this.value)"></td>
+      <td><input class="name-input" value="${escapeHtml(m.name ?? '')}" onchange="updateMember(${idx}, 'name', this.value)"></td>
+      <td><input class="score-input" type="number" value="${Number(m.score||0)}" onchange="updateMember(${idx}, 'score', this.value)"></td>
       <td class="small">${escapeHtml(formatUpdate(m.updated || state.updateInput))}</td>
+      <td><button class="btn-danger mini-btn" onclick="deleteMember(${idx})">삭제</button></td>
     </tr>
   `).join('');
 }
@@ -990,72 +995,31 @@ function downloadFile(name, content, type) {
   a.click();
   URL.revokeObjectURL(url);
 }
-async function sha256(text) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
-}
-function openPwModal(callback) {
-  pendingAction = callback;
-  const saved = localStorage.getItem(STORAGE_KEY);
-  $('pwMsg').textContent = '';
-  $('passwordInput').value = '';
-  $('newPassword').value = '';
-  $('confirmPassword').value = '';
-  if (saved) {
-    $('pwTitle').textContent = '관리자 확인';
-    $('pwDesc').textContent = 'index.html을 만들려면 관리자 암호를 입력하세요.';
-    $('pwRegisterBox').style.display = 'none';
-    $('pwUnlockBox').style.display = '';
-    $('pwResetBtn').style.display = '';
-  } else {
-    $('pwTitle').textContent = '관리자 암호 등록';
-    $('pwDesc').textContent = '처음 index.html을 생성합니다. 새 관리자 암호를 등록하세요.';
-    $('pwRegisterBox').style.display = '';
-    $('pwUnlockBox').style.display = 'none';
-    $('pwResetBtn').style.display = 'none';
-  }
-  $('pwModalBg').style.display = 'flex';
-}
-function closePwModal() {
-  $('pwModalBg').style.display = 'none';
-  pendingAction = null;
-}
-$('pwCancelBtn').addEventListener('click', closePwModal);
-$('pwResetBtn').addEventListener('click', () => {
-  if (!confirm('이 브라우저에 저장된 관리자 암호를 초기화할까요?')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  $('pwMsg').textContent = '암호가 초기화되었습니다. 다음 생성 시 새 암호를 등록하세요.';
-});
-$('pwSubmitBtn').addEventListener('click', async () => {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    const hash = await sha256($('passwordInput').value);
-    if (hash !== saved) {
-      $('pwMsg').textContent = '암호가 올바르지 않습니다.';
-      return;
-    }
-  } else {
-    const p1 = $('newPassword').value;
-    const p2 = $('confirmPassword').value;
-    if (!p1) {
-      $('pwMsg').textContent = '새 암호를 입력해 주세요.';
-      return;
-    }
-    if (p1 !== p2) {
-      $('pwMsg').textContent = '암호 확인이 일치하지 않습니다.';
-      return;
-    }
-    localStorage.setItem(STORAGE_KEY, await sha256(p1));
-  }
-  const run = pendingAction;
-  closePwModal();
-  if (run) run();
-});
 $('downloadIndexBtn').addEventListener('click', () => {
-  openPwModal(() => {
-    syncMeta();
-    downloadFile('index.html', buildStaticIndexHtml(), 'text/html;charset=utf-8');
-  });
+  syncMeta();
+  downloadFile('index.html', buildStaticIndexHtml(), 'text/html;charset=utf-8');
+});
+$('downloadJsonBtn').addEventListener('click', () => {
+  syncMeta();
+  downloadFile('arena-data.json', JSON.stringify(state, null, 2), 'application/json;charset=utf-8');
+});
+$('loadJsonBtn').addEventListener('click', () => $('jsonFileInput').click());
+$('jsonFileInput').addEventListener('change', async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    if (!parsed || !Array.isArray(parsed.members)) throw new Error();
+    state = parsed;
+    ensureMemberDefaults();
+    syncForm();
+    renderTable();
+    renderPreview();
+  } catch (err) {
+    alert('JSON 파일을 읽지 못했습니다.');
+  }
+  e.target.value = '';
 });
 $('sortBtn').addEventListener('click', ()=> {
   sortMembers();
@@ -1063,12 +1027,13 @@ $('sortBtn').addEventListener('click', ()=> {
   renderTable();
   renderPreview();
 });
+$('addMemberBtn').addEventListener('click', addMember);
 $('importJsonBtn').addEventListener('click', ()=> {
   try {
     const parsed = JSON.parse($('jsonBox').value);
     if (!parsed || !Array.isArray(parsed.members)) throw new Error();
     state = parsed;
-    (state.members || []).forEach(m => { if (!m.updated) m.updated = state.updateInput || nowLocalIso(); });
+    ensureMemberDefaults();
     syncForm();
     renderTable();
     renderPreview();
@@ -1077,6 +1042,9 @@ $('importJsonBtn').addEventListener('click', ()=> {
   }
 });
 ['guildName','eventLabel','goalScore','totalMembers'].forEach(id => $(id).addEventListener('input', syncState));
+
+window.updateMember = updateMember;
+window.deleteMember = deleteMember;
 
 syncForm();
 renderTable();
