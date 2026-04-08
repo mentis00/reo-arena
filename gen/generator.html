@@ -132,6 +132,18 @@
         <input id="disqusShortname" placeholder="예: reo-arena">
       </div>
 
+      <div class="grid2">
+        <div>
+          <label><input id="includeGA" type="checkbox" style="width:auto; margin-right:8px;"> Google Analytics 넣기</label>
+        </div>
+        <div></div>
+      </div>
+
+      <div id="gaOptionBox" style="display:none;">
+        <label>Google Analytics Measurement ID</label>
+        <input id="gaMeasurementId" placeholder="예: G-XXXXXXXXXX">
+      </div>
+
 
       <div class="btn-row">
         <button class="btn-primary" id="downloadIndexBtn">index.html 다운로드</button>
@@ -186,7 +198,9 @@ let state = {
   members: [],
   includeCounter: true,
   includeDisqus: false,
-  disqusShortname: ''
+  disqusShortname: '',
+  includeGA: false,
+  gaMeasurementId: ''
 };
 
 const $ = id => document.getElementById(id);
@@ -263,6 +277,9 @@ function syncForm() {
   $('includeDisqus').checked = !!state.includeDisqus;
   $('disqusShortname').value = state.disqusShortname || '';
   $('disqusOptionBox').style.display = state.includeDisqus ? '' : 'none';
+  $('includeGA').checked = !!state.includeGA;
+  $('gaMeasurementId').value = state.gaMeasurementId || '';
+  $('gaOptionBox').style.display = state.includeGA ? '' : 'none';
   syncMeta();
   $('jsonBox').value = JSON.stringify(state, null, 2);
 }
@@ -274,6 +291,9 @@ function syncState() {
   state.includeDisqus = $('includeDisqus').checked;
   state.disqusShortname = $('disqusShortname').value.trim();
   $('disqusOptionBox').style.display = state.includeDisqus ? '' : 'none';
+  state.includeGA = $('includeGA').checked;
+  state.gaMeasurementId = $('gaMeasurementId').value.trim();
+  $('gaOptionBox').style.display = state.includeGA ? '' : 'none';
   syncMeta();
   $('jsonBox').value = JSON.stringify(state, null, 2);
   renderTable();
@@ -375,6 +395,7 @@ function renderPreview() {
       </div>
       ${state.includeCounter ? '<div style="margin-top:30px;text-align:center;color:rgba(200,180,255,0.7);">👥 방문자 수 영역</div>' : ''}
       ${state.includeDisqus ? '<hr style="margin:30px 0;opacity:0.2;"><div style="text-align:center;color:#c4b5fd;">💬 Disqus 방명록 영역</div>' : ''}
+      ${state.includeGA ? '<div style="margin-top:18px;text-align:center;color:rgba(200,180,255,0.55);">📊 Google Analytics 연결됨: ' + escapeHtml(state.gaMeasurementId || '') + '</div>' : ''}
     </div>
   `;
   const buttons = document.querySelectorAll('#previewRoot .arena-filter-btn');
@@ -422,10 +443,20 @@ function buildStaticIndexHtml() {
     extraHtml += '<\/script>';
     extraHtml += '<noscript>댓글을 보려면 JavaScript를 켜주세요.<\/noscript>';
   }
+  var gaHead = '';
+  if (state.includeGA && state.gaMeasurementId) {
+    gaHead += '<script async src="https://www.googletagmanager.com/gtag/js?id=' + state.gaMeasurementId + '"><\/script>';
+    gaHead += '<script>';
+    gaHead += 'window.dataLayer = window.dataLayer || [];';
+    gaHead += 'function gtag(){dataLayer.push(arguments);}';
+    gaHead += 'gtag("js", new Date());';
+    gaHead += 'gtag("config", "' + state.gaMeasurementId + '");';
+    gaHead += '<\/script>';
+  }
 
   return '<!DOCTYPE html>' +
   '<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-  '<title>' + escapeHtml(state.guildName || '') + ' Guild Arena</title>' +
+  '<title>' + escapeHtml(state.guildName || '') + ' Guild Arena</title>' + gaHead +
   '<style>' +
   "@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');" +
   "*{margin:0;padding:0;box-sizing:border-box}" +
@@ -568,8 +599,8 @@ $('sortBtn').addEventListener('click', ()=> {
   renderPreview();
 });
 $('addMemberBtn').addEventListener('click', addMember);
-['guildName','goalScore','disqusShortname'].forEach(id => $(id).addEventListener('input', syncState));
-['includeCounter','includeDisqus'].forEach(id => $(id).addEventListener('change', syncState));
+['guildName','goalScore','disqusShortname','gaMeasurementId'].forEach(id => $(id).addEventListener('input', syncState));
+['includeCounter','includeDisqus','includeGA'].forEach(id => $(id).addEventListener('change', syncState));
 
 window.updateMember = updateMember;
 window.deleteMember = deleteMember;
