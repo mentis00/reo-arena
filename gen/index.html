@@ -118,6 +118,20 @@
         <div><label>이벤트명</label><input value="Guild Arena" readonly style="opacity:0.7"></div>
         <div><label>최종 업데이트</label><input id="lastUpdateText" readonly></div>
       </div>
+      <div class="grid2">
+        <div>
+          <label><input id="includeCounter" type="checkbox" style="width:auto; margin-right:8px;" checked> 방문자수 넣기</label>
+        </div>
+        <div>
+          <label><input id="includeDisqus" type="checkbox" style="width:auto; margin-right:8px;"> 방명록(Disqus) 넣기</label>
+        </div>
+      </div>
+
+      <div id="disqusOptionBox" style="display:none;">
+        <label>Disqus shortname</label>
+        <input id="disqusShortname" placeholder="예: reo-arena">
+      </div>
+
 
       <div class="btn-row">
         <button class="btn-primary" id="downloadIndexBtn">index.html 다운로드</button>
@@ -169,7 +183,10 @@ let state = {
   goalScore: '',
   totalMembers: '',
   updateInput: '',
-  members: []
+  members: [],
+  includeCounter: true,
+  includeDisqus: false,
+  disqusShortname: ''
 };
 
 const $ = id => document.getElementById(id);
@@ -242,6 +259,10 @@ function syncForm() {
   ensureMemberDefaults();
   $('guildName').value = state.guildName || '';
   $('goalScore').value = state.goalScore || '';
+  $('includeCounter').checked = !!state.includeCounter;
+  $('includeDisqus').checked = !!state.includeDisqus;
+  $('disqusShortname').value = state.disqusShortname || '';
+  $('disqusOptionBox').style.display = state.includeDisqus ? '' : 'none';
   syncMeta();
   $('jsonBox').value = JSON.stringify(state, null, 2);
 }
@@ -249,6 +270,10 @@ function syncState() {
   state.guildName = $('guildName').value.trim();
   state.eventLabel = 'Guild Arena';
   state.goalScore = Number($('goalScore').value) || 0;
+  state.includeCounter = $('includeCounter').checked;
+  state.includeDisqus = $('includeDisqus').checked;
+  state.disqusShortname = $('disqusShortname').value.trim();
+  $('disqusOptionBox').style.display = state.includeDisqus ? '' : 'none';
   syncMeta();
   $('jsonBox').value = JSON.stringify(state, null, 2);
   renderTable();
@@ -348,6 +373,8 @@ function renderPreview() {
         <div class="arena-total">총 멤버 <strong>${sorted.length}명</strong> &nbsp;|&nbsp; ${getDayText(state.updateInput)}</div>
         <div class="arena-goal-note">⚠️ ${goalScore.toLocaleString()}점 미달성 시 주의</div>
       </div>
+      ${state.includeCounter ? '<div style="margin-top:30px;text-align:center;color:rgba(200,180,255,0.7);">👥 방문자 수 영역</div>' : ''}
+      ${state.includeDisqus ? '<hr style="margin:30px 0;opacity:0.2;"><div style="text-align:center;color:#c4b5fd;">💬 Disqus 방명록 영역</div>' : ''}
     </div>
   `;
   const buttons = document.querySelectorAll('#previewRoot .arena-filter-btn');
@@ -380,6 +407,21 @@ function buildStaticIndexHtml() {
       '<span class="updated">' + escapeHtml(formatUpdate(m.updated || state.updateInput)) + '</span>' +
     '</div>';
   }).join('');
+
+  var extraHtml = '';
+  if (state.includeCounter) {
+    extraHtml += '<div style="margin-top:30px; text-align:center; color:rgba(200,180,255,0.7);">👥 방문자 수: <span id="busuanzi_value_site_uv"></span></div>';
+    extraHtml += '<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"><\/script>';
+  }
+  if (state.includeDisqus && state.disqusShortname) {
+    extraHtml += '<hr style="margin:30px 0; opacity:0.2;">';
+    extraHtml += '<div id="disqus_thread" style="margin-top:20px;"><\/div>';
+    extraHtml += '<script>';
+    extraHtml += 'var disqus_config = function(){ this.page.url = window.location.href; this.page.identifier = "reo-arena-guestbook"; this.page.title = "REO Arena Guestbook"; };';
+    extraHtml += '(function(){ var d=document,s=d.createElement("script"); s.src="https://' + state.disqusShortname + '.disqus.com/embed.js"; s.setAttribute("data-timestamp", +new Date()); (d.head||d.body).appendChild(s); })();';
+    extraHtml += '<\/script>';
+    extraHtml += '<noscript>댓글을 보려면 JavaScript를 켜주세요.<\/noscript>';
+  }
 
   return '<!DOCTYPE html>' +
   '<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
@@ -430,6 +472,7 @@ function buildStaticIndexHtml() {
       '<div class="total">총 멤버 <strong>' + sorted.length + '명</strong> &nbsp;|&nbsp; ' + getDayText(state.updateInput) + '</div>' +
       '<div class="goal-note">⚠️ ' + goalScore.toLocaleString() + '점 미달성 시 주의</div>' +
     '</div>' +
+    extraHtml +
   '</div>' +
   '<script>(function(){' +
     'var buttons=document.querySelectorAll(".filter-btn");' +
@@ -525,7 +568,8 @@ $('sortBtn').addEventListener('click', ()=> {
   renderPreview();
 });
 $('addMemberBtn').addEventListener('click', addMember);
-['guildName','goalScore'].forEach(id => $(id).addEventListener('input', syncState));
+['guildName','goalScore','disqusShortname'].forEach(id => $(id).addEventListener('input', syncState));
+['includeCounter','includeDisqus'].forEach(id => $(id).addEventListener('change', syncState));
 
 window.updateMember = updateMember;
 window.deleteMember = deleteMember;

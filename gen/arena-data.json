@@ -540,6 +540,12 @@
       "updated": "2026-04-08T10:47"
     },
     {
+      "rank": 298,
+      "name": "Miffy",
+      "score": 1378,
+      "updated": "2026-04-08T10:47"
+    },
+    {
       "rank": 305,
       "name": "ゆき💗Yuki💗",
       "score": 1274,
@@ -558,16 +564,13 @@
       "updated": "2026-04-08T10:47"
     },
     {
-      "rank": 298,
-      "name": "Miffy",
-      "score": 1378,
-      "updated": "2026-04-08T10:47"
-    },
-    {
       "rank": "-",
       "name": "린_RIN",
       "score": 0,
       "updated": "2026-04-07T14:00"
     }
-  ]
+  ],
+  "includeCounter": true,
+  "includeDisqus": true,
+  "disqusShortname": "reo-arena"
 }
