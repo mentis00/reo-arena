@@ -415,6 +415,24 @@ function nextImage(){
   currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
   document.getElementById('lightbox-img').src = galleryImages[currentImageIndex];
 }
+
+/* 🔥 추가: 키보드 컨트롤 */
+document.addEventListener('keydown', function(e){
+  const lightbox = document.getElementById('lightbox');
+
+  // 라이트박스 열려있을 때만 작동
+  if (lightbox.style.display !== 'flex') return;
+
+  if (e.key === 'ArrowLeft'){
+    prevImage();
+  }
+  else if (e.key === 'ArrowRight'){
+    nextImage();
+  }
+  else if (e.key === 'Escape'){
+    closeImage();
+  }
+});
 </script>
 
 </body>
