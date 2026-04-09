@@ -390,7 +390,7 @@ body{
 
 <div class="lightbox" id="lightbox" onclick="closeImage()">
   <button class="lightbox-nav left" onclick="event.stopPropagation(); prevImage()">❮</button>
-  <img id="lightbox-img" onclick="closeImage()">
+  <img id="lightbox-img">
   <button class="lightbox-nav right" onclick="event.stopPropagation(); nextImage()">❯</button>
 </div>
 
@@ -408,6 +408,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   lightboxImg.addEventListener('touchstart', function(e){
     touchStartX = e.changedTouches[0].clientX;
+    touchEndX = touchStartX;
   }, { passive: true });
 
   lightboxImg.addEventListener('touchmove', function(e){
@@ -416,9 +417,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
   lightboxImg.addEventListener('touchend', function(e){
     touchEndX = e.changedTouches[0].clientX;
-    handleSwipe();
+    handleSwipeOrClose();
   }, { passive: true });
 });
+
+function handleSwipeOrClose(){
+  const diff = touchEndX - touchStartX;
+
+  if (Math.abs(diff) < 30) {
+    closeImage();   // 거의 안 움직였으면 탭으로 보고 닫기
+    return;
+  }
+
+  if (diff > 0) {
+    prevImage();    // 오른쪽 스와이프
+  } else {
+    nextImage();    // 왼쪽 스와이프
+  }
+}
 
 function openImage(src){
   currentImageIndex = galleryImages.indexOf(src);
