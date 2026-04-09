@@ -194,7 +194,7 @@ body{
 }
 
 .image-item img:hover{
-  transform:scale(1.02);
+  transform:scale(1.05);
   border-color:rgba(180,130,255,0.28);
 }
 
@@ -216,6 +216,7 @@ body{
   max-height:88%;
   object-fit:contain;
   cursor:pointer;
+  transition:opacity 0.15s ease;
 }
 
 .lightbox-nav{
@@ -358,26 +359,26 @@ body{
     </div>
   {% endif %}
 
- {% if image_count > 0 %}
-   <div class="section-title">이미지</div>
-   <div class="image-grid">
-     {% for file in files_sorted %}
-       {% if file.path contains page.url %}
-         {% assign rest = file.path | remove_first: page.url %}
-         {% assign parts = rest | split:'/' %}
-         {% assign ext = file.extname | downcase %}
+  {% if image_count > 0 %}
+    <div class="section-title">이미지</div>
+    <div class="image-grid">
+      {% for file in files_sorted %}
+        {% if file.path contains page.url %}
+          {% assign rest = file.path | remove_first: page.url %}
+          {% assign parts = rest | split:'/' %}
+          {% assign ext = file.extname | downcase %}
 
-         {% if parts.size == 1 and rest != '' %}
-           {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
-             <div class="image-item" onclick="openImage('{{ file.path | relative_url }}')">
-               <img src="{{ file.path | relative_url }}" alt="">
-             </div>
-           {% endif %}
-         {% endif %}
-       {% endif %}
-     {% endfor %}
-   </div>
- {% endif %}
+          {% if parts.size == 1 and rest != '' %}
+            {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
+              <div class="image-item" onclick="openImage('{{ file.path | relative_url }}')">
+                <img src="{{ file.path | relative_url }}" alt="">
+              </div>
+            {% endif %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
 
   <div class="footer">REO Archive</div>
 </div>
@@ -392,13 +393,33 @@ body{
 let galleryImages = [];
 let currentImageIndex = 0;
 
+let touchStartX = 0;
+let touchEndX = 0;
+
 document.addEventListener('DOMContentLoaded', function () {
   galleryImages = Array.from(document.querySelectorAll('.image-item img')).map(img => img.src);
+
+  const lightboxImg = document.getElementById('lightbox-img');
+
+  lightboxImg.addEventListener('touchstart', function(e){
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+
+  lightboxImg.addEventListener('touchmove', function(e){
+    touchEndX = e.changedTouches[0].clientX;
+  }, { passive: true });
+
+  lightboxImg.addEventListener('touchend', function(e){
+    touchEndX = e.changedTouches[0].clientX;
+    handleSwipe();
+  }, { passive: true });
 });
 
 function openImage(src){
   currentImageIndex = galleryImages.indexOf(src);
-  document.getElementById('lightbox-img').src = src;
+  const img = document.getElementById('lightbox-img');
+  img.src = src;
+  img.style.opacity = 1;
   document.getElementById('lightbox').style.display = 'flex';
 }
 
@@ -408,14 +429,43 @@ function closeImage(){
 
 function prevImage(){
   if (galleryImages.length === 0) return;
-  currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
-  document.getElementById('lightbox-img').src = galleryImages[currentImageIndex];
+
+  const img = document.getElementById('lightbox-img');
+  img.style.opacity = 0;
+
+  setTimeout(() => {
+    currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+    img.src = galleryImages[currentImageIndex];
+    img.style.opacity = 1;
+  }, 100);
 }
 
 function nextImage(){
   if (galleryImages.length === 0) return;
-  currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
-  document.getElementById('lightbox-img').src = galleryImages[currentImageIndex];
+
+  const img = document.getElementById('lightbox-img');
+  img.style.opacity = 0;
+
+  setTimeout(() => {
+    currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+    img.src = galleryImages[currentImageIndex];
+    img.style.opacity = 1;
+  }, 100);
+}
+
+function handleSwipe(){
+  const diff = touchEndX - touchStartX;
+
+  if (Math.abs(diff) < 40) {
+    closeImage();
+    return;
+  }
+
+  if (diff > 0) {
+    prevImage();
+  } else {
+    nextImage();
+  }
 }
 
 document.addEventListener('keydown', function(e){
