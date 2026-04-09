@@ -9,42 +9,268 @@ layout: null
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ page.url }}</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');
+    * { margin:0; padding:0; box-sizing:border-box; }
+
     body {
-      background: #0f0c1a;
-      color: #fff;
-      font-family: 'Noto Sans KR', sans-serif;
-      padding: 20px;
+      background:#0f0c1a;
+      font-family:'Noto Sans KR',sans-serif;
+      padding:20px;
+      color:#fff;
     }
-    .wrap {
-      max-width: 900px;
-      margin: 0 auto;
-      background: linear-gradient(160deg, #1a1030 0%, #0f0c1a 50%, #0c1525 100%);
-      border: 1px solid rgba(180,130,255,0.2);
-      border-radius: 20px;
-      padding: 28px;
+
+    .container {
+      max-width:1100px;
+      margin:0 auto;
+      background:linear-gradient(160deg,#1a1030 0%,#0f0c1a 50%,#0c1525 100%);
+      border:1px solid rgba(180,130,255,0.2);
+      border-radius:20px;
+      padding:36px 40px 44px;
+      position:relative;
+      overflow:hidden;
     }
-    a { color: #7dd3fc; text-decoration: none; }
-    ul { margin-top: 16px; padding-left: 20px; }
-    li { margin: 8px 0; }
+
+    .container::before {
+      content:'';
+      position:absolute;
+      top:-80px;
+      right:-80px;
+      width:300px;
+      height:300px;
+      background:radial-gradient(circle, rgba(130,80,255,0.15) 0%, transparent 70%);
+      pointer-events:none;
+    }
+
+    .container::after {
+      content:'';
+      position:absolute;
+      bottom:-60px;
+      left:-60px;
+      width:250px;
+      height:250px;
+      background:radial-gradient(circle, rgba(60,160,255,0.1) 0%, transparent 70%);
+      pointer-events:none;
+    }
+
+    .header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:28px;
+      padding-bottom:20px;
+      border-bottom:1px solid rgba(180,130,255,0.2);
+      position:relative;
+      z-index:1;
+    }
+
+    .guild-name {
+      font-family:'Rajdhani',sans-serif;
+      font-size:52px;
+      font-weight:700;
+      letter-spacing:8px;
+      background:linear-gradient(135deg,#c084fc,#818cf8,#38bdf8);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .header-right {
+      text-align:right;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:10px;
+    }
+
+    .event-label {
+      font-size:14px;
+      color:rgba(200,180,255,0.6);
+      letter-spacing:2px;
+      text-transform:uppercase;
+      margin-bottom:4px;
+    }
+
+    .archive-btn {
+      display:inline-block;
+      padding:7px 16px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      color:#7dd3fc;
+      background:rgba(30,58,95,0.7);
+      border:1px solid rgba(125,211,252,0.25);
+      text-decoration:none;
+      letter-spacing:0.5px;
+      transition:all .15s ease;
+    }
+
+    .archive-btn:hover {
+      background:rgba(45,78,125,0.9);
+      transform:translateY(-1px);
+    }
+
+    .section-title {
+      font-size:18px;
+      font-weight:900;
+      margin:20px 0 12px;
+      color:#f3e8ff;
+      position:relative;
+      z-index:1;
+    }
+
+    .path-title {
+      font-size:36px;
+      font-weight:900;
+      margin-bottom:10px;
+      position:relative;
+      z-index:1;
+    }
+
+    .list {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:9px;
+      position:relative;
+      z-index:1;
+    }
+
+    .item {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:10px;
+      padding:11px 14px;
+      min-width:0;
+      text-decoration:none;
+      color:#fff;
+      transition:all .15s ease;
+    }
+
+    .item:hover {
+      background:rgba(180,130,255,0.08);
+      border-color:rgba(180,130,255,0.22);
+      transform:translateY(-1px);
+    }
+
+    .icon {
+      width:24px;
+      text-align:center;
+      flex-shrink:0;
+      font-size:18px;
+    }
+
+    .name {
+      flex:1;
+      min-width:0;
+      font-size:16px;
+      font-weight:700;
+      color:#e2d9f3;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .meta {
+      font-size:13px;
+      color:rgba(180,160,255,0.65);
+      flex-shrink:0;
+    }
+
+    .empty {
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:10px;
+      padding:18px 16px;
+      color:rgba(220,220,255,0.7);
+    }
+
+    @media (max-width:860px) {
+      body { padding:12px; }
+      .container { padding:22px 18px 28px; }
+      .list { grid-template-columns:1fr; }
+      .header { flex-direction:column; align-items:flex-start; }
+      .header-right { text-align:left; align-items:flex-start; }
+      .guild-name { font-size:36px; letter-spacing:4px; }
+      .path-title { font-size:28px; }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <p><a href="{{ '/archive/' | relative_url }}">← Archive로 돌아가기</a></p>
-    <h1>{{ page.url }}</h1>
+  <div class="container">
+    <div class="header">
+      <div class="guild-name">REO</div>
+      <div class="header-right">
+        <div class="event-label">Guild Arena &nbsp;·&nbsp; Archive</div>
+        <a class="archive-btn" href="{{ '/archive/' | relative_url }}">📁 아카이브로 돌아가기</a>
+        <a class="archive-btn" href="{{ '/reo-arena/' | relative_url }}">← 현재 시즌</a>
+      </div>
+    </div>
 
-    <ul>
+    <div class="path-title">{{ page.url }}</div>
+
+    <h2 class="section-title">폴더</h2>
+    <div class="list">
+      {% assign base = page.url %}
+      {% assign folder_string = "" %}
+      {% assign folder_count = 0 %}
+
       {% for file in site.static_files %}
-        {% if file.path contains page.url and file.name != 'index.html' %}
-          {% assign parts = file.path | split: '/' %}
-          {% assign current = page.url | split: '/' %}
-          {% assign target_depth = current.size | plus: 1 %}
-          {% if parts.size == target_depth %}
-            <li><a href="{{ file.path | relative_url }}">{{ file.name }}</a></li>
+        {% if file.path contains base %}
+          {% assign rest = file.path | remove_first: base %}
+          {% assign parts = rest | split: '/' %}
+          {% if parts.size > 1 and parts[0] != '' %}
+            {% assign folder = parts[0] %}
+            {% assign token = '|' | append: folder | append: '|' %}
+            {% unless folder_string contains token %}
+              {% assign folder_string = folder_string | append: token %}
+              {% assign folder_count = folder_count | plus: 1 %}
+            {% endunless %}
           {% endif %}
         {% endif %}
       {% endfor %}
-    </ul>
+
+      {% if folder_count > 0 %}
+        {% assign folder_array = folder_string | split: '|' | sort %}
+        {% for folder in folder_array %}
+          {% if folder != '' %}
+            <a class="item" href="{{ page.url | append: folder | append: '/' | relative_url }}">
+              <span class="icon">📁</span>
+              <span class="name">{{ folder }}</span>
+              <span class="meta">folder</span>
+            </a>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <div class="empty">표시할 하위 폴더가 없습니다.</div>
+      {% endif %}
+    </div>
+
+    <h2 class="section-title">파일</h2>
+    <div class="list">
+      {% assign file_count = 0 %}
+      {% assign files_sorted = site.static_files | sort: "name" %}
+
+      {% for file in files_sorted %}
+        {% if file.path contains base and file.name != 'index.html' %}
+          {% assign rest = file.path | remove_first: base %}
+          {% assign parts = rest | split: '/' %}
+          {% if parts.size == 1 and rest != '' %}
+            {% assign file_count = file_count | plus: 1 %}
+            <a class="item" href="{{ file.path | relative_url }}">
+              <span class="icon">📄</span>
+              <span class="name">{{ file.name }}</span>
+              <span class="meta">{{ file.extname | upcase }}</span>
+            </a>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+
+      {% if file_count == 0 %}
+        <div class="empty">표시할 파일이 없습니다.</div>
+      {% endif %}
+    </div>
   </div>
 </body>
 </html>
