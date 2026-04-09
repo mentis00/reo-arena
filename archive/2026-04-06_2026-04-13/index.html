@@ -358,26 +358,26 @@ body{
     </div>
   {% endif %}
 
-  {% if image_count > 0 %}
-    <div class="section-title">이미지</div>
-    <div class="image-grid">
-      {% for file in files_sorted %}
-        {% if file.path contains page.url %}
-          {% assign rest = file.path | remove_first: page.url %}
-          {% assign parts = rest | split:'/' %}
-          {% assign ext = file.extname | downcase %}
+ {% if image_count > 0 %}
+   <div class="section-title">이미지</div>
+   <div class="image-grid">
+     {% for file in files_sorted %}
+       {% if file.path contains page.url %}
+         {% assign rest = file.path | remove_first: page.url %}
+         {% assign parts = rest | split:'/' %}
+         {% assign ext = file.extname | downcase %}
 
-          {% if parts.size == 1 and rest != '' %}
-            {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
-              <div class="image-item" onclick="openImage('{{ file.path | relative_url }}')">
-                <img src="{{ file.path | relative_url }}" alt="">
-              </div>
-            {% endif %}
-          {% endif %}
-        {% endfor %}
-      {% endfor %}
-    </div>
-  {% endif %}
+         {% if parts.size == 1 and rest != '' %}
+           {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
+             <div class="image-item" onclick="openImage('{{ file.path | relative_url }}')">
+               <img src="{{ file.path | relative_url }}" alt="">
+             </div>
+           {% endif %}
+         {% endif %}
+       {% endif %}
+     {% endfor %}
+   </div>
+ {% endif %}
 
   <div class="footer">REO Archive</div>
 </div>
