@@ -10,13 +10,11 @@ layout: null
 <title>REO Archive</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');
-
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
   background:#0f0c1a;
-  font-family:'Noto Sans KR',sans-serif;
+  font-family:sans-serif;
   padding:20px;
   color:#fff;
 }
@@ -24,186 +22,32 @@ body{
 .container{
   max-width:1100px;
   margin:0 auto;
-  background:linear-gradient(160deg,#1a1030 0%,#0f0c1a 50%,#0c1525 100%);
-  border:1px solid rgba(180,130,255,0.2);
-  border-radius:20px;
-  padding:36px 40px 44px;
-  position:relative;
-  overflow:hidden;
-}
-
-.container::before{
-  content:'';
-  position:absolute;
-  top:-80px;
-  right:-80px;
-  width:300px;
-  height:300px;
-  background:radial-gradient(circle, rgba(130,80,255,0.15) 0%, transparent 70%);
-  pointer-events:none;
-}
-
-.container::after{
-  content:'';
-  position:absolute;
-  bottom:-60px;
-  left:-60px;
-  width:250px;
-  height:250px;
-  background:radial-gradient(circle, rgba(60,160,255,0.1) 0%, transparent 70%);
-  pointer-events:none;
-}
-
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:16px;
-  margin-bottom:20px;
-  border-bottom:1px solid rgba(180,130,255,0.2);
-  padding-bottom:16px;
-  position:relative;
-  z-index:1;
-}
-
-.guild-name{
-  font-family:'Rajdhani',sans-serif;
-  font-size:42px;
-  font-weight:700;
-  letter-spacing:6px;
-  background:linear-gradient(135deg,#c084fc,#818cf8,#38bdf8);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.header-right{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  align-items:flex-end;
-}
-
-.event-label{
-  font-size:14px;
-  color:rgba(200,180,255,0.6);
-  letter-spacing:2px;
-  text-transform:uppercase;
-  margin-bottom:4px;
-}
-
-.archive-btn{
-  display:inline-block;
-  padding:6px 14px;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:700;
-  color:#7dd3fc;
-  background:rgba(30,58,95,0.7);
-  border:1px solid rgba(125,211,252,0.25);
-  text-decoration:none;
-  letter-spacing:0.5px;
-  transition:all .15s ease;
-}
-
-.archive-btn:hover{
-  background:rgba(45,78,125,0.9);
-  transform:translateY(-1px);
-}
-
-.path{
-  font-size:18px;
-  font-weight:800;
-  margin-bottom:10px;
-  color:#c4b5fd;
-  word-break:break-word;
-  position:relative;
-  z-index:1;
-}
-
-.section-title{
-  margin:20px 0 10px;
-  font-size:18px;
-  font-weight:900;
-  color:#f3e8ff;
-  position:relative;
-  z-index:1;
-}
-
-.list{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-  position:relative;
-  z-index:1;
-}
-
-.item{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.06);
-  border-radius:10px;
-  padding:12px;
-  text-decoration:none;
-  color:#fff;
-  transition:all .15s ease;
-  min-width:0;
-}
-
-.item:hover{
-  background:rgba(180,130,255,0.08);
-  border-color:rgba(180,130,255,0.22);
-  transform:translateY(-1px);
-}
-
-.icon{
-  font-size:18px;
-  flex-shrink:0;
-}
-
-.name{
-  font-weight:700;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  min-width:0;
 }
 
 .image-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
-  gap:14px;
-  position:relative;
-  z-index:1;
-}
-
-.image-item{
-  cursor:pointer;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:12px;
 }
 
 .image-item img{
   width:100%;
-  height:170px;
+  height:150px;
   object-fit:contain;
-  background:rgba(255,255,255,0.03);
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.08);
-  padding:6px;
-  transition:all .15s ease;
+  background:#111;
+  border-radius:8px;
+  cursor:pointer;
+  transition:.15s;
 }
 
 .image-item img:hover{
   transform:scale(1.05);
-  border-color:rgba(180,130,255,0.28);
 }
 
+/* 라이트박스 */
 .lightbox{
   position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+  inset:0;
   background:rgba(0,0,0,0.92);
   display:none;
   align-items:center;
@@ -215,183 +59,63 @@ body{
   max-width:88%;
   max-height:88%;
   object-fit:contain;
-  cursor:pointer;
-  transition:transform 0.22s ease, opacity 0.22s ease;
+  transition:transform .22s ease, opacity .22s ease;
 }
 
+/* 화살표 */
 .lightbox-nav{
   position:absolute;
   top:50%;
   transform:translateY(-50%);
-  width:52px;
-  height:52px;
-  border:none;
-  border-radius:999px;
-  background:rgba(20,20,30,0.45);
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:rgba(0,0,0,0.5);
   color:#fff;
-  font-size:30px;
-  font-weight:700;
+  border:none;
+  font-size:28px;
   cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid rgba(255,255,255,0.12);
-  transition:all .15s ease;
 }
 
-.lightbox-nav:hover{
-  background:rgba(80,80,120,0.62);
-  border-color:rgba(180,130,255,0.35);
-}
-
-.lightbox-nav.left{
-  left:24px;
-}
-
-.lightbox-nav.right{
-  right:24px;
-}
-
-.footer{
-  margin-top:24px;
-  padding-top:16px;
-  border-top:1px solid rgba(180,130,255,0.15);
-  color:rgba(200,180,255,0.45);
-  position:relative;
-  z-index:1;
-}
+.lightbox-nav.left{ left:20px }
+.lightbox-nav.right{ right:20px }
 
 @media(max-width:860px){
-  body{padding:12px}
-  .container{padding:22px 18px 28px}
-  .list{grid-template-columns:1fr}
-  .header{flex-direction:column;align-items:flex-start}
-  .header-right{text-align:left;align-items:flex-start}
-  .guild-name{font-size:36px;letter-spacing:4px}
-  .lightbox-nav{
-    width:44px;
-    height:44px;
-    font-size:24px;
-  }
-  .lightbox-nav.left{left:20px}
-  .lightbox-nav.right{right:20px}
-
-    /* 🔥 이거 추가 */
-  .lightbox img{
-    touch-action: none;
-  }
+  .lightbox img{ touch-action:none }
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
-  <div class="header">
-    <div class="guild-name">REO</div>
-    <div class="header-right">
-      <div class="event-label">Guild Arena &nbsp;·&nbsp; Archive</div>
-      <a class="archive-btn" href="https://mentis00.github.io/reo-arena/archive/">📁 아카이브 목록</a>
-      <a class="archive-btn" href="https://mentis00.github.io/reo-arena/">← 현재 시즌</a>
-    </div>
+  <h2>{{ page.url }}</h2>
+
+  <div class="image-grid">
+    {% assign idx = 0 %}
+    {% for file in site.static_files %}
+      {% if file.path contains page.url %}
+        {% assign ext = file.extname | downcase %}
+        {% if ext == '.jpg' or ext == '.png' or ext == '.jpeg' or ext == '.webp' or ext == '.gif' %}
+          <div class="image-item"
+               data-index="{{ idx }}"
+               data-full="{{ file.path | absolute_url }}">
+            <img src="{{ file.path | relative_url }}">
+          </div>
+          {% assign idx = idx | plus: 1 %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
   </div>
 
-  <div class="path">{{ page.url }}</div>
-
-  {% assign files_sorted = site.static_files | sort:"name" %}
-  {% assign folder_string = '' %}
-  {% assign image_count = 0 %}
-  {% assign file_count = 0 %}
-
-  {% for file in files_sorted %}
-    {% if file.path contains page.url %}
-      {% assign rest = file.path | remove_first: page.url %}
-      {% assign parts = rest | split:'/' %}
-      {% assign ext = file.extname | downcase %}
-
-      {% if parts.size > 1 %}
-        {% assign token = '|' | append: parts[0] | append: '|' %}
-        {% unless folder_string contains token %}
-          {% assign folder_string = folder_string | append: token %}
-        {% endunless %}
-      {% endif %}
-
-      {% if parts.size == 1 and rest != '' and file.name != 'index.html' %}
-        {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
-          {% assign image_count = image_count | plus:1 %}
-        {% else %}
-          {% assign file_count = file_count | plus:1 %}
-        {% endif %}
-      {% endif %}
-    {% endif %}
-  {% endfor %}
-
-  {% assign folder_array = folder_string | split:'|' | sort %}
-
-  {% if folder_array.size > 1 %}
-    <div class="section-title">폴더</div>
-    <div class="list">
-      {% for folder in folder_array %}
-        {% if folder != '' %}
-          <a class="item" href="{{ page.url | append: folder | append:'/' | relative_url }}">
-            <span class="icon">📁</span>
-            <span class="name">{{ folder }}</span>
-          </a>
-        {% endif %}
-      {% endfor %}
-    </div>
-  {% endif %}
-
-  {% if file_count > 0 %}
-    <div class="section-title">파일</div>
-    <div class="list">
-      {% for file in files_sorted %}
-        {% if file.path contains page.url %}
-          {% assign rest = file.path | remove_first: page.url %}
-          {% assign parts = rest | split:'/' %}
-          {% assign ext = file.extname | downcase %}
-
-          {% if parts.size == 1 and rest != '' and file.name != 'index.html' %}
-            {% unless ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
-              <a class="item" href="{{ file.path | relative_url }}">
-                <span class="icon">📄</span>
-                <span class="name">{{ file.name }}</span>
-              </a>
-            {% endunless %}
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-    </div>
-  {% endif %}
-
-  {% if image_count > 0 %}
-    <div class="section-title">이미지</div>
-    <div class="image-grid">
-      {% for file in files_sorted %}
-        {% if file.path contains page.url %}
-          {% assign rest = file.path | remove_first: page.url %}
-          {% assign parts = rest | split:'/' %}
-          {% assign ext = file.extname | downcase %}
-
-          {% if parts.size == 1 and rest != '' %}
-            {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
-              <div class="image-item" onclick="openImage('{{ file.path | relative_url }}')">
-                <img src="{{ file.path | relative_url }}" alt="">
-              </div>
-            {% endif %}
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-    </div>
-  {% endif %}
-
-  <div class="footer">REO Archive</div>
 </div>
 
-<div class="lightbox" id="lightbox" onclick="closeImage()">
-  <button class="lightbox-nav left" onclick="event.stopPropagation(); prevImage()">❮</button>
+<!-- 라이트박스 -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-nav left" onclick="prevImage()">❮</button>
   <img id="lightbox-img">
-  <button class="lightbox-nav right" onclick="event.stopPropagation(); nextImage()">❯</button>
+  <button class="lightbox-nav right" onclick="nextImage()">❯</button>
 </div>
 
 <script>
@@ -400,126 +124,114 @@ let currentImageIndex = 0;
 
 let touchStartX = 0;
 let touchEndX = 0;
+let suppressNextOpen = false;
 
-document.addEventListener('DOMContentLoaded', function () {
-  galleryImages = Array.from(document.querySelectorAll('.image-item img')).map(img => img.src);
+document.addEventListener('DOMContentLoaded', () => {
 
-  const lightboxImg = document.getElementById('lightbox-img');
+  const items = document.querySelectorAll('.image-item');
+  const lightbox = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
 
-  lightboxImg.addEventListener('touchstart', function(e){
+  galleryImages = Array.from(items).map(i => i.dataset.full);
+
+  items.forEach(item=>{
+    item.addEventListener('click', e=>{
+      e.stopPropagation();
+      if(suppressNextOpen) return;
+
+      currentImageIndex = parseInt(item.dataset.index);
+      openImage();
+    });
+  });
+
+  img.addEventListener('click', ()=> closeImage(true));
+
+  lightbox.addEventListener('click', e=>{
+    if(e.target === lightbox) closeImage(true);
+  });
+
+  /* 모바일 스와이프 */
+  img.addEventListener('touchstart', e=>{
     touchStartX = e.changedTouches[0].clientX;
     touchEndX = touchStartX;
-  }, { passive: true });
+  }, {passive:true});
 
-  lightboxImg.addEventListener('touchmove', function(e){
+  img.addEventListener('touchmove', e=>{
     touchEndX = e.changedTouches[0].clientX;
-  }, { passive: true });
+  }, {passive:true});
 
-  lightboxImg.addEventListener('touchend', function(e){
-    touchEndX = e.changedTouches[0].clientX;
-    handleSwipeOrClose();
-  }, { passive: true });
+  img.addEventListener('touchend', e=>{
+    e.preventDefault();
+    handleSwipe();
+  }, {passive:false});
 });
 
-function handleSwipeOrClose(){
-  const diff = touchEndX - touchStartX;
-
-  if (Math.abs(diff) < 30) {
-    closeImage();   // 거의 안 움직였으면 탭으로 보고 닫기
-    return;
-  }
-
-  if (diff > 0) {
-    prevImage();    // 오른쪽 스와이프
-  } else {
-    nextImage();    // 왼쪽 스와이프
-  }
-}
-
-function openImage(src){
-  currentImageIndex = galleryImages.indexOf(src);
+function openImage(){
   const img = document.getElementById('lightbox-img');
-  img.src = src;
+  img.src = galleryImages[currentImageIndex];
   img.style.opacity = 1;
-  document.getElementById('lightbox').style.display = 'flex';
+  document.getElementById('lightbox').style.display='flex';
 }
 
-function closeImage(){
-  document.getElementById('lightbox').style.display = 'none';
+function closeImage(fromTouch=false){
+  document.getElementById('lightbox').style.display='none';
+
+  if(fromTouch){
+    suppressNextOpen = true;
+    setTimeout(()=> suppressNextOpen=false,300);
+  }
 }
 
 function prevImage(){
-  if (galleryImages.length === 0) return;
-
-  const img = document.getElementById('lightbox-img');
-
-  img.style.transform = 'translateX(40px)';
-  img.style.opacity = '0';
-
-  setTimeout(() => {
-    currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
-    img.src = galleryImages[currentImageIndex];
-    img.style.transition = 'none';
-    img.style.transform = 'translateX(-40px)';
-    img.style.opacity = '0';
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        img.style.transition = 'transform 0.22s ease, opacity 0.22s ease';
-        img.style.transform = 'translateX(0)';
-        img.style.opacity = '1';
-      });
-    });
-  }, 120);
+  slide(-1);
 }
 
 function nextImage(){
-  if (galleryImages.length === 0) return;
+  slide(1);
+}
 
+function slide(dir){
   const img = document.getElementById('lightbox-img');
 
-  img.style.transform = 'translateX(-40px)';
-  img.style.opacity = '0';
+  img.style.transform = `translateX(${dir>0?'-40px':'40px'})`;
+  img.style.opacity = 0;
 
-  setTimeout(() => {
-    currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+  setTimeout(()=>{
+    currentImageIndex = (currentImageIndex + dir + galleryImages.length) % galleryImages.length;
     img.src = galleryImages[currentImageIndex];
-    img.style.transition = 'none';
-    img.style.transform = 'translateX(40px)';
-    img.style.opacity = '0';
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        img.style.transition = 'transform 0.22s ease, opacity 0.22s ease';
-        img.style.transform = 'translateX(0)';
-        img.style.opacity = '1';
-      });
+    img.style.transition='none';
+    img.style.transform = `translateX(${dir>0?'40px':'-40px'})`;
+    img.style.opacity=0;
+
+    requestAnimationFrame(()=>{
+      img.style.transition='transform .22s ease, opacity .22s ease';
+      img.style.transform='translateX(0)';
+      img.style.opacity=1;
     });
-  }, 120);
+
+  },120);
 }
 
 function handleSwipe(){
   const diff = touchEndX - touchStartX;
 
-  if (Math.abs(diff) < 40) {
-    closeImage();
+  if(Math.abs(diff)<30){
+    closeImage(true);
     return;
   }
 
-  if (diff > 0) {
-    prevImage();
-  } else {
-    nextImage();
-  }
+  if(diff>0) prevImage();
+  else nextImage();
 }
 
-document.addEventListener('keydown', function(e){
-  const lightbox = document.getElementById('lightbox');
-  if (lightbox.style.display !== 'flex') return;
+document.addEventListener('keydown', e=>{
+  const lb = document.getElementById('lightbox');
+  if(lb.style.display!=='flex') return;
 
-  if (e.key === 'ArrowLeft') prevImage();
-  else if (e.key === 'ArrowRight') nextImage();
-  else if (e.key === 'Escape') closeImage();
+  if(e.key==='ArrowLeft'){ e.preventDefault(); prevImage(); }
+  if(e.key==='ArrowRight'){ e.preventDefault(); nextImage(); }
+  if(e.key==='Escape'){ e.preventDefault(); closeImage(); }
 });
 </script>
 
