@@ -89,6 +89,13 @@
   .arena-score { font-size:18px; font-weight:700; color:#a78bfa; text-align:right; flex-shrink:0; min-width:58px; }
   .arena-score.high { color:#34d399; } .arena-score.zero-score { color:rgba(255,100,100,0.6); }
   .arena-updated { font-size:11px; color:rgba(180,160,255,0.5); flex-shrink:0; white-space:nowrap; width:84px; text-align:right; }
+  .arena-total-score-box {
+    display:flex; align-items:center; gap:14px; background:rgba(139,92,246,0.10);
+    border:1px solid rgba(139,92,246,0.28); border-radius:14px; padding:14px 22px; margin-bottom:18px;
+  }
+  .arena-total-score-label { font-size:13px; color:rgba(200,180,255,0.6); letter-spacing:1px; white-space:nowrap; }
+  .arena-total-score-value { font-family:'Rajdhani',sans-serif; font-size:30px; font-weight:700; color:#c084fc; letter-spacing:1px; }
+  .arena-total-score-sub { font-size:12px; color:rgba(200,180,255,0.45); margin-top:2px; }
   .arena-footer { margin-top:24px; padding-top:16px; border-top:1px solid rgba(180,130,255,0.15); display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
   .arena-total { font-size:14px; color:rgba(200,180,255,0.45); }
   .arena-total strong { color:rgba(200,180,255,0.8); font-family:'Rajdhani',sans-serif; font-size:17px; }
@@ -371,6 +378,7 @@ function renderPreview() {
   const goalScore = Number(state.goalScore || 0);
   const displayUpdate = formatUpdate(state.updateInput);
   const sorted = state.members.map((m, i) => ({ ...m, no:i+1 }));
+  const totalScore = sorted.reduce((sum, m) => sum + (Number(m.score) || 0), 0);
   $('previewRoot').innerHTML = `
     <div class="arena-container">
       <div class="arena-header">
@@ -381,6 +389,13 @@ function renderPreview() {
             <div class="arena-update-time">최종 업데이트: <span>${escapeHtml(displayUpdate)}</span></div>
           </div>
           <a style="display:inline-block;padding:7px 16px;border-radius:999px;font-size:13px;font-weight:700;color:#7dd3fc;background:rgba(30,58,95,0.7);border:1px solid rgba(125,211,252,0.25);text-decoration:none;">📁 지난 시즌 아카이브</a>
+        </div>
+      </div>
+      <div class="arena-total-score-box">
+        <div>
+          <div class="arena-total-score-label">🏆 길드 총 합계 점수</div>
+          <div class="arena-total-score-value">${totalScore.toLocaleString()}</div>
+          <div class="arena-total-score-sub">${sorted.length}명 참여 &nbsp;·&nbsp; <span style="color:rgba(255,120,120,0.8);">목표점수 미달 ${sorted.filter(m => Number(m.score) < goalScore).length}명</span></div>
         </div>
       </div>
       <div class="arena-rule-box">
@@ -496,6 +511,10 @@ function buildStaticIndexHtml() {
   ".filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}" +
   ".filter-btn{border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.04);color:#e8e3ff;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer}" +
   ".filter-btn.active{background:rgba(139,92,246,0.22);border-color:rgba(139,92,246,0.45)}" +
+  ".total-score-box{display:flex;align-items:center;gap:14px;background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.28);border-radius:14px;padding:14px 22px;margin-bottom:18px}" +
+  ".total-score-label{font-size:13px;color:rgba(200,180,255,0.6);letter-spacing:1px}" +
+  ".total-score-value{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:#c084fc;letter-spacing:1px}" +
+  ".total-score-sub{font-size:12px;color:rgba(200,180,255,0.45);margin-top:2px}" +
   ".grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}" +
   ".row{display:flex;align-items:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:11px 14px;gap:10px;min-width:0}" +
   ".row.top3{background:rgba(180,130,255,0.1);border-color:rgba(180,130,255,0.25)}.row.zero{background:rgba(255,80,80,0.05);border-color:rgba(255,80,80,0.15)}" +
@@ -520,6 +539,7 @@ function buildStaticIndexHtml() {
         '<a class="archive-btn" href="https://mentis00.github.io/reo-arena/archive/">📁 지난 시즌 아카이브</a>' +
       '</div>' +
     '</div>' +
+    (function(){ var ts = sorted.reduce(function(s,m){ return s+(Number(m.score)||0); },0); var below = sorted.filter(function(m){ return (Number(m.score)||0) < goalScore; }).length; return '<div class="total-score-box"><div><div class="total-score-label">🏆 길드 총 합계 점수</div><div class="total-score-value">' + ts.toLocaleString() + '</div><div class="total-score-sub">' + sorted.length + '명 참여 &nbsp;·&nbsp; <span style="color:rgba(255,120,120,0.8);">목표점수 미달 ' + below + '명</span></div></div></div>'; })() +
     '<div class="rule-box"><span>📌</span><span>길드 규칙: 길드 아레나(Guild Arena) 이벤트 진행 시 최소 개인점수 <strong>' + goalScore.toLocaleString() + '점</strong> 달성 바랍니다.</span></div>' +
     '<div class="filter-bar">' +
       '<button class="filter-btn active" data-mode="all">전체</button>' +
@@ -601,6 +621,10 @@ function buildArchiveHtml(startDate, endDate) {
   ".filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}" +
   ".filter-btn{border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.04);color:#e8e3ff;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer}" +
   ".filter-btn.active{background:rgba(139,92,246,0.22);border-color:rgba(139,92,246,0.45)}" +
+  ".total-score-box{display:flex;align-items:center;gap:14px;background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.28);border-radius:14px;padding:14px 22px;margin-bottom:18px}" +
+  ".total-score-label{font-size:13px;color:rgba(200,180,255,0.6);letter-spacing:1px}" +
+  ".total-score-value{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:#c084fc;letter-spacing:1px}" +
+  ".total-score-sub{font-size:12px;color:rgba(200,180,255,0.45);margin-top:2px}" +
   ".grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}" +
   ".row{display:flex;align-items:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:11px 14px;gap:10px;min-width:0}" +
   ".row.top3{background:rgba(180,130,255,0.1);border-color:rgba(180,130,255,0.25)}.row.zero{background:rgba(255,80,80,0.05);border-color:rgba(255,80,80,0.15)}" +
@@ -627,6 +651,7 @@ function buildArchiveHtml(startDate, endDate) {
         '<a class="archive-btn" href="https://mentis00.github.io/reo-arena/">← 현재 시즌</a>' +
       '</div>' +
     '</div>' +
+    (function(){ var ts = sorted.reduce(function(s,m){ return s+(Number(m.score)||0); },0); var below = sorted.filter(function(m){ return (Number(m.score)||0) < goalScore; }).length; return '<div class="total-score-box"><div><div class="total-score-label">🏆 길드 총 합계 점수</div><div class="total-score-value">' + ts.toLocaleString() + '</div><div class="total-score-sub">' + sorted.length + '명 참여 &nbsp;·&nbsp; <span style="color:rgba(255,120,120,0.8);">목표점수 미달 ' + below + '명</span></div></div></div>'; })() +
     '<div class="rule-box"><span>📌</span><span>길드 규칙: 길드 아레나(Guild Arena) 이벤트 진행 시 최소 개인점수 <strong>' + goalScore.toLocaleString() + '점</strong> 달성 바랍니다.</span></div>' +
     '<div class="filter-bar">' +
       '<button class="filter-btn active" data-mode="all">전체</button>' +
