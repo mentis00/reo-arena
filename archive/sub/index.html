@@ -148,6 +148,7 @@ body{
   text-decoration:none;
   color:#fff;
   transition:all .15s ease;
+  min-width:0;
 }
 
 .item:hover{
@@ -214,6 +215,7 @@ body{
   max-width:88%;
   max-height:88%;
   object-fit:contain;
+  cursor:pointer;
 }
 
 .lightbox-nav{
@@ -224,7 +226,7 @@ body{
   height:52px;
   border:none;
   border-radius:999px;
-  background:rgba(20,20,30,0.55);
+  background:rgba(20,20,30,0.45);
   color:#fff;
   font-size:30px;
   font-weight:700;
@@ -232,12 +234,12 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  border:1px solid rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.12);
   transition:all .15s ease;
 }
 
 .lightbox-nav:hover{
-  background:rgba(80,80,120,0.65);
+  background:rgba(80,80,120,0.62);
   border-color:rgba(180,130,255,0.35);
 }
 
@@ -372,7 +374,7 @@ body{
               </div>
             {% endif %}
           {% endif %}
-        {% endif %}
+        {% endfor %}
       {% endfor %}
     </div>
   {% endif %}
@@ -382,7 +384,7 @@ body{
 
 <div class="lightbox" id="lightbox" onclick="closeImage()">
   <button class="lightbox-nav left" onclick="event.stopPropagation(); prevImage()">❮</button>
-  <img id="lightbox-img" onclick="event.stopPropagation()">
+  <img id="lightbox-img" onclick="closeImage()">
   <button class="lightbox-nav right" onclick="event.stopPropagation(); nextImage()">❯</button>
 </div>
 
@@ -415,23 +417,14 @@ function nextImage(){
   currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
   document.getElementById('lightbox-img').src = galleryImages[currentImageIndex];
 }
- 
-/* 🔥 추가: 키보드 컨트롤 */
+
 document.addEventListener('keydown', function(e){
   const lightbox = document.getElementById('lightbox');
-
-  // 라이트박스 열려있을 때만 작동
   if (lightbox.style.display !== 'flex') return;
 
-  if (e.key === 'ArrowLeft'){
-    prevImage();
-  }
-  else if (e.key === 'ArrowRight'){
-    nextImage();
-  }
-  else if (e.key === 'Escape'){
-    closeImage();
-  }
+  if (e.key === 'ArrowLeft') prevImage();
+  else if (e.key === 'ArrowRight') nextImage();
+  else if (e.key === 'Escape') closeImage();
 });
 </script>
 
