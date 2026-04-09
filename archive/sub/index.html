@@ -109,19 +109,19 @@ layout: null
       transform:translateY(-1px);
     }
 
+    .path-title {
+      font-size:36px;
+      font-weight:900;
+      margin-bottom:12px;
+      position:relative;
+      z-index:1;
+    }
+
     .section-title {
       font-size:18px;
       font-weight:900;
       margin:20px 0 12px;
       color:#f3e8ff;
-      position:relative;
-      z-index:1;
-    }
-
-    .path-title {
-      font-size:36px;
-      font-weight:900;
-      margin-bottom:10px;
       position:relative;
       z-index:1;
     }
@@ -178,14 +178,6 @@ layout: null
       flex-shrink:0;
     }
 
-    .empty {
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.06);
-      border-radius:10px;
-      padding:18px 16px;
-      color:rgba(220,220,255,0.7);
-    }
-
     @media (max-width:860px) {
       body { padding:12px; }
       .container { padding:22px 18px 28px; }
@@ -210,29 +202,36 @@ layout: null
 
     <div class="path-title">{{ page.url }}</div>
 
-    <h2 class="section-title">폴더</h2>
-    <div class="list">
-      {% assign base = page.url %}
-      {% assign folder_string = "" %}
-      {% assign folder_count = 0 %}
-
-      {% for file in site.static_files %}
-        {% if file.path contains base %}
-          {% assign rest = file.path | remove_first: base %}
-          {% assign parts = rest | split: '/' %}
-          {% if parts.size > 1 and parts[0] != '' %}
-            {% assign folder = parts[0] %}
-            {% assign token = '|' | append: folder | append: '|' %}
-            {% unless folder_string contains token %}
-              {% assign folder_string = folder_string | append: token %}
-              {% assign folder_count = folder_count | plus: 1 %}
-            {% endunless %}
-          {% endif %}
+    {% assign folder_string = '' %}
+    {% for file in site.static_files %}
+      {% if file.path contains page.url %}
+        {% assign rest = file.path | remove_first: page.url %}
+        {% assign parts = rest | split: '/' %}
+        {% if parts.size > 1 and parts[0] != '' %}
+          {% assign token = '|' | append: parts[0] | append: '|' %}
+          {% unless folder_string contains token %}
+            {% assign folder_string = folder_string | append: token %}
+          {% endunless %}
         {% endif %}
-      {% endfor %}
+      {% endif %}
+    {% endfor %}
+    {% assign folder_array = folder_string | split: '|' | sort %}
 
-      {% if folder_count > 0 %}
-        {% assign folder_array = folder_string | split: '|' | sort %}
+    {% assign file_count = 0 %}
+    {% assign files_sorted = site.static_files | sort: "name" %}
+    {% for file in files_sorted %}
+      {% if file.path contains page.url and file.name != 'index.html' %}
+        {% assign rest = file.path | remove_first: page.url %}
+        {% assign parts = rest | split: '/' %}
+        {% if parts.size == 1 and rest != '' %}
+          {% assign file_count = file_count | plus: 1 %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% if folder_array.size > 1 %}
+      <h2 class="section-title">폴더</h2>
+      <div class="list">
         {% for folder in folder_array %}
           {% if folder != '' %}
             <a class="item" href="{{ page.url | append: folder | append: '/' | relative_url }}">
@@ -242,35 +241,27 @@ layout: null
             </a>
           {% endif %}
         {% endfor %}
-      {% else %}
-        <div class="empty">표시할 하위 폴더가 없습니다.</div>
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
 
-    <h2 class="section-title">파일</h2>
-    <div class="list">
-      {% assign file_count = 0 %}
-      {% assign files_sorted = site.static_files | sort: "name" %}
-
-      {% for file in files_sorted %}
-        {% if file.path contains base and file.name != 'index.html' %}
-          {% assign rest = file.path | remove_first: base %}
-          {% assign parts = rest | split: '/' %}
-          {% if parts.size == 1 and rest != '' %}
-            {% assign file_count = file_count | plus: 1 %}
-            <a class="item" href="{{ file.path | relative_url }}">
-              <span class="icon">📄</span>
-              <span class="name">{{ file.name }}</span>
-              <span class="meta">{{ file.extname | upcase }}</span>
-            </a>
+    {% if file_count > 0 %}
+      <h2 class="section-title">파일</h2>
+      <div class="list">
+        {% for file in files_sorted %}
+          {% if file.path contains page.url and file.name != 'index.html' %}
+            {% assign rest = file.path | remove_first: page.url %}
+            {% assign parts = rest | split: '/' %}
+            {% if parts.size == 1 and rest != '' %}
+              <a class="item" href="{{ file.path | relative_url }}">
+                <span class="icon">📄</span>
+                <span class="name">{{ file.name }}</span>
+                <span class="meta">{{ file.extname | upcase }}</span>
+              </a>
+            {% endif %}
           {% endif %}
-        {% endif %}
-      {% endfor %}
-
-      {% if file_count == 0 %}
-        <div class="empty">표시할 파일이 없습니다.</div>
-      {% endif %}
-    </div>
+        {% endfor %}
+      </div>
+    {% endif %}
   </div>
 </body>
 </html>
