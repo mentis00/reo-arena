@@ -12,203 +12,190 @@ title: REO Archive
   <title>{{ page.title }}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
-      background: #0f0c1a;
-      font-family: 'Noto Sans KR', sans-serif;
-      padding: 20px;
-      color: #fff;
+      background:#0f0c1a;
+      font-family:'Noto Sans KR',sans-serif;
+      padding:20px;
+      color:#fff;
     }
 
     .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      background: linear-gradient(160deg, #1a1030 0%, #0f0c1a 50%, #0c1525 100%);
-      border: 1px solid rgba(180,130,255,0.2);
-      border-radius: 20px;
-      padding: 36px 40px 44px;
-      position: relative;
-      overflow: hidden;
+      max-width:1100px;
+      margin:0 auto;
+      background:linear-gradient(160deg,#1a1030 0%,#0f0c1a 50%,#0c1525 100%);
+      border:1px solid rgba(180,130,255,0.2);
+      border-radius:20px;
+      padding:36px 40px 44px;
+      position:relative;
+      overflow:hidden;
     }
 
     .container::before {
-      content: '';
-      position: absolute;
-      top: -80px;
-      right: -80px;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(130,80,255,0.15) 0%, transparent 70%);
-      pointer-events: none;
+      content:'';
+      position:absolute;
+      top:-80px;
+      right:-80px;
+      width:300px;
+      height:300px;
+      background:radial-gradient(circle, rgba(130,80,255,0.15) 0%, transparent 70%);
+      pointer-events:none;
     }
 
     .container::after {
-      content: '';
-      position: absolute;
-      bottom: -60px;
-      left: -60px;
-      width: 250px;
-      height: 250px;
-      background: radial-gradient(circle, rgba(60,160,255,0.1) 0%, transparent 70%);
-      pointer-events: none;
+      content:'';
+      position:absolute;
+      bottom:-60px;
+      left:-60px;
+      width:250px;
+      height:250px;
+      background:radial-gradient(circle, rgba(60,160,255,0.1) 0%, transparent 70%);
+      pointer-events:none;
     }
 
     .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 28px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid rgba(180,130,255,0.2);
-      position: relative;
-      z-index: 1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:28px;
+      padding-bottom:20px;
+      border-bottom:1px solid rgba(180,130,255,0.2);
+      position:relative;
+      z-index:1;
     }
 
     .guild-name {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 52px;
-      font-weight: 700;
-      letter-spacing: 8px;
-      background: linear-gradient(135deg, #c084fc, #818cf8, #38bdf8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-family:'Rajdhani',sans-serif;
+      font-size:52px;
+      font-weight:700;
+      letter-spacing:8px;
+      background:linear-gradient(135deg,#c084fc,#818cf8,#38bdf8);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
 
     .header-right {
-      text-align: right;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
+      text-align:right;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:10px;
     }
 
     .event-label {
-      font-size: 14px;
-      color: rgba(200,180,255,0.6);
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      font-size:14px;
+      color:rgba(200,180,255,0.6);
+      letter-spacing:2px;
+      text-transform:uppercase;
+      margin-bottom:4px;
     }
 
     .archive-btn {
-      display: inline-block;
-      padding: 7px 16px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 700;
-      color: #7dd3fc;
-      background: rgba(30,58,95,0.7);
-      border: 1px solid rgba(125,211,252,0.25);
-      text-decoration: none;
-      letter-spacing: 0.5px;
+      display:inline-block;
+      padding:7px 16px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      color:#7dd3fc;
+      background:rgba(30,58,95,0.7);
+      border:1px solid rgba(125,211,252,0.25);
+      text-decoration:none;
+      letter-spacing:0.5px;
+      transition:all .15s ease;
     }
 
     .archive-btn:hover {
-      background: rgba(45, 78, 125, 0.85);
-    }
-
-    .desc-box {
-      background: rgba(255,200,80,0.07);
-      border: 1px solid rgba(255,200,80,0.25);
-      border-radius: 10px;
-      padding: 13px 20px;
-      margin-bottom: 18px;
-      font-size: 15px;
-      color: #fcd34d;
-      position: relative;
-      z-index: 1;
+      background:rgba(45,78,125,0.9);
+      transform:translateY(-1px);
     }
 
     .section-title {
-      font-size: 18px;
-      font-weight: 800;
-      margin: 22px 0 12px;
-      color: #e9ddff;
-      position: relative;
-      z-index: 1;
+      font-size:18px;
+      font-weight:900;
+      margin:20px 0 12px;
+      color:#f3e8ff;
+      position:relative;
+      z-index:1;
     }
 
     .list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      position: relative;
-      z-index: 1;
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:9px;
+      position:relative;
+      z-index:1;
     }
 
     .item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
-      padding: 12px 14px;
-      min-width: 0;
-      text-decoration: none;
-      color: #fff;
-      transition: 0.18s ease;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:10px;
+      padding:11px 14px;
+      min-width:0;
+      text-decoration:none;
+      color:#fff;
+      transition:all .15s ease;
     }
 
     .item:hover {
-      background: rgba(180,130,255,0.08);
-      border-color: rgba(180,130,255,0.24);
-      transform: translateY(-1px);
+      background:rgba(180,130,255,0.08);
+      border-color:rgba(180,130,255,0.22);
+      transform:translateY(-1px);
     }
 
     .icon {
-      font-size: 18px;
-      width: 24px;
-      flex-shrink: 0;
-      text-align: center;
+      width:24px;
+      text-align:center;
+      flex-shrink:0;
+      font-size:18px;
     }
 
     .name {
-      flex: 1;
-      min-width: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 15px;
-      font-weight: 700;
-      color: #e2d9f3;
+      flex:1;
+      min-width:0;
+      font-size:16px;
+      font-weight:700;
+      color:#e2d9f3;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
     .meta {
-      font-size: 12px;
-      color: rgba(200,180,255,0.55);
-      flex-shrink: 0;
+      font-size:13px;
+      color:rgba(180,160,255,0.65);
+      flex-shrink:0;
     }
 
     .empty {
-      padding: 18px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      color: rgba(220,220,255,0.7);
-      position: relative;
-      z-index: 1;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:10px;
+      padding:18px 16px;
+      color:rgba(220,220,255,0.7);
     }
 
     .footer {
-      margin-top: 24px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(180,130,255,0.15);
-      font-size: 14px;
-      color: rgba(200,180,255,0.5);
-      position: relative;
-      z-index: 1;
+      margin-top:24px;
+      padding-top:16px;
+      border-top:1px solid rgba(180,130,255,0.15);
+      color:rgba(200,180,255,0.45);
+      position:relative;
+      z-index:1;
     }
 
-    @media (max-width: 860px) {
-      body { padding: 12px; }
-      .container { padding: 22px 18px 28px; }
-      .list { grid-template-columns: 1fr; }
-      .header { flex-direction: column; align-items: flex-start; }
-      .header-right { text-align: left; align-items: flex-start; }
-      .guild-name { font-size: 36px; letter-spacing: 4px; }
+    @media (max-width:860px) {
+      body { padding:12px; }
+      .container { padding:22px 18px 28px; }
+      .list { grid-template-columns:1fr; }
+      .header { flex-direction:column; align-items:flex-start; }
+      .header-right { text-align:left; align-items:flex-start; }
+      .guild-name { font-size:36px; letter-spacing:4px; }
     }
   </style>
 </head>
@@ -217,22 +204,57 @@ title: REO Archive
     <div class="header">
       <div class="guild-name">REO</div>
       <div class="header-right">
-        <div class="event-label">Guild Arena · Archive</div>
-        <a class="archive-btn" href="{{ '/' | relative_url }}">← 현재 시즌</a>
+        <div class="event-label">Guild Arena &nbsp;·&nbsp; Archive</div>
+        <a class="archive-btn" href="{{ '/reo-arena/' | relative_url }}">← 현재 시즌</a>
       </div>
     </div>
 
-    <div class="desc-box">
-      📁 아카이브 폴더 바로 아래 파일만 표시하고, 하위 폴더는 클릭해서 들어갈 수 있습니다.
+    <h2 class="section-title">폴더</h2>
+    <div class="list">
+      {% assign folder_string = "" %}
+      {% assign folder_count = 0 %}
+
+      {% for file in site.static_files %}
+        {% if file.path contains '/archive/' %}
+          {% assign rest = file.path | remove_first: '/archive/' %}
+          {% assign parts = rest | split: '/' %}
+          {% if parts.size > 1 and parts[0] != '' %}
+            {% assign folder = parts[0] %}
+            {% assign token = '|' | append: folder | append: '|' %}
+            {% unless folder_string contains token %}
+              {% assign folder_string = folder_string | append: token %}
+              {% assign folder_count = folder_count | plus: 1 %}
+            {% endunless %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+
+      {% if folder_count > 0 %}
+        {% assign folder_array = folder_string | split: '|' | sort %}
+        {% for folder in folder_array %}
+          {% if folder != '' %}
+            <a class="item" href="{{ '/archive/' | append: folder | append: '/' | relative_url }}">
+              <span class="icon">📁</span>
+              <span class="name">{{ folder }}</span>
+              <span class="meta">folder</span>
+            </a>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <div class="empty">표시할 하위 폴더가 없습니다.</div>
+      {% endif %}
     </div>
 
     <h2 class="section-title">파일</h2>
     <div class="list">
-      {% assign has_files = false %}
-      {% for file in site.static_files %}
-        {% assign parts = file.path | split: '/' %}
-        {% if file.path contains '/archive/' and file.name != 'index.html' and parts.size == 3 %}
-          {% assign has_files = true %}
+      {% assign file_count = 0 %}
+      {% assign files_sorted = site.static_files | sort: "name" %}
+
+      {% for file in files_sorted %}
+        {% assign rest = file.path | remove_first: '/archive/' %}
+        {% assign parts = rest | split: '/' %}
+        {% if file.path contains '/archive/' and file.name != 'index.html' and parts.size == 1 and rest != '' %}
+          {% assign file_count = file_count | plus: 1 %}
           <a class="item" href="{{ file.path | relative_url }}">
             <span class="icon">📄</span>
             <span class="name">{{ file.name }}</span>
@@ -241,41 +263,12 @@ title: REO Archive
         {% endif %}
       {% endfor %}
 
-      {% unless has_files %}
+      {% if file_count == 0 %}
         <div class="empty">표시할 파일이 없습니다.</div>
-      {% endunless %}
+      {% endif %}
     </div>
 
-    <h2 class="section-title">폴더</h2>
-    <div class="list">
-      {% assign folder_names = "|" %}
-      {% assign has_folders = false %}
-
-      {% for file in site.static_files %}
-        {% assign parts = file.path | split: '/' %}
-        {% if file.path contains '/archive/' and parts.size > 3 %}
-          {% assign folder = parts[2] %}
-          {% assign token = "|" | append: folder | append: "|" %}
-          {% unless folder_names contains token %}
-            {% assign has_folders = true %}
-            {% assign folder_names = folder_names | append: folder | append: "|" %}
-            <a class="item" href="{{ '/archive/' | append: folder | append: '/' | relative_url }}">
-              <span class="icon">📁</span>
-              <span class="name">{{ folder }}</span>
-              <span class="meta">OPEN</span>
-            </a>
-          {% endunless %}
-        {% endif %}
-      {% endfor %}
-
-      {% unless has_folders %}
-        <div class="empty">표시할 하위 폴더가 없습니다.</div>
-      {% endunless %}
-    </div>
-
-    <div class="footer">
-      REO Archive
-    </div>
+    <div class="footer">REO Archive</div>
   </div>
 </body>
 </html>
