@@ -422,6 +422,13 @@ document.addEventListener('DOMContentLoaded', function () {
   navButtons.forEach(btn => {
     btn.addEventListener('touchend', function(e){
       e.preventDefault();
+      e.stopPropagation();
+
+      if (btn.classList.contains('left')) {
+        prevImage();
+      } else if (btn.classList.contains('right')) {
+        nextImage();
+      }
     }, { passive: false });
   });
 
