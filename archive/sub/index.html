@@ -380,7 +380,7 @@ body{
   <div class="footer">REO Archive</div>
 </div>
 
-<div class="lightbox" id="lightbox" onclick="closeImage()">
+<div class="lightbox" id="lightbox" onclick="handleClick(event)">
   <button class="lightbox-nav left" onclick="event.stopPropagation(); prevImage()">❮</button>
   <img id="lightbox-img" onclick="event.stopPropagation()">
   <button class="lightbox-nav right" onclick="event.stopPropagation(); nextImage()">❯</button>
@@ -416,6 +416,22 @@ function nextImage(){
   document.getElementById('lightbox-img').src = galleryImages[currentImageIndex];
 }
 
+/* 🔥 클릭 위치 기반 처리 */
+function handleClick(e){
+  const screenWidth = window.innerWidth;
+  const clickX = e.clientX;
+
+  if (clickX < screenWidth * 0.33){
+    prevImage();   // 왼쪽
+  }
+  else if (clickX > screenWidth * 0.66){
+    nextImage();   // 오른쪽
+  }
+  else{
+    closeImage();  // 중앙
+  }
+}
+  
 /* 🔥 추가: 키보드 컨트롤 */
 document.addEventListener('keydown', function(e){
   const lightbox = document.getElementById('lightbox');
