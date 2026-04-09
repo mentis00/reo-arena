@@ -237,6 +237,10 @@ body{
   justify-content:center;
   border:1px solid rgba(255,255,255,0.12);
   transition:all .15s ease;
+
+  -webkit-user-select:none;
+  user-select:none;
+  touch-action:manipulation;
 }
 
 .lightbox-nav:hover{
@@ -400,6 +404,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const items = Array.from(document.querySelectorAll('.image-item'));
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
+  const navButtons = document.querySelectorAll('.lightbox-nav');
 
   galleryImages = items.map(item => item.dataset.full);
 
@@ -412,6 +417,12 @@ document.addEventListener('DOMContentLoaded', function () {
       const idx = parseInt(item.dataset.index, 10);
       openImageByIndex(idx);
     });
+  });
+
+  navButtons.forEach(btn => {
+    btn.addEventListener('touchend', function(e){
+      e.preventDefault();
+    }, { passive: false });
   });
 
   lightbox.addEventListener('click', function(e){
