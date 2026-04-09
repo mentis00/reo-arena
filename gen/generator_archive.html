@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아레나 점수 입력기</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:'Noto Sans KR',sans-serif; background:linear-gradient(180deg,#09111f,#0d1326); color:#eef2ff; }
+  .wrap { max-width:1560px; margin:0 auto; padding:20px; display:grid; grid-template-columns:560px minmax(0,1fr); gap:20px; }
+  .panel,.preview { background:rgba(16,24,48,.96); border:1px solid rgba(255,255,255,.08); border-radius:20px; overflow:hidden; }
+  .head { padding:18px 20px; border-bottom:1px solid rgba(255,255,255,.08); font-weight:800; font-size:18px; }
+  .body { padding:18px; }
+  .stack { display:flex; flex-direction:column; gap:14px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  label { display:block; font-size:13px; color:#b7c2e6; margin-bottom:6px; }
+  input, textarea {
+    width:100%; border:1px solid rgba(255,255,255,.09); background:#0c1428; color:#eef2ff;
+    border-radius:12px; padding:10px 12px; font-size:14px; outline:none;
+  }
+  textarea { min-height:130px; resize:vertical; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  button { border:0; border-radius:12px; padding:11px 14px; font-size:14px; font-weight:800; cursor:pointer; }
+  .btn-primary { background:linear-gradient(135deg,#8b5cf6,#38bdf8); color:#fff; }
+  .btn-secondary { background:#172343; color:#fff; border:1px solid rgba(255,255,255,.08); }
+  .btn-danger { background:#3a1620; color:#ffe3e9; border:1px solid rgba(255,255,255,.08); }
+  .btn-archive { background:linear-gradient(135deg,#1e3a5f,#1a4a6b); color:#7dd3fc; border:1px solid rgba(125,211,252,0.2); }
+  .section-divider { border:0; border-top:1px solid rgba(255,255,255,0.07); margin:4px 0; }
+  .archive-box { background:rgba(10,30,60,0.5); border:1px solid rgba(125,211,252,0.15); border-radius:14px; padding:14px 16px; }
+  .btn-row { display:flex; flex-wrap:wrap; gap:10px; }
+  .hint { font-size:12px; color:#a9b5d8; line-height:1.5; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th,td { padding:9px 8px; border-bottom:1px solid rgba(255,255,255,.06); text-align:left; vertical-align:middle; }
+  th { position:sticky; top:0; background:#14203d; }
+  .table-wrap { max-height:680px; overflow:auto; border:1px solid rgba(255,255,255,.08); border-radius:14px; }
+  .badge { display:inline-block; font-size:12px; padding:6px 10px; border-radius:999px; background:#1a274b; color:#d8e3ff; }
+  .topline { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+  .preview-scroll { max-height: calc(100vh - 110px); overflow:auto; padding:18px; background:#0f0c1a; }
+  .small { font-size:11px; color:#9fb0df; }
+  .mini-btn { padding:7px 10px; font-size:12px; border-radius:8px; }
+  .file-input { display:none; }
+  .table-wrap input { min-width:0; }
+  .name-input { min-width:160px; }
+  .rank-input { width:74px; }
+  .score-input { width:92px; }
+  @media (max-width:1250px){ .wrap{grid-template-columns:1fr;} .preview-scroll{max-height:none;} }
+  @media (max-width:860px){ .grid2{grid-template-columns:1fr;} }
+
+  .arena-container {
+    max-width:1100px; margin:0 auto; background:linear-gradient(160deg,#1a1030 0%,#0f0c1a 50%,#0c1525 100%);
+    border:1px solid rgba(180,130,255,0.2); border-radius:20px; padding:36px 40px 44px; position:relative; overflow:hidden;
+  }
+  .arena-container::before {
+    content:''; position:absolute; top:-80px; right:-80px; width:300px; height:300px;
+    background:radial-gradient(circle, rgba(130,80,255,0.15) 0%, transparent 70%); pointer-events:none;
+  }
+  .arena-container::after {
+    content:''; position:absolute; bottom:-60px; left:-60px; width:250px; height:250px;
+    background:radial-gradient(circle, rgba(60,160,255,0.1) 0%, transparent 70%); pointer-events:none;
+  }
+  .arena-header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:28px; padding-bottom:20px; border-bottom:1px solid rgba(180,130,255,0.2); }
+  .arena-guild-name {
+    font-family:'Rajdhani',sans-serif; font-size:52px; font-weight:700; letter-spacing:8px;
+    background:linear-gradient(135deg,#c084fc,#818cf8,#38bdf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .arena-header-right { text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
+  .arena-event-label { font-size:14px; color:rgba(200,180,255,0.6); letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
+  .arena-update-time { font-size:14px; color:rgba(200,180,255,0.7); }
+  .arena-update-time span { color:#c4b5fd; font-weight:700; font-size:15px; }
+  .arena-rule-box {
+    background:rgba(255,200,80,0.07); border:1px solid rgba(255,200,80,0.25); border-radius:10px;
+    padding:13px 20px; margin-bottom:18px; font-size:15px; color:#fcd34d; display:flex; align-items:center; gap:8px;
+  }
+  .arena-filter-bar, .filter-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+  .arena-filter-btn, .filter-btn {
+    border:1px solid rgba(255,255,255,0.10); background:rgba(255,255,255,0.04); color:#e8e3ff;
+    padding:8px 12px; border-radius:999px; font-size:13px; font-weight:700; cursor:pointer;
+  }
+  .arena-filter-btn.active, .filter-btn.active { background:rgba(139,92,246,0.22); border-color:rgba(139,92,246,0.45); }
+  .arena-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:9px; }
+  .arena-row { display:flex; align-items:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:11px 14px; gap:10px; min-width:0; }
+  .arena-row.top3 { background:rgba(180,130,255,0.1); border-color:rgba(180,130,255,0.25); }
+  .arena-row.zero { background:rgba(255,80,80,0.05); border-color:rgba(255,80,80,0.15); }
+  .arena-no,.arena-rank,.arena-score { font-family:'Rajdhani',sans-serif; }
+  .arena-no { font-size:13px; font-weight:600; color:rgba(200,180,255,0.35); width:22px; text-align:right; flex-shrink:0; }
+  .arena-rank { font-size:14px; font-weight:700; color:rgba(200,180,255,0.5); width:46px; text-align:center; flex-shrink:0; }
+  .arena-rank.r1 { color:#fbbf24; } .arena-rank.r2 { color:#94a3b8; } .arena-rank.r3 { color:#cd7c3a; }
+  .arena-name { flex:1; font-size:16px; font-weight:700; color:#e2d9f3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+  .arena-score { font-size:18px; font-weight:700; color:#a78bfa; text-align:right; flex-shrink:0; min-width:58px; }
+  .arena-score.high { color:#34d399; } .arena-score.zero-score { color:rgba(255,100,100,0.6); }
+  .arena-updated { font-size:11px; color:rgba(180,160,255,0.5); flex-shrink:0; white-space:nowrap; width:84px; text-align:right; }
+  .arena-footer { margin-top:24px; padding-top:16px; border-top:1px solid rgba(180,130,255,0.15); display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+  .arena-total { font-size:14px; color:rgba(200,180,255,0.45); }
+  .arena-total strong { color:rgba(200,180,255,0.8); font-family:'Rajdhani',sans-serif; font-size:17px; }
+  .arena-goal-note { font-size:14px; color:rgba(252,211,77,0.6); }
+  @media (max-width:860px){
+    .arena-container{padding:22px 18px 28px}
+    .arena-grid{grid-template-columns:1fr}
+    .arena-header{flex-direction:column; align-items:flex-start}
+    .arena-header-right{text-align:left}
+    .arena-guild-name{font-size:36px; letter-spacing:4px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="panel">
+    <div class="head">
+      <div class="topline">
+        <span>아레나 점수 입력기</span>
+        <span class="badge">GitHub: arena-data.json 자동 로드</span>
+      </div>
+    </div>
+    <div class="body stack">
+      <div class="grid2">
+        <div><label>길드명</label><input id="guildName"></div>
+        <div><label>목표 점수</label><input id="goalScore" type="number"></div>
+      </div>
+
+      <div class="grid2">
+        <div><label>이벤트명</label><input value="Guild Arena" readonly style="opacity:0.7"></div>
+        <div><label>최종 업데이트</label><input id="lastUpdateText" readonly></div>
+      </div>
+      <div class="grid2">
+        <div>
+          <label><input id="includeCounter" type="checkbox" style="width:auto; margin-right:8px;" checked> 방문자수 넣기</label>
+        </div>
+        <div>
+          <label><input id="includeDisqus" type="checkbox" style="width:auto; margin-right:8px;"> 방명록(Disqus) 넣기</label>
+        </div>
+      </div>
+
+      <div id="disqusOptionBox" style="display:none;">
+        <label>Disqus shortname</label>
+        <input id="disqusShortname" placeholder="예: reo-arena">
+      </div>
+
+      <div class="grid2">
+        <div>
+          <label><input id="includeGA" type="checkbox" style="width:auto; margin-right:8px;"> Google Analytics 넣기</label>
+        </div>
+        <div></div>
+      </div>
+
+      <div id="gaOptionBox" style="display:none;">
+        <label>Google Analytics Measurement ID</label>
+        <input id="gaMeasurementId" placeholder="예: G-XXXXXXXXXX">
+      </div>
+
+
+      <div class="btn-row">
+        <button class="btn-primary" id="downloadIndexBtn">⬇ index.html 다운로드</button>
+        <button class="btn-secondary" id="downloadJsonBtn">JSON 저장</button>
+        <button class="btn-secondary" id="loadJsonBtn">JSON 파일 불러오기</button>
+        <button class="btn-secondary" id="importJsonBtn">JSON 붙여넣기 적용</button>
+        <button class="btn-secondary" id="sortBtn">점수순 재정렬</button>
+        <button class="btn-secondary" id="addMemberBtn">길드원 추가</button>
+      </div>
+      <input class="file-input" id="jsonFileInput" type="file" accept=".json,application/json">
+
+      <hr class="section-divider">
+
+      <div class="archive-box">
+        <label style="font-size:14px;font-weight:800;color:#7dd3fc;margin-bottom:10px;display:block;">📁 아카이브 생성</label>
+        <div class="grid2" style="margin-bottom:10px;">
+          <div><label>시즌 시작일</label><input id="archiveStart" type="date" placeholder="2026-03-30"></div>
+          <div><label>시즌 종료일</label><input id="archiveEnd" type="date" placeholder="2026-04-07"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-archive" id="downloadArchiveBtn">📦 아카이브 HTML 다운로드</button>
+        </div>
+        <div class="hint" style="margin-top:8px;">
+          파일명: <strong id="archiveFilenamePreview">시작일_종료일.html</strong> → <code>archive/</code> 폴더에 업로드하세요
+        </div>
+      </div>
+
+      <textarea id="jsonBox" placeholder="JSON 붙여넣기 / 백업용"></textarea>
+
+      <div class="hint">
+        생성되는 index.html에는 필터 버튼 + 상단 아카이브 링크가 들어갑니다. <strong>전체 / 목표점수 이상 / 목표점수 미만</strong><br>
+        GitHub에서는 시작 시 같은 폴더의 arena-data.json을 읽고, 로컬에서는 JSON 파일 불러오기를 사용하세요.
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:60px;">순번</th>
+              <th style="width:90px;">#등수</th>
+              <th style="min-width:160px;">이름</th>
+              <th style="width:110px;">점수</th>
+              <th style="width:120px;">업데이트</th>
+              <th style="width:80px;">삭제</th>
+            </tr>
+          </thead>
+          <tbody id="memberTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="preview">
+    <div class="head">미리보기</div>
+    <div class="preview-scroll">
+      <div id="previewRoot"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+let state = {
+  guildName: '',
+  eventLabel: 'Guild Arena',
+  goalScore: '',
+  totalMembers: '',
+  updateInput: '',
+  members: [],
+  includeCounter: true,
+  includeDisqus: false,
+  disqusShortname: '',
+  includeGA: false,
+  gaMeasurementId: ''
+};
+
+const $ = id => document.getElementById(id);
+
+function nowLocalIso() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  const hh = String(d.getHours()).padStart(2,'0');
+  const mm = String(d.getMinutes()).padStart(2,'0');
+  return `${y}-${m}-${day}T${hh}:${mm}`;
+}
+function formatUpdate(input) {
+  if(!input) return '';
+  const d = new Date(input);
+  if (isNaN(d.getTime())) return input;
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  const hh = String(d.getHours()).padStart(2,'0');
+  const mm = String(d.getMinutes()).padStart(2,'0');
+  return `${m}-${day} ${hh}:${mm}`;
+}
+function rankNumber(v) {
+  if (v === '-' || v === '' || v == null) return Infinity;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : Infinity;
+}
+function getDayText(input) {
+  const d = new Date(input);
+  if (isNaN(d.getTime())) return 'Day ? / 7';
+  const map = {1:1,2:2,3:3,4:4,5:5,6:6,0:7};
+  return `Day ${map[d.getDay()] ?? '?'} / 7`;
+}
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'","&#39;");
+}
+function latestUpdateIso() {
+  const list = (state.members || []).map(m => m.updated).filter(Boolean);
+  if (!list.length) return '';
+  return list.sort().slice(-1)[0];
+}
+function ensureMemberDefaults() {
+  (state.members || []).forEach(m => {
+    if (m.updated == null || m.updated === '') m.updated = state.updateInput || nowLocalIso();
+    if (m.rank == null || m.rank === '') m.rank = '-';
+    if (m.score == null || Number.isNaN(Number(m.score))) m.score = 0;
+  });
+}
+function syncMeta() {
+  state.totalMembers = (state.members || []).length;
+  state.updateInput = latestUpdateIso() || state.updateInput || '';
+  $('lastUpdateText').value = formatUpdate(state.updateInput);
+}
+function sortMembers() {
+  state.members.sort((a,b)=> {
+    const scoreDiff = (Number(b.score)||0) - (Number(a.score)||0);
+    if (scoreDiff !== 0) return scoreDiff;
+    const rankDiff = rankNumber(a.rank) - rankNumber(b.rank);
+    if (rankDiff !== 0) return rankDiff;
+    return String(a.name || '').localeCompare(String(b.name || ''), 'ko');
+  });
+}
+function syncForm() {
+  ensureMemberDefaults();
+  $('guildName').value = state.guildName || '';
+  $('goalScore').value = state.goalScore || '';
+  $('includeCounter').checked = !!state.includeCounter;
+  $('includeDisqus').checked = !!state.includeDisqus;
+  $('disqusShortname').value = state.disqusShortname || '';
+  $('disqusOptionBox').style.display = state.includeDisqus ? '' : 'none';
+  $('includeGA').checked = !!state.includeGA;
+  $('gaMeasurementId').value = state.gaMeasurementId || '';
+  $('gaOptionBox').style.display = state.includeGA ? '' : 'none';
+  syncMeta();
+  $('jsonBox').value = JSON.stringify(state, null, 2);
+}
+function syncState() {
+  state.guildName = $('guildName').value.trim();
+  state.eventLabel = 'Guild Arena';
+  state.goalScore = Number($('goalScore').value) || 0;
+  state.includeCounter = $('includeCounter').checked;
+  state.includeDisqus = $('includeDisqus').checked;
+  state.disqusShortname = $('disqusShortname').value.trim();
+  $('disqusOptionBox').style.display = state.includeDisqus ? '' : 'none';
+  state.includeGA = $('includeGA').checked;
+  state.gaMeasurementId = $('gaMeasurementId').value.trim();
+  $('gaOptionBox').style.display = state.includeGA ? '' : 'none';
+  syncMeta();
+  $('jsonBox').value = JSON.stringify(state, null, 2);
+  renderTable();
+  renderPreview();
+}
+function updateMember(index, field, value) {
+  if (field === 'score') {
+    state.members[index][field] = Number(value) || 0;
+    state.members[index].updated = nowLocalIso();
+  } else if (field === 'rank') {
+    const v = String(value).trim();
+    state.members[index][field] = v === '' ? '-' : (isFinite(Number(v)) ? Number(v) : '-');
+    state.members[index].updated = nowLocalIso();
+  } else {
+    state.members[index][field] = value;
+  }
+  syncState();
+}
+function addMember() {
+  state.members.push({
+    rank: '-',
+    name: 'New Member',
+    score: 0,
+    updated: nowLocalIso()
+  });
+  syncState();
+}
+function deleteMember(index) {
+  if (!confirm('이 길드원을 삭제할까요?')) return;
+  state.members.splice(index, 1);
+  syncState();
+}
+function renderTable() {
+  sortMembers();
+  $('memberTable').innerHTML = state.members.map((m, idx)=>`
+    <tr>
+      <td>${idx+1}</td>
+      <td><input class="rank-input" value="${escapeHtml(m.rank ?? '')}" onchange="updateMember(${idx}, 'rank', this.value)"></td>
+      <td><input class="name-input" value="${escapeHtml(m.name ?? '')}" onchange="updateMember(${idx}, 'name', this.value)"></td>
+      <td><input class="score-input" type="number" value="${Number(m.score||0)}" onchange="updateMember(${idx}, 'score', this.value)"></td>
+      <td class="small">${escapeHtml(formatUpdate(m.updated || state.updateInput))}</td>
+      <td><button class="btn-danger mini-btn" onclick="deleteMember(${idx})">삭제</button></td>
+    </tr>
+  `).join('');
+}
+function applyFilterToRows(container, mode, goalScore) {
+  const rows = container.querySelectorAll('[data-score]');
+  rows.forEach(row => {
+    const score = Number(row.getAttribute('data-score') || 0);
+    const show = mode === 'all' || (mode === 'above' && score >= goalScore) || (mode === 'below' && score < goalScore);
+    row.style.display = show ? '' : 'none';
+  });
+}
+function renderPreview() {
+  sortMembers();
+  const goalScore = Number(state.goalScore || 0);
+  const displayUpdate = formatUpdate(state.updateInput);
+  const sorted = state.members.map((m, i) => ({ ...m, no:i+1 }));
+  $('previewRoot').innerHTML = `
+    <div class="arena-container">
+      <div class="arena-header">
+        <div class="arena-guild-name">${escapeHtml(state.guildName || '')}</div>
+        <div class="arena-header-right">
+          <div>
+            <div class="arena-event-label">Guild Arena</div>
+            <div class="arena-update-time">최종 업데이트: <span>${escapeHtml(displayUpdate)}</span></div>
+          </div>
+          <a style="display:inline-block;padding:7px 16px;border-radius:999px;font-size:13px;font-weight:700;color:#7dd3fc;background:rgba(30,58,95,0.7);border:1px solid rgba(125,211,252,0.25);text-decoration:none;">📁 지난 시즌 아카이브</a>
+        </div>
+      </div>
+      <div class="arena-rule-box">
+        <span>📌</span>
+        <span>길드 규칙: 길드 아레나(Guild Arena) 이벤트 진행 시 최소 개인점수 <strong>${goalScore.toLocaleString()}점</strong> 달성 바랍니다.</span>
+      </div>
+      <div class="arena-filter-bar">
+        <button class="arena-filter-btn active" data-mode="all">전체</button>
+        <button class="arena-filter-btn" data-mode="above">이상</button>
+        <button class="arena-filter-btn" data-mode="below">미만</button>
+      </div>
+      <div class="arena-grid" id="previewArenaGrid">
+        ${sorted.map(m => {
+          const numericRank = rankNumber(m.rank);
+          const isTop3 = Number.isFinite(numericRank) && numericRank <= 3;
+          const isZero = Number(m.score) === 0;
+          const scoreClass = Number(m.score) >= goalScore ? 'high' : isZero ? 'zero-score' : '';
+          const rankClass = numericRank === 1 ? 'r1' : numericRank === 2 ? 'r2' : numericRank === 3 ? 'r3' : '';
+          const rowClass = isTop3 ? 'arena-row top3' : isZero ? 'arena-row zero' : 'arena-row';
+          return `
+            <div class="${rowClass}" data-score="${Number(m.score||0)}">
+              <span class="arena-no">${m.no}</span>
+              <span class="arena-rank ${rankClass}">${m.rank === '-' ? '—' : '#'+m.rank}</span>
+              <span class="arena-name">${escapeHtml(m.name)}</span>
+              <span class="arena-score ${scoreClass}">${Number(m.score||0).toLocaleString()}</span>
+              <span class="arena-updated">${escapeHtml(formatUpdate(m.updated || state.updateInput))}</span>
+            </div>
+          `;
+        }).join('')}
+      </div>
+      <div class="arena-footer">
+        <div class="arena-total">총 멤버 <strong>${sorted.length}명</strong> &nbsp;|&nbsp; ${getDayText(state.updateInput)}</div>
+        <div class="arena-goal-note">⚠️ ${goalScore.toLocaleString()}점 미달성 시 주의</div>
+      </div>
+      ${state.includeCounter ? '<div style="margin-top:30px;text-align:center;color:rgba(200,180,255,0.7);">👥 방문자 수 영역</div>' : ''}
+      ${state.includeDisqus ? '<hr style="margin:30px 0;opacity:0.2;"><div style="text-align:center;color:#c4b5fd;">💬 Disqus 방명록 영역</div>' : ''}
+      ${state.includeGA ? '<div style="margin-top:18px;text-align:center;color:rgba(200,180,255,0.55);">📊 Google Analytics 연결됨: ' + escapeHtml(state.gaMeasurementId || '') + '</div>' : ''}
+    </div>
+  `;
+  const buttons = document.querySelectorAll('#previewRoot .arena-filter-btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilterToRows(document.getElementById('previewRoot'), btn.dataset.mode, goalScore);
+    });
+  });
+}
+function buildStaticIndexHtml() {
+  sortMembers();
+  const goalScore = Number(state.goalScore || 0);
+  const displayUpdate = formatUpdate(state.updateInput);
+  const sorted = state.members.map((m, i) => ({ ...m, no:i+1 }));
+
+  const rows = sorted.map(m => {
+    const numericRank = rankNumber(m.rank);
+    const isTop3 = Number.isFinite(numericRank) && numericRank <= 3;
+    const isZero = Number(m.score) === 0;
+    const scoreClass = Number(m.score) >= goalScore ? 'high' : isZero ? 'zero-score' : '';
+    const rankClass = numericRank === 1 ? 'r1' : numericRank === 2 ? 'r2' : numericRank === 3 ? 'r3' : '';
+    const rowClass = isTop3 ? 'row top3' : isZero ? 'row zero' : 'row';
+    return '<div class="' + rowClass + '" data-score="' + Number(m.score||0) + '">' +
+      '<span class="no">' + m.no + '</span>' +
+      '<span class="rank ' + rankClass + '">' + (m.rank === '-' ? '—' : '#' + m.rank) + '</span>' +
+      '<span class="name">' + escapeHtml(m.name) + '</span>' +
+      '<span class="score ' + scoreClass + '">' + Number(m.score||0).toLocaleString() + '</span>' +
+      '<span class="updated">' + escapeHtml(formatUpdate(m.updated || state.updateInput)) + '</span>' +
+    '</div>';
+  }).join('');
+
+  var extraHtml = '';
+  if (state.includeCounter) {
+    extraHtml += '<div style="margin-top:30px; text-align:center; color:rgba(200,180,255,0.7);">👥 방문자 수: <span id="busuanzi_value_site_uv"></span></div>';
+    extraHtml += '<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"><\/script>';
+  }
+  if (state.includeDisqus && state.disqusShortname) {
+    extraHtml += '<hr style="margin:30px 0; opacity:0.2;">';
+    extraHtml += '<div id="disqus_thread" style="margin-top:20px;"><\/div>';
+    extraHtml += '<script>';
+    extraHtml += 'var disqus_config = function(){ this.page.url = window.location.href; this.page.identifier = "reo-arena-guestbook"; this.page.title = "REO Arena Guestbook"; };';
+    extraHtml += '(function(){ var d=document,s=d.createElement("script"); s.src="https://' + state.disqusShortname + '.disqus.com/embed.js"; s.setAttribute("data-timestamp", +new Date()); (d.head||d.body).appendChild(s); })();';
+    extraHtml += '<\/script>';
+    extraHtml += '<noscript>댓글을 보려면 JavaScript를 켜주세요.<\/noscript>';
+  }
+  var gaHead = '';
+  if (state.includeGA && state.gaMeasurementId) {
+    gaHead += '<script async src="https://www.googletagmanager.com/gtag/js?id=' + state.gaMeasurementId + '"><\/script>';
+    gaHead += '<script>';
+    gaHead += 'window.dataLayer = window.dataLayer || [];';
+    gaHead += 'function gtag(){dataLayer.push(arguments);}';
+    gaHead += 'gtag("js", new Date());';
+    gaHead += 'gtag("config", "' + state.gaMeasurementId + '");';
+    gaHead += '<\/script>';
+  }
+
+  return '<!DOCTYPE html>' +
+  '<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+  '<title>' + escapeHtml(state.guildName || '') + ' Guild Arena</title>' + gaHead +
+  '<style>' +
+  "@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');" +
+  "*{margin:0;padding:0;box-sizing:border-box}" +
+  "body{background:#0f0c1a;font-family:'Noto Sans KR',sans-serif;padding:20px;color:#fff}" +
+  ".container{max-width:1100px;margin:0 auto;background:linear-gradient(160deg,#1a1030 0%,#0f0c1a 50%,#0c1525 100%);border:1px solid rgba(180,130,255,0.2);border-radius:20px;padding:36px 40px 44px;position:relative;overflow:hidden}" +
+  ".container::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle, rgba(130,80,255,0.15) 0%, transparent 70%);pointer-events:none}" +
+  ".container::after{content:'';position:absolute;bottom:-60px;left:-60px;width:250px;height:250px;background:radial-gradient(circle, rgba(60,160,255,0.1) 0%, transparent 70%);pointer-events:none}" +
+  ".header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid rgba(180,130,255,0.2)}" +
+  ".guild-name{font-family:'Rajdhani',sans-serif;font-size:52px;font-weight:700;letter-spacing:8px;background:linear-gradient(135deg,#c084fc,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}" +
+  ".header-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:10px}.event-label{font-size:14px;color:rgba(200,180,255,0.6);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}" +
+  ".update-time{font-size:14px;color:rgba(200,180,255,0.7)}.update-time span{color:#c4b5fd;font-weight:700;font-size:15px}" +
+  ".archive-btn{display:inline-block;padding:7px 16px;border-radius:999px;font-size:13px;font-weight:700;color:#7dd3fc;background:rgba(30,58,95,0.7);border:1px solid rgba(125,211,252,0.25);text-decoration:none;letter-spacing:0.5px;transition:background .2s}" +
+  ".archive-btn:hover{background:rgba(30,58,95,1)}" +
+  ".rule-box{background:rgba(255,200,80,0.07);border:1px solid rgba(255,200,80,0.25);border-radius:10px;padding:13px 20px;margin-bottom:18px;font-size:15px;color:#fcd34d;display:flex;align-items:center;gap:8px}" +
+  ".filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}" +
+  ".filter-btn{border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.04);color:#e8e3ff;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer}" +
+  ".filter-btn.active{background:rgba(139,92,246,0.22);border-color:rgba(139,92,246,0.45)}" +
+  ".grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}" +
+  ".row{display:flex;align-items:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:11px 14px;gap:10px;min-width:0}" +
+  ".row.top3{background:rgba(180,130,255,0.1);border-color:rgba(180,130,255,0.25)}.row.zero{background:rgba(255,80,80,0.05);border-color:rgba(255,80,80,0.15)}" +
+  ".no,.rank,.score{font-family:'Rajdhani',sans-serif}.no{font-size:13px;font-weight:600;color:rgba(200,180,255,0.35);width:22px;text-align:right;flex-shrink:0}" +
+  ".rank{font-size:14px;font-weight:700;color:rgba(200,180,255,0.5);width:46px;text-align:center;flex-shrink:0}.rank.r1{color:#fbbf24}.rank.r2{color:#94a3b8}.rank.r3{color:#cd7c3a}" +
+  ".name{flex:1;font-size:16px;font-weight:700;color:#e2d9f3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}" +
+  ".score{font-size:18px;font-weight:700;color:#a78bfa;text-align:right;flex-shrink:0;min-width:58px}.score.high{color:#34d399}.score.zero-score{color:rgba(255,100,100,0.6)}" +
+  ".updated{font-size:11px;color:rgba(180,160,255,0.5);flex-shrink:0;white-space:nowrap;width:84px;text-align:right}" +
+  ".footer{margin-top:24px;padding-top:16px;border-top:1px solid rgba(180,130,255,0.15);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}" +
+  ".total{font-size:14px;color:rgba(200,180,255,0.45)}.total strong{color:rgba(200,180,255,0.8);font-family:'Rajdhani',sans-serif;font-size:17px}.goal-note{font-size:14px;color:rgba(252,211,77,0.6)}" +
+  "@media (max-width:860px){body{padding:12px}.container{padding:22px 18px 28px}.grid{grid-template-columns:1fr}.header{flex-direction:column;align-items:flex-start}.header-right{text-align:left}.guild-name{font-size:36px;letter-spacing:4px}}" +
+  "@media (max-width:860px) and (orientation:portrait){.arena-updated,.updated{display:none!important}}" +
+  '</style></head><body>' +
+  '<div class="container">' +
+    '<div class="header">' +
+      '<div class="guild-name">' + escapeHtml(state.guildName || '') + '</div>' +
+      '<div class="header-right">' +
+        '<div>' +
+          '<div class="event-label">Guild Arena</div>' +
+          '<div class="update-time">최종 업데이트: <span>' + escapeHtml(displayUpdate) + '</span></div>' +
+        '</div>' +
+        '<a class="archive-btn" href="./archive/">📁 지난 시즌 아카이브</a>' +
+      '</div>' +
+    '</div>' +
+    '<div class="rule-box"><span>📌</span><span>길드 규칙: 길드 아레나(Guild Arena) 이벤트 진행 시 최소 개인점수 <strong>' + goalScore.toLocaleString() + '점</strong> 달성 바랍니다.</span></div>' +
+    '<div class="filter-bar">' +
+      '<button class="filter-btn active" data-mode="all">전체</button>' +
+      '<button class="filter-btn" data-mode="above">이상</button>' +
+      '<button class="filter-btn" data-mode="below">미만</button>' +
+    '</div>' +
+    '<div class="grid">' + rows + '</div>' +
+    '<div class="footer">' +
+      '<div class="total">총 멤버 <strong>' + sorted.length + '명</strong> &nbsp;|&nbsp; ' + getDayText(state.updateInput) + '</div>' +
+      '<div class="goal-note">⚠️ ' + goalScore.toLocaleString() + '점 미달성 시 주의</div>' +
+    '</div>' +
+    extraHtml +
+  '</div>' +
+  '<script>(function(){' +
+    'var buttons=document.querySelectorAll(".filter-btn");' +
+    'var rows=document.querySelectorAll("[data-score]");' +
+    'var goal=' + JSON.stringify(goalScore) + ';' +
+    'buttons.forEach(function(btn){btn.addEventListener("click",function(){' +
+      'buttons.forEach(function(b){b.classList.remove("active")});' +
+      'btn.classList.add("active");' +
+      'var mode=btn.getAttribute("data-mode");' +
+      'rows.forEach(function(row){' +
+        'var s=Number(row.getAttribute("data-score")||0);' +
+        'var show=(mode==="all")||(mode==="above"&&s>=goal)||(mode==="below"&&s<goal);' +
+        'row.style.display=show?"":"none";' +
+      '});' +
+    '})});' +
+  '})();<\/script>' +
+  '</body></html>';
+}
+function buildArchiveHtml(startDate, endDate) {
+  // 아카이브는 index.html과 동일하되, 아카이브 버튼 링크만 상위로 조정
+  sortMembers();
+  const goalScore = Number(state.goalScore || 0);
+  const displayUpdate = formatUpdate(state.updateInput);
+  const sorted = state.members.map((m, i) => ({ ...m, no:i+1 }));
+
+  const rows = sorted.map(m => {
+    const numericRank = rankNumber(m.rank);
+    const isTop3 = Number.isFinite(numericRank) && numericRank <= 3;
+    const isZero = Number(m.score) === 0;
+    const scoreClass = Number(m.score) >= goalScore ? 'high' : isZero ? 'zero-score' : '';
+    const rankClass = numericRank === 1 ? 'r1' : numericRank === 2 ? 'r2' : numericRank === 3 ? 'r3' : '';
+    const rowClass = isTop3 ? 'row top3' : isZero ? 'row zero' : 'row';
+    return '<div class="' + rowClass + '" data-score="' + Number(m.score||0) + '">' +
+      '<span class="no">' + m.no + '</span>' +
+      '<span class="rank ' + rankClass + '">' + (m.rank === '-' ? '—' : '#' + m.rank) + '</span>' +
+      '<span class="name">' + escapeHtml(m.name) + '</span>' +
+      '<span class="score ' + scoreClass + '">' + Number(m.score||0).toLocaleString() + '</span>' +
+      '<span class="updated">' + escapeHtml(formatUpdate(m.updated || state.updateInput)) + '</span>' +
+    '</div>';
+  }).join('');
+
+  const periodLabel = startDate && endDate ? startDate + ' ~ ' + endDate : (startDate || endDate || '');
+
+  var gaHead = '';
+  if (state.includeGA && state.gaMeasurementId) {
+    gaHead += '<script async src="https://www.googletagmanager.com/gtag/js?id=' + state.gaMeasurementId + '"><\/script>';
+    gaHead += '<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","' + state.gaMeasurementId + '");<\/script>';
+  }
+
+  return '<!DOCTYPE html>' +
+  '<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+  '<title>' + escapeHtml(state.guildName || '') + ' Guild Arena – ' + escapeHtml(periodLabel) + '</title>' + gaHead +
+  '<style>' +
+  "@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');" +
+  "*{margin:0;padding:0;box-sizing:border-box}" +
+  "body{background:#0f0c1a;font-family:'Noto Sans KR',sans-serif;padding:20px;color:#fff}" +
+  ".container{max-width:1100px;margin:0 auto;background:linear-gradient(160deg,#1a1030 0%,#0f0c1a 50%,#0c1525 100%);border:1px solid rgba(180,130,255,0.2);border-radius:20px;padding:36px 40px 44px;position:relative;overflow:hidden}" +
+  ".container::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle, rgba(130,80,255,0.15) 0%, transparent 70%);pointer-events:none}" +
+  ".container::after{content:'';position:absolute;bottom:-60px;left:-60px;width:250px;height:250px;background:radial-gradient(circle, rgba(60,160,255,0.1) 0%, transparent 70%);pointer-events:none}" +
+  ".header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid rgba(180,130,255,0.2)}" +
+  ".guild-name{font-family:'Rajdhani',sans-serif;font-size:52px;font-weight:700;letter-spacing:8px;background:linear-gradient(135deg,#c084fc,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}" +
+  ".header-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:10px}.event-label{font-size:14px;color:rgba(200,180,255,0.6);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}" +
+  ".update-time{font-size:14px;color:rgba(200,180,255,0.7)}.update-time span{color:#c4b5fd;font-weight:700;font-size:15px}" +
+  ".archive-btn{display:inline-block;padding:7px 16px;border-radius:999px;font-size:13px;font-weight:700;color:#7dd3fc;background:rgba(30,58,95,0.7);border:1px solid rgba(125,211,252,0.25);text-decoration:none;letter-spacing:0.5px}" +
+  ".period-badge{display:inline-block;padding:5px 14px;border-radius:999px;font-size:13px;font-weight:700;color:#fcd34d;background:rgba(255,200,80,0.08);border:1px solid rgba(255,200,80,0.2)}" +
+  ".rule-box{background:rgba(255,200,80,0.07);border:1px solid rgba(255,200,80,0.25);border-radius:10px;padding:13px 20px;margin-bottom:18px;font-size:15px;color:#fcd34d;display:flex;align-items:center;gap:8px}" +
+  ".filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}" +
+  ".filter-btn{border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.04);color:#e8e3ff;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer}" +
+  ".filter-btn.active{background:rgba(139,92,246,0.22);border-color:rgba(139,92,246,0.45)}" +
+  ".grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}" +
+  ".row{display:flex;align-items:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:11px 14px;gap:10px;min-width:0}" +
+  ".row.top3{background:rgba(180,130,255,0.1);border-color:rgba(180,130,255,0.25)}.row.zero{background:rgba(255,80,80,0.05);border-color:rgba(255,80,80,0.15)}" +
+  ".no,.rank,.score{font-family:'Rajdhani',sans-serif}.no{font-size:13px;font-weight:600;color:rgba(200,180,255,0.35);width:22px;text-align:right;flex-shrink:0}" +
+  ".rank{font-size:14px;font-weight:700;color:rgba(200,180,255,0.5);width:46px;text-align:center;flex-shrink:0}.rank.r1{color:#fbbf24}.rank.r2{color:#94a3b8}.rank.r3{color:#cd7c3a}" +
+  ".name{flex:1;font-size:16px;font-weight:700;color:#e2d9f3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}" +
+  ".score{font-size:18px;font-weight:700;color:#a78bfa;text-align:right;flex-shrink:0;min-width:58px}.score.high{color:#34d399}.score.zero-score{color:rgba(255,100,100,0.6)}" +
+  ".updated{font-size:11px;color:rgba(180,160,255,0.5);flex-shrink:0;white-space:nowrap;width:84px;text-align:right}" +
+  ".footer{margin-top:24px;padding-top:16px;border-top:1px solid rgba(180,130,255,0.15);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}" +
+  ".total{font-size:14px;color:rgba(200,180,255,0.45)}.total strong{color:rgba(200,180,255,0.8);font-family:'Rajdhani',sans-serif;font-size:17px}.goal-note{font-size:14px;color:rgba(252,211,77,0.6)}" +
+  "@media (max-width:860px){body{padding:12px}.container{padding:22px 18px 28px}.grid{grid-template-columns:1fr}.header{flex-direction:column;align-items:flex-start}.header-right{text-align:left;align-items:flex-start}.guild-name{font-size:36px;letter-spacing:4px}}" +
+  "@media (max-width:860px) and (orientation:portrait){.updated{display:none!important}}" +
+  '</style></head><body>' +
+  '<div class="container">' +
+    '<div class="header">' +
+      '<div class="guild-name">' + escapeHtml(state.guildName || '') + '</div>' +
+      '<div class="header-right">' +
+        '<div>' +
+          '<div class="event-label">Guild Arena &nbsp;·&nbsp; Archive</div>' +
+          '<div class="update-time">최종 업데이트: <span>' + escapeHtml(displayUpdate) + '</span></div>' +
+        '</div>' +
+        (periodLabel ? '<span class="period-badge">📅 ' + escapeHtml(periodLabel) + '</span>' : '') +
+        '<a class="archive-btn" href="../">← 현재 시즌</a>' +
+      '</div>' +
+    '</div>' +
+    '<div class="rule-box"><span>📌</span><span>길드 규칙: 길드 아레나(Guild Arena) 이벤트 진행 시 최소 개인점수 <strong>' + goalScore.toLocaleString() + '점</strong> 달성 바랍니다.</span></div>' +
+    '<div class="filter-bar">' +
+      '<button class="filter-btn active" data-mode="all">전체</button>' +
+      '<button class="filter-btn" data-mode="above">이상</button>' +
+      '<button class="filter-btn" data-mode="below">미만</button>' +
+    '</div>' +
+    '<div class="grid">' + rows + '</div>' +
+    '<div class="footer">' +
+      '<div class="total">총 멤버 <strong>' + sorted.length + '명</strong></div>' +
+      '<div class="goal-note">⚠️ ' + goalScore.toLocaleString() + '점 미달성 시 주의</div>' +
+    '</div>' +
+  '</div>' +
+  '<script>(function(){' +
+    'var buttons=document.querySelectorAll(".filter-btn");' +
+    'var rows=document.querySelectorAll("[data-score]");' +
+    'var goal=' + JSON.stringify(goalScore) + ';' +
+    'buttons.forEach(function(btn){btn.addEventListener("click",function(){' +
+      'buttons.forEach(function(b){b.classList.remove("active")});' +
+      'btn.classList.add("active");' +
+      'var mode=btn.getAttribute("data-mode");' +
+      'rows.forEach(function(row){' +
+        'var s=Number(row.getAttribute("data-score")||0);' +
+        'var show=(mode==="all")||(mode==="above"&&s>=goal)||(mode==="below"&&s<goal);' +
+        'row.style.display=show?"":"none";' +
+      '});' +
+    '})});' +
+  '})();<\/script>' +
+  '</body></html>';
+}
+function downloadFile(name, content, type) {
+  const blob = new Blob([content], {type});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+async function tryLoadArenaJsonFromSameFolder() {
+  try {
+    const res = await fetch('./arena-data.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error();
+    const parsed = await res.json();
+    if (!parsed || !Array.isArray(parsed.members)) throw new Error();
+    state = parsed;
+    state.eventLabel = 'Guild Arena';
+    ensureMemberDefaults();
+  } catch (e) {
+    // 로컬 file:// 환경에서는 자동 로드가 실패할 수 있음
+  }
+}
+
+$('downloadIndexBtn').addEventListener('click', () => {
+  syncMeta();
+  $('jsonBox').value = JSON.stringify(state, null, 2);
+  renderTable();
+  renderPreview();
+  downloadFile('index.html', buildStaticIndexHtml(), 'text/html;charset=utf-8');
+});
+$('downloadJsonBtn').addEventListener('click', () => {
+  syncMeta();
+  $('jsonBox').value = JSON.stringify(state, null, 2);
+  renderTable();
+  renderPreview();
+  downloadFile('arena-data.json', JSON.stringify(state, null, 2), 'application/json;charset=utf-8');
+});
+$('loadJsonBtn').addEventListener('click', () => $('jsonFileInput').click());
+$('jsonFileInput').addEventListener('change', async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    if (!parsed || !Array.isArray(parsed.members)) throw new Error();
+    state = parsed;
+    state.eventLabel = 'Guild Arena';
+    ensureMemberDefaults();
+    syncForm();
+    renderTable();
+    renderPreview();
+  } catch (err) {
+    alert('JSON 파일을 읽지 못했습니다.');
+  }
+  e.target.value = '';
+});
+$('importJsonBtn').addEventListener('click', ()=> {
+  try {
+    const parsed = JSON.parse($('jsonBox').value);
+    if (!parsed || !Array.isArray(parsed.members)) throw new Error();
+    state = parsed;
+    state.eventLabel = 'Guild Arena';
+    ensureMemberDefaults();
+    syncForm();
+    renderTable();
+    renderPreview();
+  } catch (e) {
+    alert('JSON 형식이 올바르지 않습니다.');
+  }
+});
+$('sortBtn').addEventListener('click', ()=> {
+  sortMembers();
+  syncForm();
+  renderTable();
+  renderPreview();
+});
+$('addMemberBtn').addEventListener('click', addMember);
+['guildName','goalScore','disqusShortname','gaMeasurementId'].forEach(id => $(id).addEventListener('input', syncState));
+['includeCounter','includeDisqus','includeGA'].forEach(id => $(id).addEventListener('change', syncState));
+
+function updateArchiveFilenamePreview() {
+  const s = $('archiveStart').value;
+  const e = $('archiveEnd').value;
+  if (s && e) $('archiveFilenamePreview').textContent = s + '_' + e + '.html';
+  else if (s) $('archiveFilenamePreview').textContent = s + '_???.html';
+  else $('archiveFilenamePreview').textContent = '시작일_종료일.html';
+}
+$('archiveStart').addEventListener('input', updateArchiveFilenamePreview);
+$('archiveEnd').addEventListener('input', updateArchiveFilenamePreview);
+
+$('downloadArchiveBtn').addEventListener('click', () => {
+  const s = $('archiveStart').value;
+  const e = $('archiveEnd').value;
+  if (!s || !e) { alert('시작일과 종료일을 모두 입력하세요.'); return; }
+  const filename = s + '_' + e + '.html';
+  syncMeta();
+  downloadFile(filename, buildArchiveHtml(s, e), 'text/html;charset=utf-8');
+});
+
+window.updateMember = updateMember;
+window.deleteMember = deleteMember;
+
+(async () => {
+  await tryLoadArenaJsonFromSameFolder();
+  syncForm();
+  renderTable();
+  renderPreview();
+})();
+</script>
+</body>
+</html>
