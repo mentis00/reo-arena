@@ -5,233 +5,278 @@ layout: null
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ page.url }}</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ page.url }}</title>
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');
-    * { margin:0; padding:0; box-sizing:border-box; }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');
 
-    body {
-      background:#0f0c1a;
-      font-family:'Noto Sans KR',sans-serif;
-      padding:20px;
-      color:#fff;
-    }
+*{margin:0;padding:0;box-sizing:border-box}
 
-    .container {
-      max-width:1100px;
-      margin:0 auto;
-      background:linear-gradient(160deg,#1a1030 0%,#0f0c1a 50%,#0c1525 100%);
-      border:1px solid rgba(180,130,255,0.2);
-      border-radius:20px;
-      padding:36px 40px 44px;
-      position:relative;
-    }
+body{
+  background:#0f0c1a;
+  font-family:'Noto Sans KR',sans-serif;
+  padding:20px;
+  color:#fff;
+}
 
-    .header {
-      display:flex;
-      justify-content:space-between;
-      margin-bottom:24px;
-      border-bottom:1px solid rgba(180,130,255,0.2);
-      padding-bottom:16px;
-    }
+.container{
+  max-width:1100px;
+  margin:0 auto;
+  background:linear-gradient(160deg,#1a1030 0%,#0f0c1a 50%,#0c1525 100%);
+  border:1px solid rgba(180,130,255,0.2);
+  border-radius:20px;
+  padding:36px 40px 44px;
+}
 
-    .guild-name {
-      font-family:'Rajdhani',sans-serif;
-      font-size:42px;
-      font-weight:700;
-      letter-spacing:6px;
-      background:linear-gradient(135deg,#c084fc,#818cf8,#38bdf8);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-    }
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
+  border-bottom:1px solid rgba(180,130,255,0.2);
+  padding-bottom:16px;
+}
 
-    .header-right {
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      align-items:flex-end;
-    }
+.guild-name{
+  font-family:'Rajdhani',sans-serif;
+  font-size:42px;
+  font-weight:700;
+  letter-spacing:6px;
+  background:linear-gradient(135deg,#c084fc,#818cf8,#38bdf8);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
 
-    .archive-btn {
-      padding:6px 14px;
-      border-radius:999px;
-      font-size:13px;
-      font-weight:700;
-      color:#7dd3fc;
-      background:rgba(30,58,95,0.7);
-      border:1px solid rgba(125,211,252,0.25);
-      text-decoration:none;
-    }
+.header-right{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:flex-end;
+}
 
-    .section-title {
-      margin:20px 0 10px;
-      font-size:18px;
-      font-weight:900;
-    }
+.archive-btn{
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  color:#7dd3fc;
+  background:rgba(30,58,95,0.7);
+  border:1px solid rgba(125,211,252,0.25);
+  text-decoration:none;
+}
 
-    .list {
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:10px;
-    }
+/* 경로 표시 */
+.path{
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:10px;
+  color:#c4b5fd;
+  word-break:break-word;
+}
 
-    .item {
-      display:flex;
-      align-items:center;
-      gap:10px;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.06);
-      border-radius:10px;
-      padding:12px;
-      text-decoration:none;
-      color:#fff;
-    }
+.section-title{
+  margin:20px 0 10px;
+  font-size:18px;
+  font-weight:900;
+}
 
-    .icon {
-      font-size:18px;
-    }
+/* 리스트 */
+.list{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
 
-    .name {
-      font-weight:700;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
+.item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:10px;
+  padding:12px;
+  text-decoration:none;
+  color:#fff;
+}
 
-    /* ✅ 이미지 전용 */
-    .image-grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
-      gap:12px;
-    }
+.icon{font-size:18px}
 
-    .image-item img {
-      width:100%;
-      height:140px;
-      object-fit:cover;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.08);
-      transition:0.15s;
-    }
+.name{
+  font-weight:700;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
 
-    .image-item img:hover {
-      transform:scale(1.03);
-      border-color:rgba(180,130,255,0.4);
-    }
+/* 이미지 */
+.image-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:14px;
+}
 
-    @media (max-width:860px) {
-      .list { grid-template-columns:1fr; }
-    }
+.image-item{
+  cursor:pointer;
+}
 
-  </style>
+.image-item img{
+  width:100%;
+  height:160px;
+  object-fit:contain; /* 🔥 전체 표시 */
+  background:rgba(255,255,255,0.03);
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.08);
+  padding:6px;
+}
+
+/* 라이트박스 */
+.lightbox{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.9);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+.lightbox img{
+  max-width:90%;
+  max-height:90%;
+}
+
+@media(max-width:860px){
+  .list{grid-template-columns:1fr}
+}
+</style>
 </head>
 
 <body>
 <div class="container">
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="guild-name">REO</div>
-    <div class="header-right">
-      <a class="archive-btn" href="{{ '/archive/' | relative_url }}">📁 아카이브</a>
-      <a class="archive-btn" href="{{ '/reo-arena/' | relative_url }}">← 현재 시즌</a>
-    </div>
+<!-- HEADER -->
+<div class="header">
+  <div class="guild-name">REO</div>
+  <div class="header-right">
+    <a class="archive-btn" href="{{ '/archive/' | relative_url }}">📁 아카이브</a>
+    <a class="archive-btn" href="{{ '/reo-arena/' | relative_url }}">← 현재 시즌</a>
   </div>
+</div>
 
-  <!-- 데이터 준비 -->
-  {% assign files_sorted = site.static_files | sort:"name" %}
-  {% assign folder_string = '' %}
-  {% assign image_count = 0 %}
-  {% assign file_count = 0 %}
+<!-- 📍 경로 -->
+<div class="path">{{ page.url }}</div>
 
-  {% for file in files_sorted %}
-    {% if file.path contains page.url %}
-      {% assign rest = file.path | remove_first: page.url %}
-      {% assign parts = rest | split:'/' %}
-      {% assign ext = file.extname | downcase %}
+{% assign files_sorted = site.static_files | sort:"name" %}
+{% assign folder_string = '' %}
+{% assign image_count = 0 %}
+{% assign file_count = 0 %}
 
-      {% if parts.size > 1 %}
-        {% assign token = '|' | append: parts[0] | append: '|' %}
-        {% unless folder_string contains token %}
-          {% assign folder_string = folder_string | append: token %}
-        {% endunless %}
-      {% endif %}
+{% for file in files_sorted %}
+  {% if file.path contains page.url %}
+    {% assign rest = file.path | remove_first: page.url %}
+    {% assign parts = rest | split:'/' %}
+    {% assign ext = file.extname | downcase %}
 
-      {% if parts.size == 1 and rest != '' and file.name != 'index.html' %}
-        {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
-          {% assign image_count = image_count | plus:1 %}
-        {% else %}
-          {% assign file_count = file_count | plus:1 %}
-        {% endif %}
+    {% if parts.size > 1 %}
+      {% assign token = '|' | append: parts[0] | append: '|' %}
+      {% unless folder_string contains token %}
+        {% assign folder_string = folder_string | append: token %}
+      {% endunless %}
+    {% endif %}
+
+    {% if parts.size == 1 and rest != '' and file.name != 'index.html' %}
+      {% if ext == '.jpg' or ext == '.png' or ext == '.jpeg' or ext == '.webp' or ext == '.gif' %}
+        {% assign image_count = image_count | plus:1 %}
+      {% else %}
+        {% assign file_count = file_count | plus:1 %}
       {% endif %}
     {% endif %}
-  {% endfor %}
-
-  {% assign folder_array = folder_string | split:'|' | sort %}
-
-  <!-- 📁 폴더 -->
-  {% if folder_array.size > 1 %}
-    <div class="section-title">폴더</div>
-    <div class="list">
-      {% for folder in folder_array %}
-        {% if folder != '' %}
-          <a class="item" href="{{ page.url | append: folder | append:'/' | relative_url }}">
-            <span class="icon">📁</span>
-            <span class="name">{{ folder }}</span>
-          </a>
-        {% endif %}
-      {% endfor %}
-    </div>
   {% endif %}
+{% endfor %}
 
-  <!-- 📄 파일 -->
-  {% if file_count > 0 %}
-    <div class="section-title">파일</div>
-    <div class="list">
-      {% for file in files_sorted %}
-        {% if file.path contains page.url and file.name != 'index.html' %}
-          {% assign rest = file.path | remove_first: page.url %}
-          {% assign parts = rest | split:'/' %}
-          {% assign ext = file.extname | downcase %}
+{% assign folder_array = folder_string | split:'|' | sort %}
 
-          {% if parts.size == 1 and rest != '' %}
-            {% unless ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
-              <a class="item" href="{{ file.path | relative_url }}">
-                <span class="icon">📄</span>
-                <span class="name">{{ file.name }}</span>
-              </a>
-            {% endunless %}
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-    </div>
+<!-- 📁 폴더 -->
+{% if folder_array.size > 1 %}
+<div class="section-title">폴더</div>
+<div class="list">
+{% for folder in folder_array %}
+  {% if folder != '' %}
+  <a class="item" href="{{ page.url | append: folder | append:'/' | relative_url }}">
+    <span class="icon">📁</span>
+    <span class="name">{{ folder }}</span>
+  </a>
   {% endif %}
+{% endfor %}
+</div>
+{% endif %}
 
-  <!-- 🖼 이미지 -->
-  {% if image_count > 0 %}
-    <div class="section-title">이미지</div>
-    <div class="image-grid">
-      {% for file in files_sorted %}
-        {% if file.path contains page.url %}
-          {% assign rest = file.path | remove_first: page.url %}
-          {% assign parts = rest | split:'/' %}
-          {% assign ext = file.extname | downcase %}
+<!-- 📄 파일 -->
+{% if file_count > 0 %}
+<div class="section-title">파일</div>
+<div class="list">
+{% for file in files_sorted %}
+  {% if file.path contains page.url %}
+    {% assign rest = file.path | remove_first: page.url %}
+    {% assign parts = rest | split:'/' %}
+    {% assign ext = file.extname | downcase %}
 
-          {% if parts.size == 1 and rest != '' %}
-            {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
-              <a class="image-item" href="{{ file.path | relative_url }}">
-                <img src="{{ file.path | relative_url }}">
-              </a>
-            {% endif %}
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-    </div>
+    {% if parts.size == 1 and rest != '' and file.name != 'index.html' %}
+      {% unless ext == '.jpg' or ext == '.png' or ext == '.jpeg' or ext == '.webp' or ext == '.gif' %}
+      <a class="item" href="{{ file.path | relative_url }}">
+        <span class="icon">📄</span>
+        <span class="name">{{ file.name }}</span>
+      </a>
+      {% endunless %}
+    {% endif %}
   {% endif %}
+{% endfor %}
+</div>
+{% endif %}
+
+<!-- 🖼 이미지 -->
+{% if image_count > 0 %}
+<div class="section-title">이미지</div>
+<div class="image-grid">
+{% for file in files_sorted %}
+  {% if file.path contains page.url %}
+    {% assign rest = file.path | remove_first: page.url %}
+    {% assign parts = rest | split:'/' %}
+    {% assign ext = file.extname | downcase %}
+
+    {% if parts.size == 1 and rest != '' %}
+      {% if ext == '.jpg' or ext == '.png' or ext == '.jpeg' or ext == '.webp' or ext == '.gif' %}
+      <div class="image-item" onclick="openImage('{{ file.path | relative_url }}')">
+        <img src="{{ file.path | relative_url }}">
+      </div>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+</div>
+{% endif %}
 
 </div>
+
+<!-- 🔍 라이트박스 -->
+<div class="lightbox" id="lightbox" onclick="closeImage()">
+  <img id="lightbox-img">
+</div>
+
+<script>
+function openImage(src){
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').style.display = 'flex';
+}
+function closeImage(){
+  document.getElementById('lightbox').style.display = 'none';
+}
+</script>
+
 </body>
 </html>
