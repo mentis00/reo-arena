@@ -216,7 +216,7 @@ body{
   max-height:88%;
   object-fit:contain;
   cursor:pointer;
-  transition:opacity 0.15s ease;
+  transition:transform 0.22s ease, opacity 0.22s ease;
 }
 
 .lightbox-nav{
@@ -431,26 +431,50 @@ function prevImage(){
   if (galleryImages.length === 0) return;
 
   const img = document.getElementById('lightbox-img');
-  img.style.opacity = 0;
+
+  img.style.transform = 'translateX(40px)';
+  img.style.opacity = '0';
 
   setTimeout(() => {
     currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
     img.src = galleryImages[currentImageIndex];
-    img.style.opacity = 1;
-  }, 100);
+    img.style.transition = 'none';
+    img.style.transform = 'translateX(-40px)';
+    img.style.opacity = '0';
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        img.style.transition = 'transform 0.22s ease, opacity 0.22s ease';
+        img.style.transform = 'translateX(0)';
+        img.style.opacity = '1';
+      });
+    });
+  }, 120);
 }
 
 function nextImage(){
   if (galleryImages.length === 0) return;
 
   const img = document.getElementById('lightbox-img');
-  img.style.opacity = 0;
+
+  img.style.transform = 'translateX(-40px)';
+  img.style.opacity = '0';
 
   setTimeout(() => {
     currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
     img.src = galleryImages[currentImageIndex];
-    img.style.opacity = 1;
-  }, 100);
+    img.style.transition = 'none';
+    img.style.transform = 'translateX(40px)';
+    img.style.opacity = '0';
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        img.style.transition = 'transform 0.22s ease, opacity 0.22s ease';
+        img.style.transform = 'translateX(0)';
+        img.style.opacity = '1';
+      });
+    });
+  }, 120);
 }
 
 function handleSwipe(){
