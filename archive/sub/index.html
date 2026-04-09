@@ -115,6 +115,8 @@ layout: null
       margin-bottom:12px;
       position:relative;
       z-index:1;
+      color:#f3e8ff;
+      word-break:break-word;
     }
 
     .section-title {
@@ -176,6 +178,21 @@ layout: null
       font-size:13px;
       color:rgba(180,160,255,0.65);
       flex-shrink:0;
+    }
+
+    .thumb-item {
+      align-items:center;
+      gap:12px;
+    }
+
+    .thumb {
+      width:56px;
+      height:56px;
+      object-fit:cover;
+      border-radius:8px;
+      flex-shrink:0;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.03);
     }
 
     @media (max-width:860px) {
@@ -251,12 +268,21 @@ layout: null
           {% if file.path contains page.url and file.name != 'index.html' %}
             {% assign rest = file.path | remove_first: page.url %}
             {% assign parts = rest | split: '/' %}
+            {% assign ext = file.extname | downcase %}
+
             {% if parts.size == 1 and rest != '' %}
-              <a class="item" href="{{ file.path | relative_url }}">
-                <span class="icon">📄</span>
-                <span class="name">{{ file.name }}</span>
-                <span class="meta">{{ file.extname | upcase }}</span>
-              </a>
+              {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
+                <a class="item thumb-item" href="{{ file.path | relative_url }}">
+                  <img class="thumb" src="{{ file.path | relative_url }}" alt="{{ file.name }}">
+                  <span class="name">{{ file.name }}</span>
+                </a>
+              {% else %}
+                <a class="item" href="{{ file.path | relative_url }}">
+                  <span class="icon">📄</span>
+                  <span class="name">{{ file.name }}</span>
+                  <span class="meta">{{ file.extname | upcase }}</span>
+                </a>
+              {% endif %}
             {% endif %}
           {% endif %}
         {% endfor %}
