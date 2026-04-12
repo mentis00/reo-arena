@@ -173,6 +173,11 @@
           <div><label>시즌 시작일</label><input id="archiveStart" type="date" placeholder="2026-03-30"></div>
           <div><label>시즌 종료일</label><input id="archiveEnd" type="date" placeholder="2026-04-07"></div>
         </div>
+        <div style="margin-bottom:10px;">
+          <label>🏆 길드 총점수 (게임 서버 기준 수동 입력)</label>
+          <input id="archiveTotalScore" type="number" min="0" placeholder="비워두면 멤버 점수 합산으로 자동계산">
+          <div class="hint" style="margin-top:5px;">중간에 탈퇴·가입한 길드원이 있을 경우 게임 서버에서 확인한 총점수를 입력하세요.</div>
+        </div>
         <div class="btn-row">
           <button class="btn-archive" id="downloadArchiveBtn">📦 아카이브 HTML 다운로드</button>
         </div>
@@ -570,7 +575,7 @@ function buildStaticIndexHtml() {
   '})();<\/script>' +
   '</body></html>';
 }
-function buildArchiveHtml(startDate, endDate) {
+function buildArchiveHtml(startDate, endDate, manualTotalScore) {
   // 아카이브는 index.html과 동일하되, 아카이브 버튼 링크만 상위로 조정
   sortMembers();
   const goalScore = Number(state.goalScore || 0);
@@ -651,7 +656,7 @@ function buildArchiveHtml(startDate, endDate) {
         '<a class="archive-btn" href="https://mentis00.github.io/reo-arena/">← 현재 시즌</a>' +
       '</div>' +
     '</div>' +
-    (function(){ var ts = sorted.reduce(function(s,m){ return s+(Number(m.score)||0); },0); var below = sorted.filter(function(m){ return (Number(m.score)||0) < goalScore; }).length; return '<div class="total-score-box"><div><div class="total-score-label">🏆 길드 총 합계 점수</div><div class="total-score-value">' + ts.toLocaleString() + '</div><div class="total-score-sub">' + sorted.length + '명 참여 &nbsp;·&nbsp; <span style="color:rgba(255,120,120,0.8);">목표점수 미달 ' + below + '명</span></div></div></div>'; })() +
+    (function(){ var ts = (manualTotalScore > 0) ? manualTotalScore : sorted.reduce(function(s,m){ return s+(Number(m.score)||0); },0); var below = sorted.filter(function(m){ return (Number(m.score)||0) < goalScore; }).length; var note = manualTotalScore > 0 ? ' <span style="font-size:11px;color:rgba(200,180,255,0.4);">(서버 기준)</span>' : ''; return '<div class="total-score-box"><div><div class="total-score-label">🏆 길드 총 합계 점수</div><div class="total-score-value">' + ts.toLocaleString() + note + '</div><div class="total-score-sub">' + sorted.length + '명 참여 &nbsp;·&nbsp; <span style="color:rgba(255,120,120,0.8);">목표점수 미달 ' + below + '명</span></div></div></div>'; })() +
     '<div class="rule-box"><span>📌</span><span>길드 규칙: 길드 아레나(Guild Arena) 이벤트 진행 시 최소 개인점수 <strong>' + goalScore.toLocaleString() + '점</strong> 달성 바랍니다.</span></div>' +
     '<div class="filter-bar">' +
       '<button class="filter-btn active" data-mode="all">전체</button>' +
@@ -776,8 +781,9 @@ $('downloadArchiveBtn').addEventListener('click', () => {
   const e = $('archiveEnd').value;
   if (!s || !e) { alert('시작일과 종료일을 모두 입력하세요.'); return; }
   const filename = s + '_' + e + '.html';
+  const manualTotalScore = Number($('archiveTotalScore').value) || 0;
   syncMeta();
-  downloadFile(filename, buildArchiveHtml(s, e), 'text/html;charset=utf-8');
+  downloadFile(filename, buildArchiveHtml(s, e, manualTotalScore), 'text/html;charset=utf-8');
 });
 
 window.updateMember = updateMember;
