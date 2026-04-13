@@ -227,7 +227,8 @@ title: REO Archive
     {% endfor %}
 
     {% if folder_array.size > 1 %}
-      <h2 class="section-title">📁 폴더</h2>
+      <!-- <h2 class="section-title">📁 폴더</h2> -->
+      <div class="section-title">📁 폴더</div>
       <div class="list">
         {% for folder in folder_array %}
           {% if folder != '' %}
@@ -242,7 +243,8 @@ title: REO Archive
     {% endif %}
 
     {% if file_count > 0 %}
-      <h2 class="section-title">📄 시즌 기록</h2>
+      <!-- <h2 class="section-title">📄 시즌 기록</h2> -->
+      <div class="section-title">📄 시즌 기록</div>
       <div class="list">
         {% for file in files_sorted %}
           {% assign rest = file.path | remove_first: '/archive/' %}
