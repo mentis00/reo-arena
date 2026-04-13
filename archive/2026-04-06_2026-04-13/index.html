@@ -354,6 +354,7 @@ body{
           <a class="item" href="{{ page.url | append: folder | append:'/' | relative_url }}">
             <span class="icon">📁</span>
             <span class="name">{{ folder }}</span>
+            <span class="meta">FOLDER</span>
           </a>
         {% endif %}
       {% endfor %}
@@ -361,7 +362,7 @@ body{
   {% endif %}
 
   {% if file_count > 0 %}
-    <div class="section-title">파일</div>
+    <div class="section-title">시즌 기록</div>
     <div class="list">
       {% for file in files_sorted %}
         {% if file.path contains page.url %}
@@ -373,7 +374,9 @@ body{
             {% unless ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
               <a class="item" href="{{ file.path | relative_url }}">
                 <span class="icon">📄</span>
-                <span class="name">{{ file.name }}</span>
+                <!-- <span class="name">{{ file.name }}</span> -->
+                <span class="name">{{ file.name | replace: '.html', '' | replace: '_', ' ~ ' }}</span>
+                <span class="meta">{{ file.extname | upcase | remove: '.' }}</span>
               </a>
             {% endunless %}
           {% endif %}
