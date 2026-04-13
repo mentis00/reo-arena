@@ -232,8 +232,18 @@ function rankNumber(v) {
 function getDayText(input) {
   const d = new Date(input);
   if (isNaN(d.getTime())) return 'Day ? / 7';
-  const map = {1:1,2:2,3:3,4:4,5:5,6:6,0:7};
-  return `Day ${map[d.getDay()] ?? '?'} / 7`;
+  // 해당 주의 시작 월요일 오전 11:00(로컬)을 기준으로 경과 일수 계산
+  const dow = d.getDay() === 0 ? 7 : d.getDay(); // 1(월)~7(일)
+  const startMonday = new Date(d);
+  startMonday.setDate(d.getDate() - (dow - 1)); // 이번 주 월요일
+  startMonday.setHours(11, 0, 0, 0);            // 오전 11:00
+  const elapsedMs = d - startMonday;
+  if (elapsedMs < 0) {
+    // 월요일 11시 이전 → 전주 시즌 마지막날 (Day 7)
+    return 'Day 7 / 7';
+  }
+  const dayNum = Math.min(7, Math.floor(elapsedMs / (1000 * 60 * 60 * 24)) + 1);
+  return `Day ${dayNum} / 7`;
 }
 function escapeHtml(value) {
   return String(value)
