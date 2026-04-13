@@ -260,5 +260,15 @@ title: REO Archive
 
     <div class="footer">REO Archive</div>
   </div>
+<script>
+(function(){
+  var last=0;
+  document.addEventListener("touchend",function(e){
+    var now=Date.now();
+    if(now-last<300){e.preventDefault();}
+    last=now;
+  },{passive:false});
+})();
+</script>
 </body>
 </html>
