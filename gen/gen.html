@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -48,109 +47,108 @@
   @media (max-width:1250px){ .wrap{grid-template-columns:1fr;} .preview-scroll{max-height:none;} }
   @media (max-width:860px){ .grid2{grid-template-columns:1fr;} }
 
-/* ── 출력 페이지 스타일 ── */
-.gar-wrap {
-max-width:1100px; margin:0 auto;
-background:linear-gradient(160deg,#150e28 0%,#0b0e1c 50%,#0c1420 100%);
-border:1px solid rgba(255,140,60,0.2); border-radius:20px; padding:36px 40px 44px; position:relative; overflow:hidden;
-}
-.gar-wrap::before { content:’’; position:absolute; top:-80px; right:-80px; width:320px; height:320px; background:radial-gradient(circle,rgba(249,115,22,0.12) 0%,transparent 70%); pointer-events:none; }
-.gar-wrap::after  { content:’’; position:absolute; bottom:-60px; left:-60px; width:260px; height:260px; background:radial-gradient(circle,rgba(239,68,68,0.08) 0%,transparent 70%); pointer-events:none; }
-.gar-header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:28px; padding-bottom:20px; border-bottom:1px solid rgba(255,140,60,0.2); }
-.gar-guild-name { font-family:‘Rajdhani’,sans-serif; font-size:52px; font-weight:700; letter-spacing:8px; background:linear-gradient(135deg,#fb923c,#f97316,#ef4444); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-.gar-hdr-right { text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
-.gar-event-label { font-size:14px; color:rgba(255,180,120,0.6); letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
-.gar-update-time { font-size:14px; color:rgba(255,180,120,0.7); }
-.gar-update-time span { color:#fb923c; font-weight:700; font-size:15px; }
-.gar-arc-btn { display:inline-block; padding:7px 16px; border-radius:999px; font-size:13px; font-weight:700; color:#7dd3fc; background:rgba(30,58,95,0.7); border:1px solid rgba(125,211,252,0.25); text-decoration:none; }
-.gar-arc-btn:hover { background:rgba(30,58,95,1); }
+  /* ── 출력 페이지 스타일 ── */
+  .gar-wrap {
+    max-width:1100px; margin:0 auto;
+    background:linear-gradient(160deg,#150e28 0%,#0b0e1c 50%,#0c1420 100%);
+    border:1px solid rgba(255,140,60,0.2); border-radius:20px; padding:36px 40px 44px; position:relative; overflow:hidden;
+  }
+  .gar-wrap::before { content:''; position:absolute; top:-80px; right:-80px; width:320px; height:320px; background:radial-gradient(circle,rgba(249,115,22,0.12) 0%,transparent 70%); pointer-events:none; }
+  .gar-wrap::after  { content:''; position:absolute; bottom:-60px; left:-60px; width:260px; height:260px; background:radial-gradient(circle,rgba(239,68,68,0.08) 0%,transparent 70%); pointer-events:none; }
+  .gar-header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:28px; padding-bottom:20px; border-bottom:1px solid rgba(255,140,60,0.2); }
+  .gar-guild-name { font-family:'Rajdhani',sans-serif; font-size:52px; font-weight:700; letter-spacing:8px; background:linear-gradient(135deg,#fb923c,#f97316,#ef4444); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .gar-hdr-right { text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
+  .gar-event-label { font-size:14px; color:rgba(255,180,120,0.6); letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
+  .gar-update-time { font-size:14px; color:rgba(255,180,120,0.7); }
+  .gar-update-time span { color:#fb923c; font-weight:700; font-size:15px; }
+  .gar-arc-btn { display:inline-block; padding:7px 16px; border-radius:999px; font-size:13px; font-weight:700; color:#7dd3fc; background:rgba(30,58,95,0.7); border:1px solid rgba(125,211,252,0.25); text-decoration:none; }
+  .gar-arc-btn:hover { background:rgba(30,58,95,1); }
 
-/* 총점 박스 */
-.gar-total-box { background:rgba(249,115,22,0.08); border:1px solid rgba(249,115,22,0.25); border-radius:14px; padding:16px 22px; margin-bottom:18px; }
-.gar-day-sum-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
-.gar-day-sum-item {
-display:flex; flex-direction:column; align-items:center; gap:2px;
-background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);
-border-radius:10px; padding:8px 12px; min-width:76px; cursor:pointer; transition:.15s;
-}
-.gar-day-sum-item.active { background:rgba(249,115,22,0.15); border-color:rgba(249,115,22,0.4); }
-.gar-day-sum-item .dsname { font-size:11px; color:rgba(255,180,120,0.55); }
-.gar-day-sum-item .dsval  { font-family:‘Rajdhani’,sans-serif; font-size:20px; font-weight:700; }
-.gar-sum-row { display:flex; flex-direction:column; gap:6px; }
-.gar-sum-lbl  { font-size:13px; color:rgba(255,180,120,0.6); letter-spacing:1px; }
-.gar-sum-val  { font-family:‘Rajdhani’,sans-serif; font-size:30px; font-weight:700; color:#f97316; line-height:1.1; }
-.gar-sum-sub  { font-size:13px; color:rgba(255,180,120,0.5); }
+  /* 총점 박스 */
+  .gar-total-box { background:rgba(249,115,22,0.08); border:1px solid rgba(249,115,22,0.25); border-radius:14px; padding:16px 22px; margin-bottom:18px; }
+  .gar-day-sum-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+  .gar-day-sum-item {
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);
+    border-radius:10px; padding:8px 12px; min-width:76px; cursor:pointer; transition:.15s;
+  }
+  .gar-day-sum-item.active { background:rgba(249,115,22,0.15); border-color:rgba(249,115,22,0.4); }
+  .gar-day-sum-item .dsname { font-size:11px; color:rgba(255,180,120,0.55); }
+  .gar-day-sum-item .dsval  { font-family:'Rajdhani',sans-serif; font-size:20px; font-weight:700; }
+  .gar-sum-row { display:flex; flex-direction:column; gap:6px; }
+  .gar-sum-lbl  { font-size:13px; color:rgba(255,180,120,0.6); letter-spacing:1px; }
+  .gar-sum-val  { font-family:'Rajdhani',sans-serif; font-size:30px; font-weight:700; color:#f97316; line-height:1.1; }
+  .gar-sum-sub  { font-size:13px; color:rgba(255,180,120,0.5); }
 
-.gar-rule-box { background:rgba(255,200,80,0.07); border:1px solid rgba(255,200,80,0.25); border-radius:10px; padding:13px 20px; margin-bottom:18px; font-size:15px; color:#fcd34d; display:flex; align-items:center; gap:8px; }
+  .gar-rule-box { background:rgba(255,200,80,0.07); border:1px solid rgba(255,200,80,0.25); border-radius:10px; padding:13px 20px; margin-bottom:18px; font-size:15px; color:#fcd34d; display:flex; align-items:center; gap:8px; }
 
-/* 탭: Day1~6 먼저, 전체합산 마지막 */
-.gar-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
-.gar-tab { border:1px solid rgba(255,255,255,0.10); background:rgba(255,255,255,0.04); color:#e8e3ff; padding:7px 13px; border-radius:999px; font-size:12px; font-weight:700; cursor:pointer; transition:.15s; }
-.gar-tab.active { background:rgba(249,115,22,0.20); border-color:rgba(249,115,22,0.45); color:#fb923c; }
-.gar-tab.disabled, .gar-tab:disabled { opacity:0.28; cursor:not-allowed; pointer-events:none; }
+  /* 탭: Day1~6 먼저, 전체합산 마지막 */
+  .gar-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+  .gar-tab { border:1px solid rgba(255,255,255,0.10); background:rgba(255,255,255,0.04); color:#e8e3ff; padding:7px 13px; border-radius:999px; font-size:12px; font-weight:700; cursor:pointer; transition:.15s; }
+  .gar-tab.active { background:rgba(249,115,22,0.20); border-color:rgba(249,115,22,0.45); color:#fb923c; }
+  .gar-tab.disabled, .gar-tab:disabled { opacity:0.28; cursor:not-allowed; pointer-events:none; }
 
-.gar-fbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
-.gar-fbtn { border:1px solid rgba(255,255,255,0.10); background:rgba(255,255,255,0.04); color:#e8e3ff; padding:8px 12px; border-radius:999px; font-size:13px; font-weight:700; cursor:pointer; }
-.gar-fbtn.active { background:rgba(249,115,22,0.20); border-color:rgba(249,115,22,0.45); }
+  .gar-fbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  .gar-fbtn { border:1px solid rgba(255,255,255,0.10); background:rgba(255,255,255,0.04); color:#e8e3ff; padding:8px 12px; border-radius:999px; font-size:13px; font-weight:700; cursor:pointer; }
+  .gar-fbtn.active { background:rgba(249,115,22,0.20); border-color:rgba(249,115,22,0.45); }
 
-.gar-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:9px; }
-.gar-row { display:flex; align-items:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:11px 14px; gap:10px; min-width:0; }
-.gar-row.zero { background:rgba(255,80,80,0.05); border-color:rgba(255,80,80,0.15); }
-.gar-no    { font-family:‘Rajdhani’,sans-serif; font-size:13px; font-weight:600; color:rgba(255,180,120,0.35); width:22px; text-align:right; flex-shrink:0; }
-.gar-name  { flex:1; font-size:16px; font-weight:700; color:#f0e8e0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
-.gar-score { font-family:‘Rajdhani’,sans-serif; font-size:18px; font-weight:700; color:#fb923c; text-align:right; flex-shrink:0; min-width:64px; }
-.gar-score.high { color:#34d399; } .gar-score.zero-score { color:rgba(255,100,100,0.6); }
-/* Day 미니뱃지: 전체합산 탭일 때만 표시 */
-.gar-mini { display:flex; gap:3px; flex-shrink:0; }
-.gar-dot { width:28px; height:28px; border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,.06); gap:1px; }
-.gar-dot .dnum { font-family:‘Rajdhani’,sans-serif; font-size:10px; font-weight:700; color:#fb923c; }
-.gar-dot .dval { font-size:8px; }
-.gar-dot.has { background:rgba(249,115,22,0.08); border-color:rgba(249,115,22,0.2); }
+  .gar-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:9px; }
+  .gar-row { display:flex; align-items:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:11px 14px; gap:10px; min-width:0; }
+  .gar-row.zero { background:rgba(255,80,80,0.05); border-color:rgba(255,80,80,0.15); }
+  .gar-no    { font-family:'Rajdhani',sans-serif; font-size:13px; font-weight:600; color:rgba(255,180,120,0.35); width:22px; text-align:right; flex-shrink:0; }
+  .gar-name  { flex:1; font-size:16px; font-weight:700; color:#f0e8e0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+  .gar-score { font-family:'Rajdhani',sans-serif; font-size:18px; font-weight:700; color:#fb923c; text-align:right; flex-shrink:0; min-width:64px; }
+  .gar-score.high { color:#34d399; } .gar-score.zero-score { color:rgba(255,100,100,0.6); }
+  /* Day 미니뱃지: 전체합산 탭일 때만 표시 */
+  .gar-mini { display:flex; gap:3px; flex-shrink:0; }
+  .gar-dot { width:28px; height:28px; border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,.06); gap:1px; }
+  .gar-dot .dnum { font-family:'Rajdhani',sans-serif; font-size:10px; font-weight:700; color:#fb923c; }
+  .gar-dot .dval { font-size:8px; }
+  .gar-dot.has { background:rgba(249,115,22,0.08); border-color:rgba(249,115,22,0.2); }
 
-.gar-footer { margin-top:24px; padding-top:16px; border-top:1px solid rgba(255,140,60,0.15); display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
-.gar-cnt  { font-size:14px; color:rgba(255,180,120,0.45); }
-.gar-cnt strong { color:rgba(255,180,120,0.8); font-family:‘Rajdhani’,sans-serif; font-size:17px; }
-.gar-gnote { font-size:14px; color:rgba(252,211,77,0.6); }
+  .gar-footer { margin-top:24px; padding-top:16px; border-top:1px solid rgba(255,140,60,0.15); display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+  .gar-cnt  { font-size:14px; color:rgba(255,180,120,0.45); }
+  .gar-cnt strong { color:rgba(255,180,120,0.8); font-family:'Rajdhani',sans-serif; font-size:17px; }
+  .gar-gnote { font-size:14px; color:rgba(252,211,77,0.6); }
 
-/* 상대 길드 스코어보드 */
-.gar-vs-box { background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.2); border-radius:14px; padding:16px 22px; margin-bottom:18px; }
-.gar-vs-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-.gar-vs-title { font-size:13px; color:rgba(56,189,248,0.7); letter-spacing:1px; font-weight:700; }
-.gar-vs-result { font-family:‘Rajdhani’,sans-serif; font-size:18px; font-weight:700; letter-spacing:1px; }
-.gar-vs-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; }
-.gar-vs-day { display:flex; flex-direction:column; align-items:center; gap:4px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:8px 4px; }
-.gar-vs-day.win  { background:rgba(52,211,153,0.10); border-color:rgba(52,211,153,0.3); }
-.gar-vs-day.lose { background:rgba(255,80,80,0.08); border-color:rgba(255,80,80,0.2); }
-.gar-vs-day.draw { background:rgba(255,200,80,0.08); border-color:rgba(255,200,80,0.2); }
-.gar-vs-day.pending { opacity:0.5; }
-.gar-vs-dlbl { font-size:10px; color:rgba(56,189,248,0.6); font-weight:700; }
-.gar-vs-dname { font-size:9px; color:rgba(255,255,255,0.35); }
-.gar-vs-scores { display:flex; flex-direction:column; align-items:center; gap:1px; width:100%; }
-.gar-vs-us   { font-family:‘Rajdhani’,sans-serif; font-size:13px; font-weight:700; color:#34d399; }
-.gar-vs-opp  { font-family:‘Rajdhani’,sans-serif; font-size:13px; font-weight:700; color:#f87171; }
-.gar-vs-badge { font-size:10px; font-weight:800; padding:2px 6px; border-radius:999px; margin-top:2px; }
-.gar-vs-badge.win  { background:rgba(52,211,153,0.2); color:#34d399; }
-.gar-vs-badge.lose { background:rgba(255,80,80,0.2); color:#f87171; }
-.gar-vs-badge.draw { background:rgba(255,200,80,0.2); color:#fcd34d; }
-.gar-vs-badge.pending { background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.35); }
-@media(max-width:860px){ .gar-vs-grid{grid-template-columns:repeat(3,1fr);} }
+  /* 상대 길드 스코어보드 */
+  .gar-vs-box { background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.2); border-radius:14px; padding:16px 22px; margin-bottom:18px; }
+  .gar-vs-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .gar-vs-title { font-size:13px; color:rgba(56,189,248,0.7); letter-spacing:1px; font-weight:700; }
+  .gar-vs-result { font-family:'Rajdhani',sans-serif; font-size:18px; font-weight:700; letter-spacing:1px; }
+  .gar-vs-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; }
+  .gar-vs-day { display:flex; flex-direction:column; align-items:center; gap:4px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:8px 4px; }
+  .gar-vs-day.win  { background:rgba(52,211,153,0.10); border-color:rgba(52,211,153,0.3); }
+  .gar-vs-day.lose { background:rgba(255,80,80,0.08); border-color:rgba(255,80,80,0.2); }
+  .gar-vs-day.draw { background:rgba(255,200,80,0.08); border-color:rgba(255,200,80,0.2); }
+  .gar-vs-day.pending { opacity:0.5; }
+  .gar-vs-dlbl { font-size:10px; color:rgba(56,189,248,0.6); font-weight:700; }
+  .gar-vs-dname { font-size:9px; color:rgba(255,255,255,0.35); }
+  .gar-vs-scores { display:flex; flex-direction:column; align-items:center; gap:1px; width:100%; }
+  .gar-vs-us   { font-family:'Rajdhani',sans-serif; font-size:13px; font-weight:700; color:#34d399; }
+  .gar-vs-opp  { font-family:'Rajdhani',sans-serif; font-size:13px; font-weight:700; color:#f87171; }
+  .gar-vs-badge { font-size:10px; font-weight:800; padding:2px 6px; border-radius:999px; margin-top:2px; }
+  .gar-vs-badge.win  { background:rgba(52,211,153,0.2); color:#34d399; }
+  .gar-vs-badge.lose { background:rgba(255,80,80,0.2); color:#f87171; }
+  .gar-vs-badge.draw { background:rgba(255,200,80,0.2); color:#fcd34d; }
+  .gar-vs-badge.pending { background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.35); }
+  @media(max-width:860px){ .gar-vs-grid{grid-template-columns:repeat(3,1fr);} }
 
-@media(max-width:860px){
-.gar-wrap{padding:22px 18px 28px}
-.gar-grid{grid-template-columns:1fr}
-.gar-header{flex-direction:column;align-items:flex-start}
-.gar-hdr-right{text-align:left;align-items:flex-start}
-.gar-guild-name{font-size:36px;letter-spacing:4px}
-.gar-mini{display:none}
-.gar-day-sum-item{min-width:60px;padding:6px 8px}
-}
-/* 모바일 가로: 승패 6개 한줄, 길드원 2열 */
-@media(max-width:860px) and (orientation:landscape){
-.gar-grid{grid-template-columns:repeat(2,1fr)!important;}
-.gar-vs-grid{grid-template-columns:repeat(6,1fr)!important;}
-}
+  @media(max-width:860px){
+    .gar-wrap{padding:22px 18px 28px}
+    .gar-grid{grid-template-columns:1fr}
+    .gar-header{flex-direction:column;align-items:flex-start}
+    .gar-hdr-right{text-align:left;align-items:flex-start}
+    .gar-guild-name{font-size:36px;letter-spacing:4px}
+    .gar-mini{display:none}
+    .gar-day-sum-item{min-width:60px;padding:6px 8px}
+  }
+  /* 모바일 가로: 승패 6개 한줄, 길드원 2열 */
+  @media(max-width:860px) and (orientation:landscape){
+    .gar-grid{grid-template-columns:repeat(2,1fr)!important;}
+    .gar-vs-grid{grid-template-columns:repeat(6,1fr)!important;}
+  }
 </style>
-
 </head>
 <body>
 <div class="wrap">
@@ -172,72 +170,68 @@ border-radius:10px; padding:8px 12px; min-width:76px; cursor:pointer; transition
         <div><label>최종 업데이트</label><input id="lastUpdateText" readonly></div>
       </div>
 
-```
-  <div class="btn-row">
-    <button class="btn-primary" id="downloadIndexBtn">⬇ index.html 다운로드</button>
-    <button class="btn-secondary" id="downloadJsonBtn">JSON 저장</button>
-    <button class="btn-secondary" id="loadJsonBtn">JSON 파일 불러오기</button>
-    <button class="btn-secondary" id="importJsonBtn">JSON 붙여넣기 적용</button>
-    <button class="btn-secondary" id="sortBtn">점수순 재정렬</button>
-    <button class="btn-secondary" id="addMemberBtn">길드원 추가</button>
-  </div>
-  <input class="file-input" id="jsonFileInput" type="file" accept=".json,application/json">
-  <hr class="section-divider">
-  <!-- 상대 길드 섹션 -->
-  <div style="background:rgba(56,189,248,0.05);border:1px solid rgba(56,189,248,0.15);border-radius:14px;padding:14px 16px;">
-    <label style="font-size:14px;font-weight:800;color:#38bdf8;margin-bottom:12px;display:block;">⚔️ 상대 길드 기록</label>
-    <div style="margin-bottom:12px;">
-      <label>상대 길드명</label>
-      <input id="opponentName" placeholder="예) #10468[GOD]DEUSES">
+      <div class="btn-row">
+        <button class="btn-primary" id="downloadIndexBtn">⬇ index.html 다운로드</button>
+        <button class="btn-secondary" id="downloadJsonBtn">JSON 저장</button>
+        <button class="btn-secondary" id="loadJsonBtn">JSON 파일 불러오기</button>
+        <button class="btn-secondary" id="importJsonBtn">JSON 붙여넣기 적용</button>
+        <button class="btn-secondary" id="sortBtn">점수순 재정렬</button>
+        <button class="btn-secondary" id="addMemberBtn">길드원 추가</button>
+      </div>
+      <input class="file-input" id="jsonFileInput" type="file" accept=".json,application/json">
+      <hr class="section-divider">
+      <!-- 상대 길드 섹션 -->
+      <div style="background:rgba(56,189,248,0.05);border:1px solid rgba(56,189,248,0.15);border-radius:14px;padding:14px 16px;">
+        <label style="font-size:14px;font-weight:800;color:#38bdf8;margin-bottom:12px;display:block;">⚔️ 상대 길드 기록</label>
+        <div style="margin-bottom:12px;">
+          <label>상대 길드명</label>
+          <input id="opponentName" placeholder="예) #10468[GOD]DEUSES">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label>우리 길드 풀네임 <span style="font-size:11px;color:rgba(255,255,255,0.35);">(선택 · 표시용)</span></label>
+          <input id="guildFullName" placeholder="예) #10472[REO]NOOK">
+        </div>
+        <label style="font-size:13px;color:#b7c2e6;margin-bottom:8px;display:block;">Day별 상대 점수 (M 단위) · 승패 선택</label>
+        <div style="display:flex;flex-direction:column;gap:6px;" id="oppDayRows"></div>
+      </div>
+      <hr class="section-divider">
+      <div class="archive-box">
+        <label style="font-size:14px;font-weight:800;color:#7dd3fc;margin-bottom:10px;display:block;">📁 아카이브 생성</label>
+        <div class="grid2" style="margin-bottom:10px;">
+          <div><label>시즌 시작일</label><input id="archiveStart" type="date"></div>
+          <div><label>시즌 종료일</label><input id="archiveEnd" type="date"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-archive" id="downloadArchiveBtn">📦 아카이브 HTML 다운로드</button>
+        </div>
+        <div class="hint" style="margin-top:8px;">파일명: <strong id="archiveFilenamePreview">시작일_종료일.html</strong> → <code>archive/</code> 폴더에 업로드하세요</div>
+      </div>
+      <textarea id="jsonBox" placeholder="JSON 붙여넣기 / 백업용"></textarea>
+      <div class="hint">목표점수는 <strong>일일 기준</strong>입니다 (매일 초기화). Day 탭 클릭 시 해당 날짜 점수로 필터링됩니다.<br>GitHub에서는 시작 시 같은 폴더의 gar-data.json을 읽습니다.</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:34px;">No</th>
+              <th style="min-width:130px;">이름</th>
+              <th class="day-col-header" style="width:66px;">Day1<br>건설</th>
+              <th class="day-col-header" style="width:66px;">Day2<br>기술</th>
+              <th class="day-col-header" style="width:66px;">Day3<br>채집</th>
+              <th class="day-col-header" style="width:66px;">Day4<br>영웅</th>
+              <th class="day-col-header" style="width:66px;">Day5<br>훈련</th>
+              <th class="day-col-header" style="width:66px;">Day6<br>전쟁</th>
+              <th style="width:72px;color:#34d399;">합산</th>
+              <th style="width:78px;">업데이트</th>
+              <th style="width:50px;">삭제</th>
+            </tr>
+          </thead>
+          <tbody id="memberTable"></tbody>
+        </table>
+      </div>
     </div>
-    <div style="margin-bottom:12px;">
-      <label>우리 길드 풀네임 <span style="font-size:11px;color:rgba(255,255,255,0.35);">(선택 · 표시용)</span></label>
-      <input id="guildFullName" placeholder="예) #10472[REO]NOOK">
-    </div>
-    <label style="font-size:13px;color:#b7c2e6;margin-bottom:8px;display:block;">Day별 상대 점수 (M 단위) · 승패 선택</label>
-    <div style="display:flex;flex-direction:column;gap:6px;" id="oppDayRows"></div>
-  </div>
-  <hr class="section-divider">
-  <div class="archive-box">
-    <label style="font-size:14px;font-weight:800;color:#7dd3fc;margin-bottom:10px;display:block;">📁 아카이브 생성</label>
-    <div class="grid2" style="margin-bottom:10px;">
-      <div><label>시즌 시작일</label><input id="archiveStart" type="date"></div>
-      <div><label>시즌 종료일</label><input id="archiveEnd" type="date"></div>
-    </div>
-    <div class="btn-row">
-      <button class="btn-archive" id="downloadArchiveBtn">📦 아카이브 HTML 다운로드</button>
-    </div>
-    <div class="hint" style="margin-top:8px;">파일명: <strong id="archiveFilenamePreview">시작일_종료일.html</strong> → <code>archive/</code> 폴더에 업로드하세요</div>
-  </div>
-  <textarea id="jsonBox" placeholder="JSON 붙여넣기 / 백업용"></textarea>
-  <div class="hint">목표점수는 <strong>일일 기준</strong>입니다 (매일 초기화). Day 탭 클릭 시 해당 날짜 점수로 필터링됩니다.<br>GitHub에서는 시작 시 같은 폴더의 gar-data.json을 읽습니다.</div>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th style="width:34px;">No</th>
-          <th style="min-width:130px;">이름</th>
-          <th class="day-col-header" style="width:66px;">Day1<br>건설</th>
-          <th class="day-col-header" style="width:66px;">Day2<br>기술</th>
-          <th class="day-col-header" style="width:66px;">Day3<br>채집</th>
-          <th class="day-col-header" style="width:66px;">Day4<br>영웅</th>
-          <th class="day-col-header" style="width:66px;">Day5<br>훈련</th>
-          <th class="day-col-header" style="width:66px;">Day6<br>전쟁</th>
-          <th style="width:72px;color:#34d399;">합산</th>
-          <th style="width:78px;">업데이트</th>
-          <th style="width:50px;">삭제</th>
-        </tr>
-      </thead>
-      <tbody id="memberTable"></tbody>
-    </table>
-  </div>
-</div>
-```
-
   </section>
 
   <!-- 미리보기 -->
-
   <section class="preview">
     <div class="head">미리보기</div>
     <div class="preview-scroll"><div id="previewRoot"></div></div>
@@ -380,7 +374,7 @@ function renderPreview(){
     // 우리팀 Day별 합계를 M단위로 변환
     const usDaysM=DL.map((_,i)=>{
       const s=sorted.reduce((acc,m)=>acc+(Number(m.days[i])||0),0);
-      return s>0?Math.floor(s/1000000):0;
+      return s>0?(s/1000000).toFixed(1):0;
     });
     const dayCols=DL.map((l,i)=>{
       const r=oppResults[i]||'';
@@ -728,7 +722,7 @@ function buildHtmlBody(sorted, goal, isArchive, periodLabel, manualTotal){
     function fmtM(v){return (v&&Number(v)>0)?Number(v).toLocaleString()+'M':'—';}
     let wins=0,loses=0,draws=0;
     oppResults.forEach(r=>{if(r==='win')wins++;else if(r==='lose')loses++;else if(r==='draw')draws++;});
-    const usDaysM=DL.map((_,i)=>{const s=dsArr[i];return s>0?Math.floor(s/1000000):0;});
+    const usDaysM=DL.map((_,i)=>{const s=dsArr[i];return s>0?(s/1000000).toFixed(1):0;});
     const dayCols=DL.map((l,i)=>{
       const r=oppResults[i]||'';
       return `<div class="vsday" style="background:${rBg[r]};border-color:${rBd[r]};"><span class="vsdlbl">Day${i+1}</span><span class="vsdname">${l}</span><div class="vsscores"><span class="vsus">${usDaysM[i]?Number(usDaysM[i]).toLocaleString()+'M':'—'}</span><span class="vsopp">${fmtM(oppDays[i])}</span></div><span class="vsbadge" style="color:${rText[r]};background:${rBg[r]};border:1px solid ${rBd[r]};">${rLabel[r]}</span></div>`;
@@ -797,129 +791,124 @@ function buildIndexHtml(){
     `<title>${esc(state.guildName||'')} Guild Arms Race</title>\n` +
     buildAnalyticsHead() + '\n' +
     `<style>\n${staticCss()}\n</style>\n</head>\n<body>\n` +
-
-```
-buildHtmlBody(sorted,goal,false,'',0) +
-`\n<script>\n${staticJs(goal,allSum,dsArr,false)}\n<\/script>\n` +
-`<script>\n(function(){var last=0;document.addEventListener('touchend',function(e){var now=Date.now();if(now-last<300){e.preventDefault();}last=now;},{passive:false});})();\n<\/script>\n` +
-`</body>\n</html>`;
-```
-
+    buildHtmlBody(sorted,goal,false,'',0) +
+    `\n<script>\n${staticJs(goal,allSum,dsArr,false)}\n<\/script>\n` +
+    `<script>\n(function(){var last=0;document.addEventListener('touchend',function(e){var now=Date.now();if(now-last<300){e.preventDefault();}last=now;},{passive:false});})();\n<\/script>\n` +
+    `</body>\n</html>`;
 }
 
 function buildArchiveHtml(sd, ed, manualTotal){
-sortMems();
-const goal=Number(state.goalScore||0);
-const sorted=state.members.map((m,i)=>({…m,days:[…(m.days||[0,0,0,0,0,0])],no:i+1}));
-const allSum=manualTotal>0?manualTotal:sorted.reduce((s,m)=>s+mTotal(m),0);
-const dsArr=DL.map((_,i)=>sorted.reduce((s,m)=>s+(Number(m.days[i])||0),0));
-const period=sd&&ed?sd+’ ~ ‘+ed:(sd||ed||’’);
-return `---\nlayout: null\n---\n<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n` +
-`<title>${esc(state.guildName||'')} GAR – ${esc(period)}</title>\n` +
-buildAnalyticsHead() + ‘\n’ +
-`<style>\n${staticCss()}\n</style>\n</head>\n<body>\n` +
-buildHtmlBody(sorted,goal,true,period,manualTotal) +
-`\n<script>\n${staticJs(goal,allSum,dsArr,true)}\n<\/script>\n` +
-`<script>\n(function(){var last=0;document.addEventListener('touchend',function(e){var now=Date.now();if(now-last<300){e.preventDefault();}last=now;},{passive:false});})();\n<\/script>\n` +
-`</body>\n</html>`;
+  sortMems();
+  const goal=Number(state.goalScore||0);
+  const sorted=state.members.map((m,i)=>({...m,days:[...(m.days||[0,0,0,0,0,0])],no:i+1}));
+  const allSum=manualTotal>0?manualTotal:sorted.reduce((s,m)=>s+mTotal(m),0);
+  const dsArr=DL.map((_,i)=>sorted.reduce((s,m)=>s+(Number(m.days[i])||0),0));
+  const period=sd&&ed?sd+' ~ '+ed:(sd||ed||'');
+  return `---\nlayout: null\n---\n<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n` +
+    `<title>${esc(state.guildName||'')} GAR – ${esc(period)}</title>\n` +
+    buildAnalyticsHead() + '\n' +
+    `<style>\n${staticCss()}\n</style>\n</head>\n<body>\n` +
+    buildHtmlBody(sorted,goal,true,period,manualTotal) +
+    `\n<script>\n${staticJs(goal,allSum,dsArr,true)}\n<\/script>\n` +
+    `<script>\n(function(){var last=0;document.addEventListener('touchend',function(e){var now=Date.now();if(now-last<300){e.preventDefault();}last=now;},{passive:false});})();\n<\/script>\n` +
+    `</body>\n</html>`;
 }
 
 function dlFile(name,content,type){
-const b=new Blob([content],{type});const u=URL.createObjectURL(b);
-const a=document.createElement(‘a’);a.href=u;a.download=name;a.click();URL.revokeObjectURL(u);
+  const b=new Blob([content],{type});const u=URL.createObjectURL(b);
+  const a=document.createElement('a');a.href=u;a.download=name;a.click();URL.revokeObjectURL(u);
 }
 
 async function tryLoadJson(){
-try{
-const r=await fetch(’./gar-data.json’,{cache:‘no-store’});
-if(!r.ok)throw new Error();
-const p=await r.json();
-if(!p||!Array.isArray(p.members))throw new Error();
-state=p;state.eventLabel=‘Guild Arms Race’;ensureDefaults();
-}catch(e){}
+  try{
+    const r=await fetch('./gar-data.json',{cache:'no-store'});
+    if(!r.ok)throw new Error();
+    const p=await r.json();
+    if(!p||!Array.isArray(p.members))throw new Error();
+    state=p;state.eventLabel='Guild Arms Race';ensureDefaults();
+  }catch(e){}
 }
 
 function buildAnalyticsHead() {
-return (
-“{% if site.analytics.ga %}{% include analytics-ga.html %}{% endif %}” +
-“{% if site.analytics.cf %}{% include analytics-cf.html %}{% endif %}” +
-“{% if site.analytics.umami %}{% include analytics-umami.html %}{% endif %}”
-);
+  return (
+    "{% if site.analytics.ga %}{% include analytics-ga.html %}{% endif %}" +
+    "{% if site.analytics.cf %}{% include analytics-cf.html %}{% endif %}" +
+    "{% if site.analytics.umami %}{% include analytics-umami.html %}{% endif %}"
+  );
 }
 
-$(‘downloadIndexBtn’).addEventListener(‘click’,()=>{syncMeta();$(‘jsonBox’).value=JSON.stringify(state,null,2);renderTable();renderPreview();dlFile(‘index.html’,buildIndexHtml(),‘text/html;charset=utf-8’);});
-$(‘downloadJsonBtn’).addEventListener(‘click’,()=>{syncMeta();$(‘jsonBox’).value=JSON.stringify(state,null,2);renderTable();renderPreview();dlFile(‘gar-data.json’,JSON.stringify(state,null,2),‘application/json;charset=utf-8’);});
-$(‘loadJsonBtn’).addEventListener(‘click’,()=>$(‘jsonFileInput’).click());
-$(‘jsonFileInput’).addEventListener(‘change’,async e=>{
-const f=e.target.files?.[0];if(!f)return;
-try{const p=JSON.parse(await f.text());if(!p||!Array.isArray(p.members))throw new Error();state=p;state.eventLabel=‘Guild Arms Race’;ensureDefaults();syncForm();renderTable();renderPreview();}
-catch{alert(‘JSON 파일을 읽지 못했습니다.’);}
-e.target.value=’’;
+$('downloadIndexBtn').addEventListener('click',()=>{syncMeta();$('jsonBox').value=JSON.stringify(state,null,2);renderTable();renderPreview();dlFile('index.html',buildIndexHtml(),'text/html;charset=utf-8');});
+$('downloadJsonBtn').addEventListener('click',()=>{syncMeta();$('jsonBox').value=JSON.stringify(state,null,2);renderTable();renderPreview();dlFile('gar-data.json',JSON.stringify(state,null,2),'application/json;charset=utf-8');});
+$('loadJsonBtn').addEventListener('click',()=>$('jsonFileInput').click());
+$('jsonFileInput').addEventListener('change',async e=>{
+  const f=e.target.files?.[0];if(!f)return;
+  try{const p=JSON.parse(await f.text());if(!p||!Array.isArray(p.members))throw new Error();state=p;state.eventLabel='Guild Arms Race';ensureDefaults();syncForm();renderTable();renderPreview();}
+  catch{alert('JSON 파일을 읽지 못했습니다.');}
+  e.target.value='';
 });
-$(‘importJsonBtn’).addEventListener(‘click’,()=>{
-try{const p=JSON.parse($(‘jsonBox’).value);if(!p||!Array.isArray(p.members))throw new Error();state=p;state.eventLabel=‘Guild Arms Race’;ensureDefaults();syncForm();renderTable();renderPreview();}
-catch{alert(‘JSON 형식이 올바르지 않습니다.’);}
+$('importJsonBtn').addEventListener('click',()=>{
+  try{const p=JSON.parse($('jsonBox').value);if(!p||!Array.isArray(p.members))throw new Error();state=p;state.eventLabel='Guild Arms Race';ensureDefaults();syncForm();renderTable();renderPreview();}
+  catch{alert('JSON 형식이 올바르지 않습니다.');}
 });
-$(‘sortBtn’).addEventListener(‘click’,()=>{sortMems();syncForm();renderTable();renderPreview();});
-$(‘addMemberBtn’).addEventListener(‘click’,addMember);
-[‘guildName’,‘goalScore’,‘opponentName’,‘guildFullName’].forEach(id=>$(id).addEventListener(‘input’,syncState));
+$('sortBtn').addEventListener('click',()=>{sortMems();syncForm();renderTable();renderPreview();});
+$('addMemberBtn').addEventListener('click',addMember);
+['guildName','goalScore','opponentName','guildFullName'].forEach(id=>$(id).addEventListener('input',syncState));
 
 function updateOppBtnStyle(dayIdx, val){
-const btns=document.querySelectorAll(`.opp-btn[data-day="${dayIdx}"]`);
-const styles={win:{bg:‘rgba(52,211,153,0.25)’,border:‘rgba(52,211,153,0.7)’,color:’#34d399’},lose:{bg:‘rgba(255,80,80,0.25)’,border:‘rgba(255,80,80,0.7)’,color:’#f87171’},draw:{bg:‘rgba(255,200,80,0.25)’,border:‘rgba(255,200,80,0.7)’,color:’#fcd34d’}};
-const def={win:{bg:‘rgba(52,211,153,0.1)’,border:‘rgba(52,211,153,0.3)’,color:’#34d399’},lose:{bg:‘rgba(255,80,80,0.1)’,border:‘rgba(255,80,80,0.3)’,color:’#f87171’},draw:{bg:‘rgba(255,200,80,0.1)’,border:‘rgba(255,200,80,0.3)’,color:’#fcd34d’}};
-btns.forEach(btn=>{
-const bv=btn.dataset.val;
-const s=(bv===val)?styles[bv]:def[bv];
-btn.style.background=s.bg; btn.style.borderColor=s.border; btn.style.color=s.color;
-btn.style.transform=(bv===val)?‘scale(1.05)’:‘scale(1)’;
-});
+  const btns=document.querySelectorAll(`.opp-btn[data-day="${dayIdx}"]`);
+  const styles={win:{bg:'rgba(52,211,153,0.25)',border:'rgba(52,211,153,0.7)',color:'#34d399'},lose:{bg:'rgba(255,80,80,0.25)',border:'rgba(255,80,80,0.7)',color:'#f87171'},draw:{bg:'rgba(255,200,80,0.25)',border:'rgba(255,200,80,0.7)',color:'#fcd34d'}};
+  const def={win:{bg:'rgba(52,211,153,0.1)',border:'rgba(52,211,153,0.3)',color:'#34d399'},lose:{bg:'rgba(255,80,80,0.1)',border:'rgba(255,80,80,0.3)',color:'#f87171'},draw:{bg:'rgba(255,200,80,0.1)',border:'rgba(255,200,80,0.3)',color:'#fcd34d'}};
+  btns.forEach(btn=>{
+    const bv=btn.dataset.val;
+    const s=(bv===val)?styles[bv]:def[bv];
+    btn.style.background=s.bg; btn.style.borderColor=s.border; btn.style.color=s.color;
+    btn.style.transform=(bv===val)?'scale(1.05)':'scale(1)';
+  });
 }
 
-document.addEventListener(‘click’,e=>{
-const btn=e.target.closest(’.opp-btn’);
-if(!btn) return;
-const di=Number(btn.dataset.day), val=btn.dataset.val;
-// 토글: 같은 버튼 다시 누르면 해제
-if(!state.opponentResults) state.opponentResults=[’’,’’,’’,’’,’’,’’];
-state.opponentResults[di]=(state.opponentResults[di]===val)?’’:val;
-updateOppBtnStyle(di, state.opponentResults[di]);
-syncState();
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.opp-btn');
+  if(!btn) return;
+  const di=Number(btn.dataset.day), val=btn.dataset.val;
+  // 토글: 같은 버튼 다시 누르면 해제
+  if(!state.opponentResults) state.opponentResults=['','','','','',''];
+  state.opponentResults[di]=(state.opponentResults[di]===val)?'':val;
+  updateOppBtnStyle(di, state.opponentResults[di]);
+  syncState();
 });
 
-function updArchPrev(){const s=$(‘archiveStart’).value,e=$(‘archiveEnd’).value;$(‘archiveFilenamePreview’).textContent=s&&e?s+’*’+e+’.html’:s?s+’*???.html’:‘시작일_종료일.html’;}
-$(‘archiveStart’).addEventListener(‘input’,()=>{syncState();updArchPrev();});
-$(‘archiveEnd’).addEventListener(‘input’,()=>{syncState();updArchPrev();});
-$(‘downloadArchiveBtn’).addEventListener(‘click’,()=>{
-const s=$(‘archiveStart’).value,e=$(‘archiveEnd’).value;
-if(!s||!e){alert(‘시작일과 종료일을 모두 입력하세요.’);return;}
-syncMeta();dlFile(s+’_’+e+’.html’,buildArchiveHtml(s,e,0),‘text/html;charset=utf-8’);
+function updArchPrev(){const s=$('archiveStart').value,e=$('archiveEnd').value;$('archiveFilenamePreview').textContent=s&&e?s+'_'+e+'.html':s?s+'_???.html':'시작일_종료일.html';}
+$('archiveStart').addEventListener('input',()=>{syncState();updArchPrev();});
+$('archiveEnd').addEventListener('input',()=>{syncState();updArchPrev();});
+$('downloadArchiveBtn').addEventListener('click',()=>{
+  const s=$('archiveStart').value,e=$('archiveEnd').value;
+  if(!s||!e){alert('시작일과 종료일을 모두 입력하세요.');return;}
+  syncMeta();dlFile(s+'_'+e+'.html',buildArchiveHtml(s,e,0),'text/html;charset=utf-8');
 });
 
 window.updateMember=updateMember;window.deleteMember=deleteMember;
 
 // 상대 길드 Day 행 동적 생성
 (function(){
-const dayNames=[‘건설’,‘기술’,‘채집’,‘영웅’,‘훈련’,‘전쟁’];
-const container=document.getElementById(‘oppDayRows’);
-if(!container) return;
-[0,1,2,3,4,5].forEach(i=>{
-const row=document.createElement(‘div’);
-row.style.cssText=‘display:grid;grid-template-columns:80px 1fr 1fr 1fr 1fr;gap:6px;align-items:center;’;
-row.innerHTML=
-‘<span style="font-size:12px;color:#38bdf8;font-weight:700;">Day’+(i+1)+’ <span style="color:rgba(255,255,255,0.35);font-weight:400;">’+dayNames[i]+’</span></span>’+
-‘<input id="opp'+i+'" type="number" step="1" placeholder="0" style="text-align:center;padding:6px 4px;">’+
-‘<button class="opp-btn" data-day="'+i+'" data-val="win"  style="padding:6px 4px;font-size:12px;font-weight:800;border-radius:8px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);color:#34d399;cursor:pointer;">승</button>’+
-‘<button class="opp-btn" data-day="'+i+'" data-val="lose" style="padding:6px 4px;font-size:12px;font-weight:800;border-radius:8px;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);color:#f87171;cursor:pointer;">패</button>’+
-‘<button class="opp-btn" data-day="'+i+'" data-val="draw" style="padding:6px 4px;font-size:12px;font-weight:800;border-radius:8px;background:rgba(255,200,80,0.1);border:1px solid rgba(255,200,80,0.3);color:#fcd34d;cursor:pointer;">무</button>’;
-container.appendChild(row);
-document.getElementById(‘opp’+i).addEventListener(‘input’, syncState);
-});
+  const dayNames=['건설','기술','채집','영웅','훈련','전쟁'];
+  const container=document.getElementById('oppDayRows');
+  if(!container) return;
+  [0,1,2,3,4,5].forEach(i=>{
+    const row=document.createElement('div');
+    row.style.cssText='display:grid;grid-template-columns:80px 1fr 1fr 1fr 1fr;gap:6px;align-items:center;';
+    row.innerHTML=
+      '<span style="font-size:12px;color:#38bdf8;font-weight:700;">Day'+(i+1)+' <span style="color:rgba(255,255,255,0.35);font-weight:400;">'+dayNames[i]+'</span></span>'+
+      '<input id="opp'+i+'" type="number" step="0.1" placeholder="0.0" style="text-align:center;padding:6px 4px;">'+
+      '<button class="opp-btn" data-day="'+i+'" data-val="win"  style="padding:6px 4px;font-size:12px;font-weight:800;border-radius:8px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);color:#34d399;cursor:pointer;">승</button>'+
+      '<button class="opp-btn" data-day="'+i+'" data-val="lose" style="padding:6px 4px;font-size:12px;font-weight:800;border-radius:8px;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);color:#f87171;cursor:pointer;">패</button>'+
+      '<button class="opp-btn" data-day="'+i+'" data-val="draw" style="padding:6px 4px;font-size:12px;font-weight:800;border-radius:8px;background:rgba(255,200,80,0.1);border:1px solid rgba(255,200,80,0.3);color:#fcd34d;cursor:pointer;">무</button>';
+    container.appendChild(row);
+    document.getElementById('opp'+i).addEventListener('input', syncState);
+  });
 })();
 
 (async()=>{await tryLoadJson();syncForm();renderTable();renderPreview();})();
 </script>
-
 <script>
 // 더블탭 줌 방지 (핀치 줌은 허용)
 (function(){
@@ -931,6 +920,5 @@ document.getElementById(‘opp’+i).addEventListener(‘input’, syncState);
   },{passive:false});
 })();
 </script>
-
 </body>
 </html>
