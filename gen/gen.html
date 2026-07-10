@@ -255,6 +255,45 @@ const $=id=>document.getElementById(id);
 const p2=n=>String(n).padStart(2,'0');
 function nowIso(){const d=new Date();return `${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}T${p2(d.getHours())}:${p2(d.getMinutes())}`;}
 function fmtUpd(s){if(!s)return '';const d=new Date(s);if(isNaN(d))return s;return `${p2(d.getMonth()+1)}-${p2(d.getDate())} ${p2(d.getHours())}:${p2(d.getMinutes())}`;}
+/* ===== i18n helpers (GAR output) ===== */
+function garDict(){
+  return {
+    ko:{lastUpdate:"최종 업데이트",archiveBtn:"📁 지난시즌",homeBtn:"🏠 메인",serverNote:"(서버 기준)",totalSum:"🏆 전체 합산",totalSumTab:"전체 합산",participate:"{count}명 참여",belowGoal:"목표점수 미달 {below}명",ruleText:"길드 규칙: 길드 군비(Guild Arms Race) 이벤트 진행 시 최소 개인 일일점수 {goal}점 달성 바랍니다.",filterAll:"전체",filterAbove:"이상",filterBelow:"미만",totalMember:"총 멤버 {count}명",goalNote:"⚠️ {goal}점 미달성 시 주의",win:"승",lose:"패",draw:"무",wait:"대기",cat0:"건설",cat1:"기술",cat2:"채집",cat3:"영웅",cat4:"훈련",cat5:"전쟁"},
+    en:{lastUpdate:"Last Update",archiveBtn:"📁 Archive",homeBtn:"🏠 Home",serverNote:"(server value)",totalSum:"🏆 Total",totalSumTab:"Total",participate:"{count} members",belowGoal:"{below} below goal",ruleText:"Guild Rule: Each member should reach at least {goal} daily points during the Guild Arms Race event.",filterAll:"All",filterAbove:"≥ Goal",filterBelow:"< Goal",totalMember:"Total {count} members",goalNote:"⚠️ Caution if below {goal} points",win:"W",lose:"L",draw:"D",wait:"—",cat0:"Building",cat1:"Tech",cat2:"Battle",cat3:"Hero",cat4:"Combat",cat5:"Conquest"},
+    ja:{lastUpdate:"最終更新",archiveBtn:"📁 過去シーズン",homeBtn:"🏠 ホーム",serverNote:"(サーバー基準)",totalSum:"🏆 全体合計",totalSumTab:"全体合計",participate:"{count}人参加",belowGoal:"目標未達 {below}人",ruleText:"ギルドルール：Guild Arms Race イベント中、各メンバーは1日最低 {goal} ポイントの達成をお願いします。",filterAll:"全体",filterAbove:"以上",filterBelow:"未満",totalMember:"総メンバー {count}人",goalNote:"⚠️ {goal} ポイント未達成に注意",win:"勝",lose:"敗",draw:"分",wait:"—",cat0:"建設",cat1:"技術",cat2:"戦闘",cat3:"英雄",cat4:"備え",cat5:"征服"},
+    zh:{lastUpdate:"最后更新",archiveBtn:"📁 往期赛季",homeBtn:"🏠 主页",serverNote:"(服务器数据)",totalSum:"🏆 总计",totalSumTab:"总计",participate:"{count}人参与",belowGoal:"未达目标 {below}人",ruleText:"公会规则：进行 Guild Arms Race 活动时，每位成员每日请至少达到 {goal} 分。",filterAll:"全部",filterAbove:"达标",filterBelow:"未达",totalMember:"共 {count} 名成员",goalNote:"⚠️ 未达 {goal} 分请注意",win:"胜",lose:"负",draw:"平",wait:"—",cat0:"建设",cat1:"科技",cat2:"战斗",cat3:"英雄",cat4:"备战",cat5:"征服"}
+  };
+}
+function garFontImport(){
+  return "@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Noto+Sans+SC:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');\n";
+}
+function garFontCss(){
+  return "body{background:#080e1c;font-family:'Noto Sans KR','Noto Sans JP','Noto Sans SC',sans-serif;padding:20px;color:#fff}\n" +
+  ".no,.sc,.gname,.sval,.cnt strong{font-family:'Rajdhani',sans-serif!important;font-variant-numeric:tabular-nums}\n" +
+  ".lbl-dot{margin:0;letter-spacing:0;flex:0 0 auto}\n";
+}
+function garToggleCss(){
+  return ".lang-toggle{touch-action:manipulation;position:fixed;top:14px;right:14px;z-index:50;display:flex;gap:4px;background:rgba(16,24,48,0.82);border:1px solid rgba(255,255,255,0.10);border-radius:999px;padding:4px;backdrop-filter:blur(6px)}\n" +
+  ".lang-toggle button{touch-action:manipulation;border:0;background:transparent;color:rgba(220,225,245,0.55);font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:12px;padding:5px 10px;border-radius:999px;cursor:pointer;line-height:1;transition:background .15s,color .15s}\n" +
+  ".lang-toggle button.active{background:rgba(249,115,22,0.32);color:#fff}\n" +
+  ".lang-toggle button:hover{color:#fff}\n" +
+  ".elvl{display:inline-flex;align-items:center;gap:8px}\n" +
+  "@media (max-width:540px){.lang-toggle{top:8px;right:8px}.lang-toggle button{padding:5px 8px;font-size:11px}}\n";
+}
+function garToggleHtml(){
+  return '<div class="lang-toggle" id="langToggle"><button data-lang="ko">한</button><button data-lang="en">EN</button><button data-lang="ja">日</button><button data-lang="zh">中</button></div>\n';
+}
+function garRuntime(){
+  return "{% raw %}\n<script>\n(function(){\n" +
+  "  var DICT=" + JSON.stringify(garDict()) + ";\n" +
+  "  var SUP=['ko','en','ja','zh'];\n" +
+  "  function fmt(s,p){return s.replace(/\\{(\\w+)\\}/g,function(_,k){return (p&&p[k]!=null)?p[k]:'';});}\n" +
+  "  function pick(){var saved=null;try{saved=localStorage.getItem('reo_lang');}catch(e){}if(saved&&SUP.indexOf(saved)>=0)return saved;var nav=(navigator.language||'en').toLowerCase();if(nav.indexOf('ko')===0)return'ko';if(nav.indexOf('ja')===0)return'ja';if(nav.indexOf('zh')===0)return'zh';return'en';}\n" +
+  "  function apply(lang){var d=DICT[lang]||DICT.en;document.documentElement.setAttribute('lang',lang);document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n');if(!d[k])return;var p={};if(el.hasAttribute('data-count'))p.count=el.getAttribute('data-count');if(el.hasAttribute('data-goal'))p.goal=el.getAttribute('data-goal');if(el.hasAttribute('data-below'))p.below=el.getAttribute('data-below');el.innerHTML=fmt(d[k],p);});var tg=document.getElementById('langToggle');if(tg){tg.querySelectorAll('button').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-lang')===lang);});}if(typeof window.__garApplyFilter==='function'){window.__garApplyFilter();}}\n" +
+  "  var cur=pick();function setLang(l){cur=l;try{localStorage.setItem('reo_lang',l);}catch(e){}apply(l);}\n" +
+  "  document.addEventListener('DOMContentLoaded',function(){apply(cur);var tg=document.getElementById('langToggle');if(tg){tg.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){setLang(b.getAttribute('data-lang'));});});}});\n" +
+  "})();\n<\/script>\n{% endraw %}\n";
+}
 function esc(v){return String(v).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#39;");}
 function mTotal(m){return (m.days||[]).reduce((s,v)=>s+(Number(v)||0),0);}
 function latestUpd(){const l=(state.members||[]).map(m=>m.updated).filter(Boolean);return l.length?l.sort().slice(-1)[0]:'';}
@@ -529,8 +568,10 @@ function renderPreview(){
 
 /* ── 정적 CSS (출력용) ── */
 function staticCss(){
-  return "@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');\n"+
-  "*{margin:0;padding:0;box-sizing:border-box}\nhtml{-webkit-text-size-adjust:100%;text-size-adjust:100%}\nbody{background:#080e1c;font-family:'Noto Sans KR',sans-serif;padding:20px;color:#fff}\n"+
+  return garFontImport()+
+  "*{margin:0;padding:0;box-sizing:border-box}\nhtml{-webkit-text-size-adjust:100%;text-size-adjust:100%}\n"+
+  garFontCss()+
+  garToggleCss()+
   ".wrap{max-width:1100px;margin:0 auto;background:linear-gradient(160deg,#150e28 0%,#0b0e1c 50%,#0c1420 100%);border:1px solid rgba(255,140,60,0.2);border-radius:20px;padding:36px 40px 44px;position:relative;overflow:hidden}\n"+
   ".wrap::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(249,115,22,0.12) 0%,transparent 70%);pointer-events:none}\n"+
   ".wrap::after{content:'';position:absolute;bottom:-60px;left:-60px;width:260px;height:260px;background:radial-gradient(circle,rgba(239,68,68,0.08) 0%,transparent 70%);pointer-events:none}\n"+
@@ -600,6 +641,10 @@ function staticJs(goal, allSum, dsArr, isArchive){
   return `(function(){
 var DL=${DLJ},DC=${DCJ},goal=${goal},allSum=${allSum},dsArr=${JSON.stringify(dsArr)};
 var isArchive=${isArchive};
+var GARI18N=${JSON.stringify(garDict())};
+function curLang(){var l=document.documentElement.getAttribute('lang')||'ko';return GARI18N[l]?l:'en';}
+function tr(k){var d=GARI18N[curLang()]||GARI18N.en;return d[k]!=null?d[k]:k;}
+function trf(k,p){return tr(k).replace(/\\{(\\w+)\\}/g,function(_,x){return (p&&p[x]!=null)?p[x]:'';});}
 // 최종업데이트 시간 기준 Day 계산 (시스템 시간 X)
 // 11시 이후 → 당일 Day / 11시 이전 → 전날 Day / 월11시 이전·일요일 → null
 var updateInput="${state.updateInput||''}";
@@ -644,14 +689,14 @@ function applyFilter(){
   if(gnote)gnote.style.display=isAll?'none':'';
   var di=isAll?-1:Number(cDay);
   if(isAll){
-    lbl.textContent='🏆 전체 합산';val.textContent=allSum.toLocaleString();val.style.color='#f97316';
+    lbl.textContent=tr('totalSum');val.textContent=allSum.toLocaleString();val.style.color='#f97316';
     cMode='all';
   }else{
-    lbl.textContent='🏆 Day'+(di+1)+' '+DL[di]+' 합계';
+    lbl.textContent='🏆 Day'+(di+1)+' '+tr('cat'+di);
     val.textContent=dsArr[di].toLocaleString();val.style.color=DC[di];
     if(cnt&&goal>0){
       var b2=0;rows.forEach(function(r){var d=JSON.parse(r.getAttribute('data-days')||'[]');if((Number(d[di])||0)<goal)b2++;});
-      cnt.textContent='목표점수 미달 '+b2+'명';
+      cnt.textContent=trf('belowGoal',{below:b2});
     }
   }
   // 탭별 점수 기준으로 행 재정렬
@@ -694,6 +739,7 @@ document.querySelectorAll('.fbtn').forEach(function(btn){
   });
 });
 applyFilter(); // 초기 적용
+window.__garApplyFilter=applyFilter;
 })();`;
 }
 
@@ -703,7 +749,7 @@ function buildHtmlBody(sorted, goal, isArchive, periodLabel, manualTotal){
   const dsArr=DL.map((_,i)=>sorted.reduce((s,m)=>s+(Number(m.days[i])||0),0));
   const below=sorted.filter(m=>mTotal(m)<goal).length;
   const dispUpd=fmtUpd(state.updateInput);
-  const mNote=manualTotal>0?' <span style="font-size:11px;color:rgba(255,180,120,0.4);">(서버 기준)</span>':'';
+  const mNote=manualTotal>0?' <span style="font-size:11px;color:rgba(255,180,120,0.4);" data-i18n="serverNote">(서버 기준)</span>':'';
 
   const rows=sorted.map(m=>{
     const days=m.days; const tot=mTotal(m);
@@ -720,6 +766,7 @@ function buildHtmlBody(sorted, goal, isArchive, periodLabel, manualTotal){
   const vsHtml=(()=>{
     if(!opp) return '';
     const rLabel={win:'승',lose:'패',draw:'무','':'대기'};
+    const rKey={win:'win',lose:'lose',draw:'draw','':'wait'};
     const rText={win:'#34d399',lose:'#f87171',draw:'#fcd34d','':'rgba(255,255,255,0.3)'};
     const rBg={win:'rgba(52,211,153,0.10)',lose:'rgba(255,80,80,0.08)',draw:'rgba(255,200,80,0.08)','':'rgba(255,255,255,0.03)'};
     const rBd={win:'rgba(52,211,153,0.3)',lose:'rgba(255,80,80,0.2)',draw:'rgba(255,200,80,0.2)','':'rgba(255,255,255,0.06)'};
@@ -729,27 +776,29 @@ function buildHtmlBody(sorted, goal, isArchive, periodLabel, manualTotal){
     const usDaysM=DL.map((_,i)=>{const s=dsArr[i];return s>0?Math.floor(s/1000000):0;});
     const dayCols=DL.map((l,i)=>{
       const r=oppResults[i]||'';
-      return `<div class="vsday" style="background:${rBg[r]};border-color:${rBd[r]};"><span class="vsdlbl">Day${i+1}</span><span class="vsdname">${l}</span><div class="vsscores"><span class="vsus">${usDaysM[i]?Number(usDaysM[i]).toLocaleString()+'M':'—'}</span><span class="vsopp">${fmtM(oppDays[i])}</span></div><span class="vsbadge" style="color:${rText[r]};background:${rBg[r]};border:1px solid ${rBd[r]};">${rLabel[r]}</span></div>`;
+      return `<div class="vsday" style="background:${rBg[r]};border-color:${rBd[r]};"><span class="vsdlbl">Day${i+1}</span><span class="vsdname" data-i18n="cat${i}">${l}</span><div class="vsscores"><span class="vsus">${usDaysM[i]?Number(usDaysM[i]).toLocaleString()+'M':'—'}</span><span class="vsopp">${fmtM(oppDays[i])}</span></div><span class="vsbadge" style="color:${rText[r]};background:${rBg[r]};border:1px solid ${rBd[r]};" data-i18n="${rKey[r]}">${rLabel[r]}</span></div>`;
     }).join('');
-    const resultStr='<span style="color:#34d399;">'+wins+'승</span> <span style="color:rgba(255,255,255,0.3);">·</span> <span style="color:#f87171;">'+loses+'패</span>'+(draws>0?' <span style="color:rgba(255,255,255,0.3);">·</span> <span style="color:#fcd34d;">'+draws+'무</span>':'');
+    const resultStr='<span style="color:#34d399;">'+wins+'<span data-i18n="win">승</span></span> <span style="color:rgba(255,255,255,0.3);">·</span> <span style="color:#f87171;">'+loses+'<span data-i18n="lose">패</span></span>'+(draws>0?' <span style="color:rgba(255,255,255,0.3);">·</span> <span style="color:#fcd34d;">'+draws+'<span data-i18n="draw">무</span></span>':'');
     return `<div class="vsbox"><div class="vshdr"><span class="vstitle">⚔️ ${(state.guildFullName?esc(state.guildFullName)+' vs ':'')}${esc(opp)}</span><span class="vsresult">${resultStr}</span></div><div class="vsgrid">${dayCols}</div></div>`;
   })();
 
   const arcLinks=isArchive
-    ?`<a class="abtn" href="https://mentis00.github.io/reo/gar/archive/">📁 지난시즌</a><a class="abtn" href="https://mentis00.github.io/reo/">🏠 메인</a>`
-    :`<a class="abtn" href="https://mentis00.github.io/reo/gar/archive/">📁 지난시즌</a><a class="abtn" href="https://mentis00.github.io/reo/">🏠 메인</a>`;
+    ?`<a class="abtn" href="https://mentis00.github.io/reo/gar/archive/" data-i18n="archiveBtn">📁 지난시즌</a><a class="abtn" href="https://mentis00.github.io/reo/" data-i18n="homeBtn">🏠 메인</a>`
+    :`<a class="abtn" href="https://mentis00.github.io/reo/gar/archive/" data-i18n="archiveBtn">📁 지난시즌</a><a class="abtn" href="https://mentis00.github.io/reo/" data-i18n="homeBtn">🏠 메인</a>`;
 
   // 현재(index) 페이지는 접속 시점 Day를 JS로 계산, 아카이브는 전체합산 고정
   const dayInfoJs = isArchive ? '' :
     `<span id="dayInfoText" style="font-size:14px;color:rgba(255,180,120,0.45);"></span>`;
 
   return `<div class="wrap">
-  <div class="header">
+  ${garToggleHtml()}<div class="header">
     <div class="gname">${esc(state.guildName||'')}</div>
     <div class="hright">
       <div>
-        <div class="elvl">Guild Arms Race${isArchive?' &nbsp;·&nbsp; Archive':''}</div>
-        <div class="utime">최종 업데이트: <span>${esc(dispUpd)}</span></div>
+        ${isArchive
+          ? `<div class="elvl" lang="en"><span class="arena-title">Guild Arms Race</span><span class="lbl-dot">·</span><span class="archive-title-word">Archive</span></div>`
+          : `<div class="elvl">Guild Arms Race</div>`}
+        <div class="utime"><span data-i18n="lastUpdate">최종 업데이트</span>: <span>${esc(dispUpd)}</span></div>
       </div>
       ${isArchive&&periodLabel?`<span class="pbd">📅 ${esc(periodLabel)}</span>`:''}
       ${arcLinks}
@@ -760,26 +809,26 @@ function buildHtmlBody(sorted, goal, isArchive, periodLabel, manualTotal){
       <span class="slbl" id="tLbl">🏆 ${isArchive?'전체 합산':'...'}</span>
       <span class="sval" id="tVal" style="color:#f97316;">${isArchive?allSum.toLocaleString()+mNote:'...'}</span>
       <div class="ssub">
-        <span>${sorted.length}명 참여</span>
-        ${goal>0?`<span id="bCntWrap">&nbsp;·&nbsp;<span id="bCnt" style="color:rgba(255,100,100,0.9);">목표점수 미달 ${below}명</span></span>`:''}
+        <span data-i18n="participate" data-count="${sorted.length}">${sorted.length}명 참여</span>
+        ${goal>0?`<span id="bCntWrap">&nbsp;·&nbsp;<span id="bCnt" style="color:rgba(255,100,100,0.9);" data-i18n="belowGoal" data-below="${below}">목표점수 미달 ${below}명</span></span>`:''}
       </div>
     </div>
   </div>
   ${vsHtml}
-  ${goal>0?`<div class="rbox" id="ruleBox"><span>📌</span><span>길드 규칙: 길드 군비(Guild Arms Race) 이벤트 진행 시 최소 개인 일일점수 <strong>${goal.toLocaleString()}점</strong> 달성 바랍니다.</span></div>`:''}
+  ${goal>0?`<div class="rbox" id="ruleBox"><span>📌</span><span data-i18n="ruleText" data-goal="${goal.toLocaleString()}">길드 규칙: 길드 군비(Guild Arms Race) 이벤트 진행 시 최소 개인 일일점수 <strong>${goal.toLocaleString()}점</strong> 달성 바랍니다.</span></div>`:''}
   <div class="tabs" id="tabsWrap">
-    ${DL.map((l,i)=>{const empty=dsArr[i]===0;return `<button class="tab${empty?' disabled':''}" data-day="${i}"${empty?' disabled':''}>Day${i+1} ${l}</button>`;}).join('')}
-    <button class="tab${isArchive?' active':''}" data-day="all">전체 합산</button>
+    ${DL.map((l,i)=>{const empty=dsArr[i]===0;return `<button class="tab${empty?' disabled':''}" data-day="${i}"${empty?' disabled':''}>Day${i+1}</button>`;}).join('')}
+    <button class="tab${isArchive?' active':''}" data-day="all" data-i18n="totalSumTab">전체 합산</button>
   </div>
   ${goal>0?`<div class="fbar" id="fbar">
-    <button class="fbtn active" data-mode="all">전체</button>
-    <button class="fbtn" data-mode="above">이상</button>
-    <button class="fbtn" data-mode="below">미만</button>
+    <button class="fbtn active" data-mode="all" data-i18n="filterAll">전체</button>
+    <button class="fbtn" data-mode="above" data-i18n="filterAbove">이상</button>
+    <button class="fbtn" data-mode="below" data-i18n="filterBelow">미만</button>
   </div>`:''}
   <div class="grid">${rows}</div>
   <div class="foot">
-    <div class="cnt">총 멤버 <strong>${sorted.length}명</strong>${isArchive?'':' &nbsp;|&nbsp; '+dayInfoJs}</div>
-    ${goal>0?`<div class="gnote" id="gnote">⚠️ ${goal.toLocaleString()}점 미달성 시 주의</div>`:''}
+    <div class="cnt"><span data-i18n="totalMember" data-count="${sorted.length}">총 멤버 ${sorted.length}명</span>${isArchive?'':' &nbsp;|&nbsp; '+dayInfoJs}</div>
+    ${goal>0?`<div class="gnote" id="gnote" data-i18n="goalNote" data-goal="${goal.toLocaleString()}">⚠️ ${goal.toLocaleString()}점 미달성 시 주의</div>`:''}
   </div>
 </div>`;
 }
@@ -798,6 +847,7 @@ function buildIndexHtml(){
     buildHtmlBody(sorted,goal,false,'',0) +
     `\n<script>\n${staticJs(goal,allSum,dsArr,false)}\n<\/script>\n` +
     `<script>\n(function(){var last=0;document.addEventListener('touchend',function(e){var now=Date.now();if(now-last<300){e.preventDefault();}last=now;},{passive:false});})();\n<\/script>\n` +
+    garRuntime() +
     `</body>\n</html>`;
 }
 
@@ -815,6 +865,7 @@ function buildArchiveHtml(sd, ed, manualTotal){
     buildHtmlBody(sorted,goal,true,period,manualTotal) +
     `\n<script>\n${staticJs(goal,allSum,dsArr,true)}\n<\/script>\n` +
     `<script>\n(function(){var last=0;document.addEventListener('touchend',function(e){var now=Date.now();if(now-last<300){e.preventDefault();}last=now;},{passive:false});})();\n<\/script>\n` +
+    garRuntime() +
     `</body>\n</html>`;
 }
 
@@ -881,13 +932,13 @@ document.addEventListener('click',e=>{
   syncState();
 });
 
-function updArchPrev(){const s=$('archiveStart').value,e=$('archiveEnd').value,opp=(state.opponent||'').replace(/[^a-zA-Z0-9가-힣_\[\]#]/g,'');const oppPart=opp?'_'+opp:'';$('archiveFilenamePreview').textContent=s&&e?s+'_'+e+oppPart+'.html':s?s+'_???'+oppPart+'.html':'시작일_종료일.html';}
+function updArchPrev(){const s=$('archiveStart').value,e=$('archiveEnd').value,opp=(state.opponent||'').replace(/[\\/:*?"<>|\s]/g,'');const oppPart=opp?'_'+opp:'';$('archiveFilenamePreview').textContent=s&&e?s+'_'+e+oppPart+'.html':s?s+'_???'+oppPart+'.html':'시작일_종료일.html';}
 $('archiveStart').addEventListener('input',()=>{syncState();updArchPrev();});
 $('archiveEnd').addEventListener('input',()=>{syncState();updArchPrev();});
 $('downloadArchiveBtn').addEventListener('click',()=>{
   const s=$('archiveStart').value,e=$('archiveEnd').value;
   if(!s||!e){alert('시작일과 종료일을 모두 입력하세요.');return;}
-  const opp=(state.opponent||'').replace(/[^a-zA-Z0-9가-힣_\[\]#]/g,'');const oppPart=opp?'_'+opp:'';syncMeta();dlFile(s+'_'+e+oppPart+'.html',buildArchiveHtml(s,e,0),'text/html;charset=utf-8');
+  const opp=(state.opponent||'').replace(/[\\/:*?"<>|\s]/g,'');const oppPart=opp?'_'+opp:'';syncMeta();dlFile(s+'_'+e+oppPart+'.html',buildArchiveHtml(s,e,0),'text/html;charset=utf-8');
 });
 
 window.updateMember=updateMember;window.deleteMember=deleteMember;
